@@ -1,0 +1,217 @@
+/* Główne style */
+body {
+    font-family: 'Lucida Sans Unicode', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #1e1e2f;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Kontener główny */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    height: 80vh;
+    display: flex;
+    flex-wrap: wrap;
+    background-color: #2c2c3b;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    padding: 20px;
+}
+
+/* Panele */
+.left-panel, .right-panel {
+    flex: 1;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    background-color: #3e3e4f;
+    border-radius: 10px;
+    padding: 20px;
+    position: relative;
+}
+
+/* Nagłówki paneli */
+.left-panel h2, .right-panel h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    text-align: center;
+    color: #ffffff;
+}
+
+/* Tabela */
+.left-panel table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #ddd;
+}
+
+.left-panel table thead th {
+    background-color: #7269d9;
+    color: white;
+    padding: 10px;
+    text-align: left;
+    font-weight: bold;
+    border-bottom: 2px solid #444;
+}
+
+.left-panel table tbody {
+    display: block;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.left-panel table tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    background-color: #3e3e4f;
+}
+
+.left-panel table tbody tr:nth-child(even) {
+    background-color: #4a4a5e;
+}
+
+.left-panel table tbody tr:hover {
+    background-color: #5c5c75;
+    cursor: pointer;
+}
+
+.left-panel table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #444;
+}
+
+/* Kontener przedmiotów */
+.enrollments-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+/* Przewijanie */
+.enrollments-container::-webkit-scrollbar {
+    width: 10px;
+}
+
+.enrollments-container::-webkit-scrollbar-thumb {
+    background-color: #7269d9;
+    border-radius: 5px;
+}
+
+.enrollments-container::-webkit-scrollbar-track {
+    background-color: #3e3e4f;
+}
+
+/* Stylizacja przedmiotu */
+.enrollment {
+    position: relative;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #4a4a5e;
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+}
+
+.enrollment h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.enrollment p {
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #ddd;
+}
+
+.enrollment:hover {
+    background-color: #5c5c75;
+}
+
+/* Przycisk "Resign" */
+.resign-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 5px 10px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+}
+
+.resign-btn:hover {
+    background-color: #e60000;
+}
+
+/* Przycisk akcji */
+.edit-btn, .show-all-btn, .cancel-btn {
+    height: 40px;
+    min-width: 80px;
+    padding: 10px 15px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Przycisk "Edit" */
+.edit-btn {
+    position: absolute;
+    top: 10px; /* Odstęp od górnej krawędzi right-panel */
+    right: 10px; /* Odstęp od prawej krawędzi right-panel */
+    background-color: #b54a68;
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #953753;
+}
+
+/* Przycisk "Show More" */
+.show-all-btn {
+    position: absolute;
+    top: 10px; /* Ten sam odstęp od góry */
+    right: 120px; /* Odstęp względem przycisku Edit */
+    background-color: #f5e342;
+    color: #1e1e2f;
+}
+
+.show-all-btn:hover {
+    background-color: #e4d33a;
+}
+
+.cancel-btn {
+    background-color: #e34242;
+    color: white;
+    position: absolute;
+    top: 20px;
+    right: 200px;
+}
+
+.cancel-btn:hover {
+    background-color: #c73232;
+}

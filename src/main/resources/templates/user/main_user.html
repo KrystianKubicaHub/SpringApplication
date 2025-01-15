@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lucida+Sans+Unicode&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style_main_user.css">
+
+
+</head>
+<body>
+<div class="container">
+    <section class="left-panel">
+        <h2>Your Subjects</h2>
+        <div class="enrollments-container">
+            <div class="enrollment" th:each="enrollment : ${student.enrollments}" style="position: relative;">
+                <button class="resign-btn" th:attr="onclick='confirmResignation(' + ${enrollment.course.id} + ')'">
+                    Resign
+                </button>
+
+
+                <h3 th:text="${enrollment.course.name}"></h3>
+                <p class="Lecturer"
+                   th:text="'Lecturer: ' + ${enrollment.course.lecturer.academicTitle} + ' ' + ${enrollment.course.lecturer.firstName} + ' ' + ${enrollment.course.lecturer.lastName}"></p>
+                <p class="description" th:text="'Description: ' + ${enrollment.course.description}"></p>
+                <p class="ects" th:text="'ECTS Credits: ' + ${enrollment.course.ectsCredits}"></p>
+                <p class="enrollment-date"
+                   th:text="'Enrollment Date: ' + ${#dates.format(enrollment.enrollmentDate, 'yyyy-MM-dd')}"></p>
+            </div>
+        </div>
+
+    </section>
+
+
+    <section class="right-panel">
+        <button id="toggle-info-btn" class="show-all-btn">Show All</button>
+        <button id="edit-btn" class="edit-btn">Edit</button>
+        <button id="cancel-btn" class="cancel-btn" style="display: none;">Cancel</button>
+        <h2>User Information</h2>
+        <div id="user-info">
+            <p>First Name: <span id="first-name" th:text="${student.firstName}"></span>
+                <input id="first-name-input" type="text" style="display: none;"/>
+            </p>
+            <p>Last Name: <span id="last-name" th:text="${student.lastName}"></span>
+                <input id="last-name-input" type="text" style="display: none;"/>
+            </p>
+            <p>Email: <span id="email" th:text="${student.email}"></span>
+                <input id="email-input" type="email" style="display: none;"/>
+            </p>
+            <p>Phone: <span id="phone-number" th:text="${student.phoneNumber}"></span>
+                <input id="phone-number-input" type="text" style="display: none;"/>
+            </p>
+        </div>
+        <div id="additional-info" style="display: none;">
+            <p>Student ID: <span th:text="${student.id}"></span></p>
+            <p>PESEL Number: <span th:text="${student.PESELNumber}"></span></p>
+            <p>Index Number: <span th:text="${student.indexNumber}"></span></p>
+            <p>Study Since: <span th:text="${student.studySince}"></span></p>
+            <p>Total ECTS: <span th:text="${student.totalECTS}"></span></p>
+            <p>Field of Study:
+                <span th:each="course : ${student.fieldOfStudy}" th:text="${course.name}"></span>
+            </p>
+        </div>
+        <p id="admin-note" style="display: none;">The rest of the fields might be edited only by admin!&!</p>
+    </section>
+
+
+
+
+</div>
+
+<script src="/js/main_user.js"></script>
+
+
+
+</body>
+</html>
