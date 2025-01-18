@@ -3,13 +3,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const buttonEdit = document.getElementById('edit-btn');
     const buttonCancel = document.getElementById('cancel-btn');
     const buttonAddSubject = document.getElementById('add-subject-btn');
+    const coursesPanel = document.querySelector('.courses-panel');
 
     if (buttonShowMoreOrLess&&buttonEdit&&buttonCancel&&buttonAddSubject) {
         buttonShowMoreOrLess.addEventListener('click', showMoreOrLess);
         buttonEdit.addEventListener('click', enableAndConfirmEditAction);
         buttonCancel.addEventListener('click', cancelEdit)
         buttonAddSubject.addEventListener('click', addSubjectButtonClicked)
-
+        coursesPanel.classList.add('hidden');
 
         setInterval(fetchStudentData, 500);
     } else {
@@ -130,20 +131,23 @@ function showMoreOrLess() {
     }
 }
 
-function addSubjectButtonClicked(){
-
+function addSubjectButtonClicked() {
     const rightPanel = document.querySelector('.right-panel');
-    const coursesPanel = document.querySelector('.courses-panel')
+    const coursesPanel = document.querySelector('.courses-panel');
+    const addSubjectButton = document.getElementById('add-subject-btn');
 
     if (rightPanel.classList.contains('hidden')) {
         rightPanel.classList.remove('hidden');
         coursesPanel.classList.add('hidden');
+        addSubjectButton.innerHTML = '<span class="add-subject-icon">+</span> Enroll';
     } else {
-        fetchAndDisplayCourses()
+        fetchAndDisplayCourses();
         rightPanel.classList.add('hidden');
         coursesPanel.classList.remove('hidden');
+        addSubjectButton.innerHTML = '<span class="add-subject-icon">&larr;</span> Back';
     }
 }
+
 
 
 

@@ -11,22 +11,28 @@ body {
     min-height: 100vh;
 }
 
+
 /* Kontener główny */
 .container {
     width: 90%;
-    max-width: 1200px;
+    max-width: 1400px;
     height: 80vh;
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     flex-wrap: wrap;
     background-color: #2c2c3b;
     border-radius: 15px;
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
-    overflow: hidden;
     padding: 20px;
+    box-sizing: border-box;
+}
+.courses-panel {
+    display: none; /* Domyślnie ukryty */
 }
 
-/* Panele */
-.left-panel, .right-panel {
+
+.left-panel, .right-panel, .courses-panel {
     flex: 1;
     margin: 10px;
     display: flex;
@@ -36,10 +42,15 @@ body {
     padding: 20px;
     position: relative;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    min-width: 35%; /* Minimalna szerokość paneli */
+    max-width: 48%; /* Maksymalna szerokość paneli */
+    height: calc(100% - 40px); /* Dostosowanie wysokości do kontenera */
+    overflow-y: auto; /* Zapewnia przewijanie w pionie */
 }
 
-/* Nagłówki paneli */
-.left-panel h2, .right-panel h2 {
+
+
+.left-panel h2, .right-panel h2, .courses-panel h2 {
     margin-bottom: 15px;
     font-size: 22px;
     text-align: center;
@@ -49,7 +60,6 @@ body {
     border-radius: 8px;
 }
 
-/* Przyciski akcji */
 .edit-btn, .show-more-btn, .cancel-btn, .edit-btn {
     height: 40px; /* Ujednolicona wysokość */
     padding: 10px 20px; /* Ujednolicony padding */
@@ -90,13 +100,13 @@ body {
 
 /* Przycisk "Show More" */
 .show-more-btn {
-    background-color: #ffc107; /* Nowoczesny żółty kolor */
+    background-color: #7269d9;;
     color: #1e1e2f;
-    right: 120px; /* Wyrównanie */
+    right: 120px;
 }
 
 .show-more-btn:hover {
-    background-color: #e0a706;
+    background-color: #00CCFF;
 }
 
 
@@ -266,26 +276,30 @@ body {
 
 /* Stylizacja przycisku "Add Subject" */
 .add-subject-btn {
-    background-color: #ffc107; /* Kolor podobny do Show More */
-    color: #1e1e2f; /* Kolor ikony */
+    background-color: #7269d9; /* Fioletowy kolor pasujący do reszty strony */
+    color: #ffffff; /* Kolor tekstu i ikony */
     border: none;
-    border-radius: 50%; /* Okrągły przycisk */
-    width: 40px; /* Szerokość przycisku */
-    height: 40px; /* Wysokość przycisku */
-    font-size: 24px; /* Wielkość ikony */
+    border-radius: 20px; /* Zaokrąglone rogi (prostokąt z zaokrągleniami) */
+    padding: 10px 20px; /* Większy padding dla tekstu i ikony */
+    font-size: 18px; /* Wielkość tekstu */
     font-weight: bold;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Lekki cień */
+    display: flex;
+    align-items: center; /* Wyrównanie ikony i tekstu w pionie */
+    gap: 10px; /* Odstęp między ikoną a tekstem */
     transition: all 0.3s ease; /* Animacja przy najechaniu */
 }
 
+/* Efekt hover */
 .add-subject-btn:hover {
-    background-color: #e0a706; /* Ciemniejszy żółty przy najechaniu */
-    transform: scale(1.1); /* Subtelne powiększenie */
+    background-color: #5b4fb8; /* Ciemniejszy fiolet przy najechaniu */
+    transform: scale(1.05); /* Subtelne powiększenie */
 }
 
+/* Efekt aktywacji */
 .add-subject-btn:active {
-    background-color: #cc9205; /* Jeszcze ciemniejszy żółty przy kliknięciu */
+    background-color: #4a3e9d; /* Jeszcze ciemniejszy fiolet przy kliknięciu */
     transform: scale(0.95); /* Subtelne zmniejszenie */
 }
 .empty-message {
@@ -348,6 +362,48 @@ body {
 .courses-panel::-webkit-scrollbar-track {
     background-color: #2c2c3b; /* Kolor tła paska przewijania */
 }
+
+
+/* Stylizacja responsywności */
+@media (max-width: 1200px) {
+    .left-panel, .right-panel, .courses-panel {
+        min-width: 100%;
+        max-width: 100%;
+    }
+
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media (min-width: 1400px) {
+    .left-panel, .right-panel, .courses-panel {
+        min-width: 45%;
+        max-width: 50%;
+    }
+}
+
+/* Stylizacja pasków przewijania */
+.left-panel::-webkit-scrollbar,
+.right-panel::-webkit-scrollbar,
+.courses-panel::-webkit-scrollbar {
+    width: 8px;
+}
+
+.left-panel::-webkit-scrollbar-thumb,
+.right-panel::-webkit-scrollbar-thumb,
+.courses-panel::-webkit-scrollbar-thumb {
+    background-color: #4CAF50;
+    border-radius: 4px;
+}
+
+.left-panel::-webkit-scrollbar-track,
+.right-panel::-webkit-scrollbar-track,
+.courses-panel::-webkit-scrollbar-track {
+    background-color: #2c2c3b;
+}
+
 
 
 
