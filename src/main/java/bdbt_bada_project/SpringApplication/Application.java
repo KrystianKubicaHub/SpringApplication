@@ -14,11 +14,9 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 		///EnrollmentDAO enrollmentDAO = new EnrollmentDAO();
 		///List<EnrollmentEntity> enrollments = enrollmentDAO.getAllEnrollments();
+		new StateController();
 
-		StudentData studentData = new StudentData();
-		System.out.println(studentData);
-		System.out.println("Enrollments for student:");
-		testSerialization();
+		//testSerialization();
 	}
 
 	public static void testSerialization() throws Exception {

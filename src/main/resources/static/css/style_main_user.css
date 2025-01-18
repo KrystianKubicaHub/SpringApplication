@@ -49,60 +49,56 @@ body {
     border-radius: 8px;
 }
 
-/* Przycisk akcji */
-.edit-btn, .show-more-btn, .cancel-btn {
-    height: 40px;
-    min-width: 90px;
-    padding: 10px 15px;
+/* Przyciski akcji */
+.edit-btn, .show-more-btn, .cancel-btn, .edit-btn {
+    height: 40px; /* Ujednolicona wysokość */
+    padding: 10px 20px; /* Ujednolicony padding */
     font-size: 14px;
     font-weight: bold;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    display: inline-block;
+    margin-left: 10px; /* Odstęp między przyciskami */
+    position: absolute;
+    top: 15px; /* Wspólne wyrównanie */
+    transition: all 0.3s ease; /* Animacje */
 }
 
-/* Przycisk "Edit" */
-.edit-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background-color: #d66c84;
+/* Przycisk "Cancel" */
+.cancel-btn {
+    background-color: #ff3333; /* Taki sam kolor jak "Resign" */
     color: white;
-    transition: all 0.3s;
+    right: 250px; /* Wyrównanie */
+}
+
+.cancel-btn:hover {
+    background-color: #cc0000;
+}
+
+/* Przycisk "Confirm" */
+.edit-btn {
+    background-color: #4caf50; /* Nowoczesny zielony kolor */
+    color: white;
+    right: 15px; /* Wyrównanie */
 }
 
 .edit-btn:hover {
-    background-color: #b6546b;
+    background-color: #45a049;
 }
 
 /* Przycisk "Show More" */
 .show-more-btn {
-    position: absolute;
-    top: 15px;
-    right: 120px;
-    background-color: #ffc107;
+    background-color: #ffc107; /* Nowoczesny żółty kolor */
     color: #1e1e2f;
-    transition: all 0.3s;
+    right: 120px; /* Wyrównanie */
 }
 
 .show-more-btn:hover {
     background-color: #e0a706;
 }
 
-/* Przycisk "Cancel" */
-.cancel-btn {
-    background-color: #e34e4e;
-    color: white;
-    position: absolute;
-    top: 15px;
-    right: 220px;
-    transition: all 0.3s;
-}
-
-.cancel-btn:hover {
-    background-color: #c94444;
-}
 
 /* Informacja admina */
 #admin-note {

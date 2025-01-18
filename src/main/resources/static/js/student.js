@@ -1,14 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
     const buttonShowMoreOrLess = document.getElementById('toggle-info-btn');
     const buttonEdit = document.getElementById('edit-btn');
+    const buttonCancel = document.getElementById('cancel-btn');
 
-    if (buttonShowMoreOrLess) {
+    if (buttonShowMoreOrLess&&buttonEdit&&buttonCancel) {
         buttonShowMoreOrLess.addEventListener('click', showMoreOrLess);
-    } else {
-        console.error('chuj wie gdzie jest element');
-    }
-    if (buttonEdit) {
         buttonEdit.addEventListener('click', enableEdit);
+        buttonCancel.addEventListener('click', cancelEdit)
     } else {
         console.error('chuj wie gdzie jest element');
     }
@@ -17,11 +15,14 @@ document.addEventListener('DOMContentLoaded', () => {
 function enableEdit() {
     const adminNote = document.getElementById('admin-note');
     const buttonEdit = document.getElementById('edit-btn');
+    const buttonCancel = document.getElementById('cancel-btn');
     const fields = document.querySelectorAll('#user-info p');
 
     if (buttonEdit.textContent === 'Edit') {
         adminNote.style.display = 'block';
+        buttonCancel.style.display = 'block';
         buttonEdit.textContent = 'Confirm';
+
 
         fields.forEach(field => {
             const span = field.querySelector('span');
@@ -29,6 +30,7 @@ function enableEdit() {
                 const input = document.createElement('input');
                 input.type = 'text';
                 input.value = span.textContent;
+                input.defaultValue = span.textContent;
                 input.id = span.id;
                 input.className = 'edit-input';
                 span.replaceWith(input);
@@ -36,6 +38,7 @@ function enableEdit() {
         });
     } else {
         adminNote.style.display = 'none';
+        buttonCancel.style.display = 'none';
         buttonEdit.textContent = 'Edit';
 
         fields.forEach(field => {
@@ -49,6 +52,29 @@ function enableEdit() {
         });
     }
 }
+
+function cancelEdit() {
+    const adminNote = document.getElementById('admin-note');
+    const buttonEdit = document.getElementById('edit-btn');
+    const buttonCancel = document.getElementById('cancel-btn');
+    const fields = document.querySelectorAll('#user-info p');
+
+    // Przywróć oryginalny tekst i ukryj tryb edycji
+    adminNote.style.display = 'none';
+    buttonCancel.style.display = 'none';
+    buttonEdit.textContent = 'Edit';
+
+    fields.forEach(field => {
+        const input = field.querySelector('input');
+        if (input) {
+            const span = document.createElement('span');
+            span.textContent = input.defaultValue; // Przywraca oryginalny tekst
+            span.id = input.id;
+            input.replaceWith(span);
+        }
+    });
+}
+
 
 
 

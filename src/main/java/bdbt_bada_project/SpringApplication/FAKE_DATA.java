@@ -106,8 +106,6 @@ public class FAKE_DATA {
             // Czyszczenie istniejącej listy kierunków
             instance.fieldOfStudy.clear();
 
-            System.out.println("A czy tegho printa zobacze?2: Nie");
-
 
             // Losowanie liczby kierunków studiów (1-4)
             int numberOfFields = 1 + random.nextInt(3);
