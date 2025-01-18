@@ -1,5 +1,8 @@
 package bdbt_bada_project.SpringApplication.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
 public class LecturerEntity extends PersonEntity {
     private String academicTitle;
     private String specialization;

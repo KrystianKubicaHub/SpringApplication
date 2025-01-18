@@ -16,6 +16,8 @@ public class AppViewConfig implements WebMvcConfigurer {
 
         // Widoki dla użytkowników z rolą USER
         registry.addViewController("/user/main_user").setViewName("user/main_user");
+        registry.addViewController("/user/experiment").setViewName("user/experiment");
+
 
         // Widoki dla użytkowników z rolą ADMIN
         registry.addViewController("/admin/main_admin").setViewName("admin/main_admin");

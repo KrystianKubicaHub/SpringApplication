@@ -25,7 +25,7 @@ public class DashboardController {
     @RequestMapping(value = "/user/main_user", method = RequestMethod.GET)
     public ModelAndView handleUserMain() {
         // Pobieranie danych studenta
-        StudentData student = StudentData.getInstance();
+        StudentData student = new StudentData();
 
         // Tworzenie obiektu ModelAndView
         ModelAndView modelAndView = new ModelAndView("user/main_user");

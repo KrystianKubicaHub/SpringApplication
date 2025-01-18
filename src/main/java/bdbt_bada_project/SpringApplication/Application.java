@@ -1,26 +1,36 @@
 package bdbt_bada_project.SpringApplication;
 
+import bdbt_bada_project.SpringApplication.DataModels.StateController;
 import bdbt_bada_project.SpringApplication.DataModels.StudentData;
-import bdbt_bada_project.SpringApplication.entities.EnrollmentEntity;
+import bdbt_bada_project.SpringApplication.entities.PersonEntity;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.util.List;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootApplication
 public class Application {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		SpringApplication.run(Application.class, args);
-		//EnrollmentDAO enrollmentDAO = new EnrollmentDAO();
+		///EnrollmentDAO enrollmentDAO = new EnrollmentDAO();
 		///List<EnrollmentEntity> enrollments = enrollmentDAO.getAllEnrollments();
 
-		StudentData studentData = StudentData.getInstance();
+		StudentData studentData = new StudentData();
 		System.out.println(studentData);
 		System.out.println("Enrollments for student:");
-		for (EnrollmentEntity enrollment : studentData.getEnrollments()) {
-			//System.out.println(enrollment);
-		}
+		testSerialization();
 	}
+
+	public static void testSerialization() throws Exception {
+		ObjectMapper objectMapper = new ObjectMapper();
+		StudentData student = new StudentData();
+		StateController ex = new StateController();
+
+		PersonEntity person = new PersonEntity(1,"","","","","");
+		String json = objectMapper.writeValueAsString(ex); // Spróbuj serializować
+		System.out.println(json);
+	}
+
+
 
 }

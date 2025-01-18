@@ -108,6 +108,7 @@ function cancelChanges() {
 
 // Funkcja: Przywrócenie trybu widoku
 function resetEditMode() {
+window.location.reload();
     editBtn.textContent = "Edit";
     cancelBtn.style.display = "none";
 
@@ -167,7 +168,7 @@ function confirmResignation(courseId) {
 }
 
 
-// Funkcje wywołujące backend (do zaimplementowania w backendzie)
+
 function updateFirstName(newFirstName) {
     fetch('/api/updateFirstName', {
         method: 'POST',
@@ -189,7 +190,17 @@ function updateEmail(newEmail) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: newEmail })
-    }).catch(error => console.error("Error updating email:", error));
+    })
+    .then(response => {
+        if (response.ok) {
+            document.getElementById('email').textContent = newEmail;
+            console.log("Email updated successfully!");
+        } else {
+            console.error("Failed to update email:", response.statusText);
+            alert("Failed to update email.");
+        }
+    })
+    .catch(error => console.error("Error updating email:", error));
 }
 
 function updatePhoneNumber(newPhoneNumber) {

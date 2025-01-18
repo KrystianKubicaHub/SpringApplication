@@ -7,50 +7,30 @@
     <link href="https://fonts.googleapis.com/css2?family=Lucida+Sans+Unicode&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style_main_user.css">
 
-
+    <script src="/js/student.js"></script>
 </head>
 <body>
+
 <div class="container">
     <section class="left-panel">
         <h2>Your Subjects</h2>
-        <div class="enrollments-container">
-            <div class="enrollment" th:each="enrollment : ${student.enrollments}" style="position: relative;">
-                <button class="resign-btn" th:attr="onclick='confirmResignation(' + ${enrollment.course.id} + ')'">
-                    Resign
-                </button>
-
-
-                <h3 th:text="${enrollment.course.name}"></h3>
-                <p class="Lecturer"
-                   th:text="'Lecturer: ' + ${enrollment.course.lecturer.academicTitle} + ' ' + ${enrollment.course.lecturer.firstName} + ' ' + ${enrollment.course.lecturer.lastName}"></p>
-                <p class="description" th:text="'Description: ' + ${enrollment.course.description}"></p>
-                <p class="ects" th:text="'ECTS Credits: ' + ${enrollment.course.ectsCredits}"></p>
-                <p class="enrollment-date"
-                   th:text="'Enrollment Date: ' + ${#dates.format(enrollment.enrollmentDate, 'yyyy-MM-dd')}"></p>
-            </div>
+        <div id="enrollments-container">
+            <!-- Dynamicznie generowane przedmioty -->
         </div>
-
     </section>
 
-//
+
+
     <section class="right-panel">
         <button id="toggle-info-btn" class="show-all-btn">Show All</button>
         <button id="edit-btn" class="edit-btn">Edit</button>
         <button id="cancel-btn" class="cancel-btn" style="display: none;">Cancel</button>
         <h2>User Information</h2>
         <div id="user-info">
-            <p>First Name: <span id="first-name" th:text="${student.firstName}"></span>
-                <input id="first-name-input" type="text" style="display: none;"/>
-            </p>
-            <p>Last Name: <span id="last-name" th:text="${student.lastName}"></span>
-                <input id="last-name-input" type="text" style="display: none;"/>
-            </p>
-            <p>Email: <span id="email" th:text="${student.email}"></span>
-                <input id="email-input" type="email" style="display: none;"/>
-            </p>
-            <p>Phone: <span id="phone-number" th:text="${student.phoneNumber}"></span>
-                <input id="phone-number-input" type="text" style="display: none;"/>
-            </p>
+            <p>First Name: <span id="studentFirstName">Loading..</span></p>
+            <p>Last Name: <span id="studentLastName">Loading...</span></p>
+            <p>Email: <span id="studentEmail">Loading...</span></p>
+            <p>Phone: <span id="studentPhoneNumber">Loading...</span></p>
         </div>
         <div id="additional-info" style="display: none;">
             <p>Student ID: <span th:text="${student.id}"></span></p>
@@ -69,8 +49,6 @@
 
 
 </div>
-
-<script src="/js/main_user.js"></script>
 
 
 
