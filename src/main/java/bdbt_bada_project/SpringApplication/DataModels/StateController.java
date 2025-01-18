@@ -14,7 +14,7 @@ import java.util.concurrent.ScheduledExecutorService;
 @RequestMapping("/api")
 public class StateController {
 
-    private static final StudentData instance = new StudentData();
+    private static final StudentData instance = FAKE_DATA.createExampleStudent();
     private final ScheduledExecutorService scheduler;
     private List<CourseEntity> serverCourses;
 
@@ -22,8 +22,9 @@ public class StateController {
         serverCourses = FAKE_DATA.generateCourses(20);
         this.scheduler = Executors.newSingleThreadScheduledExecutor();
         System.out.println(serverCourses);
-        FAKE_DATA.startUpdatingTask(scheduler, instance);
-        FAKE_DATA.startRemovingEnrollmentTask(scheduler, instance);
+
+        //FAKE_DATA.startUpdatingTask(scheduler, instance);
+        //FAKE_DATA.startRemovingEnrollmentTask(scheduler, instance);
         ///FAKE_DATA.stopUpdatingTask(scheduler);
     }
 
@@ -78,7 +79,14 @@ public class StateController {
 
     @GetMapping("/courses")
     public List<CourseEntity> getServerCourses() {
-        return serverCourses;
+
+        List<Integer> enrolledCourseIds = instance.getEnrollments().stream()
+                .map(enrollment -> enrollment.getCourse().getId())
+                .toList();
+
+        return serverCourses.stream()
+                .filter(course -> !enrolledCourseIds.contains(course.getId()))
+                .toList();
     }
 
     @PostMapping("/courses/register")

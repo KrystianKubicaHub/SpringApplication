@@ -151,7 +151,6 @@ function addSubjectButtonClicked() {
 
 
 
-
 function updateView(student) {
     const studentFirstName = document.getElementById('studentFirstName');
     const studentLastName = document.getElementById('studentLastName');
@@ -327,6 +326,29 @@ function removeEnrollmentById(enrollmentId) {
         });
 }
 
+async function registerForCourse(courseId) {
+    try {
+        const response = await fetch('/api/courses/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(courseId),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to register for course. Status: ${response.status}`);
+        }
+
+        const result = await response.text();
+        //alert('You will have to learn');
+    } catch (error) {
+        console.error('Error registering for course:', error);
+        alert('Something went wrong while trying to register for the course.');
+    }
+}
+
+
 async function fetchAndDisplayCourses() {
     try {
         const coursePanel = document.querySelector('.courses-panel');
@@ -335,8 +357,6 @@ async function fetchAndDisplayCourses() {
             return;
         }
 
-        // Dodanie klasy dla stałego stylu
-        coursePanel.classList.add('courses-panel');
 
         // Wyczyść zawartość, ale utrzymaj strukturę
         coursePanel.innerHTML = '<h2 style="color: #4CAF50; text-align: center; border-bottom: 2px solid #4CAF50; padding-bottom: 10px;">Available Courses</h2>';
@@ -408,11 +428,22 @@ async function fetchAndDisplayCourses() {
             lecturerInfo.style.fontStyle = 'italic';
             lecturerInfo.style.color = '#607D8B';
 
+            const enrollButtonGreem = document.createElement('button');
+            enrollButtonGreem.textContent = 'Enroll';
+            enrollButtonGreem.className = 'enroll-green-btn';
+
+            enrollButtonGreem.addEventListener('click', () => {
+                registerForCourse(course.id);
+                fetchAndDisplayCourses()
+            });
+
             courseItem.appendChild(courseName);
             courseItem.appendChild(courseDescription);
             courseItem.appendChild(ectsInfo);
             courseItem.appendChild(lecturerInfo);
+            courseItem.appendChild(enrollButtonGreem);
             courseList.appendChild(courseItem);
+
         });
 
         coursePanel.appendChild(courseList);

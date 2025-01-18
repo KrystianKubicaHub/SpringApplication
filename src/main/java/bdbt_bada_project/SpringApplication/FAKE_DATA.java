@@ -236,4 +236,44 @@ public class FAKE_DATA {
 
         return lecturers;
     }
+
+    public static StudentData createExampleStudent() {
+        StudentData exampleStudent = new StudentData();
+
+        exampleStudent.setFirstName("Alexis");
+        exampleStudent.setLastName("Valentine");
+        exampleStudent.PESELNumber = "92110312345";
+        exampleStudent.setEmail("alexis.valentine@example.com");
+        exampleStudent.setPhoneNumber("789456123");
+        exampleStudent.indexNumber = 654321;
+        exampleStudent.studySince = "2021";
+        exampleStudent.totalECTS = 180;
+
+        FieldOfStudyEntity primaryField = new FieldOfStudyEntity("Art History");
+        FieldOfStudyEntity secondaryField = new FieldOfStudyEntity("Fashion Design");
+        exampleStudent.fieldOfStudy.add(primaryField);
+        exampleStudent.fieldOfStudy.add(secondaryField);
+
+        CourseEntity course1 = new CourseEntity(
+                101,
+                "History of Modern Art",
+                "Exploration of key movements and figures in modern art.",
+                6,
+                new LecturerEntity(1, "Sophia", "Marquez", "92110333345", "s.marquez@university.com", "123-456-789", "Professor", "Art History")
+        );
+
+        CourseEntity course2 = new CourseEntity(
+                102,
+                "Luxury Brand Strategy",
+                "Understanding the psychology behind high-end fashion brands.",
+                5,
+                new LecturerEntity(2, "Julian", "Royce", "88050555512", "j.royce@university.com", "987-654-321", "Associate Professor", "Fashion Business")
+        );
+
+        exampleStudent.getEnrollments().add(new EnrollmentEntity(course1, new Date(), 1));
+        exampleStudent.getEnrollments().add(new EnrollmentEntity(course2, new Date(), 2));
+
+        return exampleStudent;
+    }
+
 }

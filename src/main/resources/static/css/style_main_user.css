@@ -403,6 +403,29 @@ body {
 .courses-panel::-webkit-scrollbar-track {
     background-color: #2c2c3b;
 }
+.enroll-green-btn {
+    background-color: #4CAF50; /* Jaskrawy zielony kolor */
+    color: white; /* Biały tekst */
+    border: none; /* Brak obramowania */
+    border-radius: 5px; /* Zaokrąglone rogi */
+    padding: 10px 15px; /* Odstępy wewnętrzne */
+    font-size: 14px; /* Rozmiar tekstu */
+    font-weight: bold; /* Grubszy tekst */
+    cursor: pointer; /* Wskaźnik kursora */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Lekki cień */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Animacje */
+}
+
+.enroll-green-btn:hover {
+    background-color: #45a049; /* Ciemniejszy zielony przy najechaniu */
+    transform: scale(1.05); /* Subtelne powiększenie */
+}
+
+.enroll-green-btn:active {
+    background-color: #388E3C; /* Jeszcze ciemniejszy zielony przy kliknięciu */
+    transform: scale(0.95); /* Subtelne zmniejszenie */
+}
+
 
 
 
