@@ -3,10 +3,13 @@ package bdbt_bada_project.SpringApplication.entities;
 import java.util.Date;
 
 public class EnrollmentEntity {
-    private CourseEntity course;
-    private Date enrollmentDate;
+    private final int id;
+    private final CourseEntity course;
+    private final Date enrollmentDate;
 
-    public EnrollmentEntity(CourseEntity course, Date enrollmentDate) {
+
+    public EnrollmentEntity(CourseEntity course, Date enrollmentDate, int id) {
+        this.id = id;
         this.course = course;
         this.enrollmentDate = enrollmentDate;
     }
@@ -18,4 +21,7 @@ public class EnrollmentEntity {
     public Date getEnrollmentDate() {
         return enrollmentDate;
     }
+
+    public int getId() {return id;}
+
 }

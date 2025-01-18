@@ -4,9 +4,6 @@ import bdbt_bada_project.SpringApplication.entities.CourseEntity;
 import bdbt_bada_project.SpringApplication.entities.EnrollmentEntity;
 import bdbt_bada_project.SpringApplication.entities.FieldOfStudyEntity;
 import bdbt_bada_project.SpringApplication.entities.LecturerEntity;
-import ch.qos.logback.core.joran.sanity.Pair;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.*;
@@ -17,14 +14,11 @@ public class FAKE_DATA {
 
     public static List<EnrollmentEntity> getAllEnrollments() {
         List<LecturerEntity> generatedLecturers = generateLecturers();
-        List<CourseEntity> courses = new ArrayList<>();
         List<EnrollmentEntity> enrollments = new ArrayList<>();
 
         String[] courseNames = {
                 "Anatomy", "Physiology", "Pharmacology", "Pathology",
-                "Microbiology", "Immunology", "Surgery Basics", "Clinical Medicine",
-                "Medical Ethics", "Radiology", "Pediatrics", "Cardiology",
-                "Neurology", "Emergency Medicine"
+                "Microbiology", "Immunology", "Surgery Basics", "Clinical Medicine"
         };
 
         Random random = new Random();
@@ -34,18 +28,13 @@ public class FAKE_DATA {
                     courseNames[i],
                     "Course about " + courseNames[i],
                     (random.nextInt(8) + 1),
-                    generatedLecturers.get(random.nextInt( generatedLecturers.size()))
-
+                    generatedLecturers.get(random.nextInt(generatedLecturers.size()))
             );
-
-            courses.add(course);
-        }
-
-        for (int i = 1; i <= 50; i++) {
-            CourseEntity course = courses.get(i % courses.size());
-            EnrollmentEntity enrollment = new EnrollmentEntity(course, new Date());
+            EnrollmentEntity enrollment = new EnrollmentEntity(course, new Date(), i);
             enrollments.add(enrollment);
         }
+
+
 
         return enrollments;
     }
@@ -145,7 +134,15 @@ public class FAKE_DATA {
         }, 0, 4, TimeUnit.SECONDS);
     }
 
-    public static void stopUpdatingTask(ScheduledExecutorService scheduler) {
+    public static void startRemovingEnrollmentTask(ScheduledExecutorService taskExecutor, StudentData studentData) {
+        taskExecutor.scheduleAtFixedRate(() -> {
+            if (!studentData.removeEnrollmentByIndex(0)) {
+                //taskExecutor.shutdown();
+            }
+        }, 0, 4, TimeUnit.SECONDS);
+    }
+
+    public static void stopTask(ScheduledExecutorService scheduler) {
         if (scheduler != null && !scheduler.isShutdown()) {
             scheduler.shutdown();
         } else {

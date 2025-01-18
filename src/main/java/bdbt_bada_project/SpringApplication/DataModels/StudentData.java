@@ -13,7 +13,11 @@ public class StudentData extends PersonEntity {
     public String studySince;
     public int totalECTS;
     public List<FieldOfStudyEntity> fieldOfStudy;
-    public List<EnrollmentEntity> enrollments;
+    private List<EnrollmentEntity> enrollments;
+
+    public List<EnrollmentEntity> getEnrollments() {
+        return enrollments;
+    }
 
     @Override
     public String toString() {
@@ -37,4 +41,14 @@ public class StudentData extends PersonEntity {
         FAKE_DATA.setPersonsData(this);
         this.enrollments = FAKE_DATA.getAllEnrollments();
     }
+
+    public boolean removeEnrollmentByIndex(int i) {
+        if (i >= 0 && i < enrollments.size()) {
+            enrollments.remove(i);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

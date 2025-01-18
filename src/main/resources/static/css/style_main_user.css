@@ -256,6 +256,50 @@ body {
     background-color: #f9f9f9;
     color: #333;
 }
+/* Stylizacja nagłówka "Your Subjects" z przyciskiem */
+.subjects-header {
+    display: flex;
+    justify-content: space-between; /* Rozdziela nagłówek i przycisk */
+    align-items: center; /* Wyrównuje elementy w pionie */
+    margin-bottom: 20px; /* Odstęp między nagłówkiem a listą przedmiotów */
+}
+
+/* Stylizacja przycisku "Add Subject" */
+.add-subject-btn {
+    background-color: #ffc107; /* Kolor podobny do Show More */
+    color: #1e1e2f; /* Kolor ikony */
+    border: none;
+    border-radius: 50%; /* Okrągły przycisk */
+    width: 40px; /* Szerokość przycisku */
+    height: 40px; /* Wysokość przycisku */
+    font-size: 24px; /* Wielkość ikony */
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Lekki cień */
+    transition: all 0.3s ease; /* Animacja przy najechaniu */
+}
+
+.add-subject-btn:hover {
+    background-color: #e0a706; /* Ciemniejszy żółty przy najechaniu */
+    transform: scale(1.1); /* Subtelne powiększenie */
+}
+
+.add-subject-btn:active {
+    background-color: #cc9205; /* Jeszcze ciemniejszy żółty przy kliknięciu */
+    transform: scale(0.95); /* Subtelne zmniejszenie */
+}
+.empty-message {
+    text-align: center;
+    font-size: 16px;
+    color: #ff4d4d; /* Czerwony kolor dla wyróżnienia */
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+
 
 
 

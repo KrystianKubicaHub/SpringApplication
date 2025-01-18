@@ -16,6 +16,7 @@ public class StateController {
     public StateController() {
         this.scheduler = Executors.newSingleThreadScheduledExecutor();
         FAKE_DATA.startUpdatingTask(scheduler, instance);
+        FAKE_DATA.startRemovingEnrollmentTask(scheduler, instance);
         ///FAKE_DATA.stopUpdatingTask(scheduler);
     }
 
@@ -37,7 +38,7 @@ public class StateController {
 
     @PostMapping("/student/update")
     public void updateStudentDataOnServer(@RequestBody StudentData studentData) {
-        FAKE_DATA.stopUpdatingTask(scheduler);
+        FAKE_DATA.stopTask(scheduler);
         if (studentData.getFirstName() != null) {
             instance.setFirstName(studentData.getFirstName());
         }
@@ -56,5 +57,15 @@ public class StateController {
     @GetMapping("/student/data")
     public StudentData getStudentData() {
         return instance;
+    }
+
+    @PostMapping("/enrollment/remove")
+    public void removeEnrollmentById(@RequestBody int enrollmentId) {
+        instance.getEnrollments().removeIf(enrollment -> enrollment.getId() == enrollmentId);
+    }
+
+    @GetMapping("/enrollment/removed/{id}")
+    public int notifyEnrollmentRemoval(@PathVariable int id) {
+        return id;
     }
 }

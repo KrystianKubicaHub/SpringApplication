@@ -184,58 +184,62 @@ function updateFieldOfStudyForStudent(student) {
 function updateEnrollments(student) {
     const enrollmentsContainer = document.getElementById('enrollments-container');
 
-    // Wyczyszczenie obecnej listy przedmiotów
     enrollmentsContainer.innerHTML = '';
 
+    if(student.enrollments.length !== 0){
+        (student.enrollments || []).forEach((enrollment) => {
 
-    // Przechodzimy przez każdy przedmiot w liście `enrollments`
-    (student.enrollments || []).forEach((enrollment) => {
-        // Tworzymy kontener dla pojedynczego przedmiotu
-        const enrollmentDiv = document.createElement('div');
-        enrollmentDiv.className = 'enrollment';
-        enrollmentDiv.style.position = 'relative';
+            const enrollmentDiv = document.createElement('div');
+            enrollmentDiv.className = 'enrollment';
+            enrollmentDiv.style.position = 'relative';
 
-        // Tworzymy przycisk do rezygnacji
-        const resignButton = document.createElement('button');
-        resignButton.className = 'resign-btn';
-        resignButton.textContent = 'Resign';
-        resignButton.onclick = () => confirmResignation(enrollment.course.id);
+            const resignButton = document.createElement('button');
+            resignButton.className = 'resign-btn';
+            resignButton.textContent = 'Resign';
+            resignButton.onclick = () => removeEnrollmentById(enrollment.id);
 
-        // Tworzymy tytuł przedmiotu
-        const courseName = document.createElement('h3');
-        courseName.textContent = enrollment.course.name || 'Brak nazwy';
+            // Tworzymy tytuł przedmiotu
+            const courseName = document.createElement('h3');
+            courseName.textContent = enrollment.course.name || 'Brak nazwy';
 
-        // Tworzymy dane o wykładowcy
-        const lecturerInfo = document.createElement('p');
-        lecturerInfo.className = 'Lecturer';
-        lecturerInfo.textContent = `Lecturer: ${enrollment.course.lecturer.academicTitle || ''} ${enrollment.course.lecturer.firstName || ''} ${enrollment.course.lecturer.lastName || ''}`;
+            // Tworzymy dane o wykładowcy
+            const lecturerInfo = document.createElement('p');
+            lecturerInfo.className = 'Lecturer';
+            lecturerInfo.textContent = `Lecturer: ${enrollment.course.lecturer.academicTitle || ''} ${enrollment.course.lecturer.firstName || ''} ${enrollment.course.lecturer.lastName || ''}`;
 
-        // Tworzymy opis przedmiotu
-        const courseDescription = document.createElement('p');
-        courseDescription.className = 'description';
-        courseDescription.textContent = `Description: ${enrollment.course.description || 'Brak opisu'}`;
+            // Tworzymy opis przedmiotu
+            const courseDescription = document.createElement('p');
+            courseDescription.className = 'description';
+            courseDescription.textContent = `Description: ${enrollment.course.description || 'Brak opisu'}`;
 
-        // Tworzymy dane o punktach ECTS
-        const ectsInfo = document.createElement('p');
-        ectsInfo.className = 'ects';
-        ectsInfo.textContent = `ECTS Credits: ${enrollment.course.ectsCredits || 0}`;
+            // Tworzymy dane o punktach ECTS
+            const ectsInfo = document.createElement('p');
+            ectsInfo.className = 'ects';
+            ectsInfo.textContent = `ECTS Credits: ${enrollment.course.ectsCredits || 0}`;
 
-        // Tworzymy datę zapisania
-        const enrollmentDate = document.createElement('p');
-        enrollmentDate.className = 'enrollment-date';
-        enrollmentDate.textContent = `Enrollment Date: ${enrollment.enrollmentDate || 'Brak daty'}`;
+            // Tworzymy datę zapisania
+            const enrollmentDate = document.createElement('p');
+            enrollmentDate.className = 'enrollment-date';
+            enrollmentDate.textContent = `Enrollment Date: ${enrollment.enrollmentDate || 'Brak daty'}`;
 
-        // Dodajemy wszystkie elementy do kontenera pojedynczego przedmiotu
-        enrollmentDiv.appendChild(resignButton);
-        enrollmentDiv.appendChild(courseName);
-        enrollmentDiv.appendChild(lecturerInfo);
-        enrollmentDiv.appendChild(courseDescription);
-        enrollmentDiv.appendChild(ectsInfo);
-        enrollmentDiv.appendChild(enrollmentDate);
+            // Dodajemy wszystkie elementy do kontenera pojedynczego przedmiotu
+            enrollmentDiv.appendChild(resignButton);
+            enrollmentDiv.appendChild(courseName);
+            enrollmentDiv.appendChild(lecturerInfo);
+            enrollmentDiv.appendChild(courseDescription);
+            enrollmentDiv.appendChild(ectsInfo);
+            enrollmentDiv.appendChild(enrollmentDate);
 
-        // Dodajemy kontener przedmiotu do głównego kontenera
-        enrollmentsContainer.appendChild(enrollmentDiv);
-    });
+            // Dodajemy kontener przedmiotu do głównego kontenera
+            enrollmentsContainer.appendChild(enrollmentDiv);
+        });
+    }else{
+        const emptyMessage = document.createElement('p');
+        emptyMessage.textContent = 'You ain\'t got no courses, probably \'cause you missed registering for them. Figures.';
+        emptyMessage.className = 'empty-message';
+        enrollmentsContainer.appendChild(emptyMessage);
+    }
+
 }
 
 
@@ -281,5 +285,26 @@ async function updateStudentData(student) {
         console.error('Błąd podczas aktualizacji danych studenta:', error);
     }
 }
+
+function removeEnrollmentById(enrollmentId) {
+    const endpoint = `/api/enrollment/remove`;
+
+    fetch(endpoint, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(enrollmentId)
+    })
+        .then(response => {
+            if (!response.ok){
+                console.error(`Failed to remove enrollment with ID ${enrollmentId}.`);
+            }
+        })
+        .catch(error => {
+            console.error('Error while removing enrollment:', error);
+        });
+}
+
 
 
