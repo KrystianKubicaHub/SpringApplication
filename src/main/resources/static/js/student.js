@@ -2,11 +2,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const buttonShowMoreOrLess = document.getElementById('toggle-info-btn');
     const buttonEdit = document.getElementById('edit-btn');
     const buttonCancel = document.getElementById('cancel-btn');
+    const buttonAddSubject = document.getElementById('add-subject-btn');
 
-    if (buttonShowMoreOrLess&&buttonEdit&&buttonCancel) {
+    if (buttonShowMoreOrLess&&buttonEdit&&buttonCancel&&buttonAddSubject) {
         buttonShowMoreOrLess.addEventListener('click', showMoreOrLess);
         buttonEdit.addEventListener('click', enableAndConfirmEditAction);
         buttonCancel.addEventListener('click', cancelEdit)
+        buttonAddSubject.addEventListener('click', addSubjectButtonClicked)
+
 
         setInterval(fetchStudentData, 500);
     } else {
@@ -127,6 +130,19 @@ function showMoreOrLess() {
     }
 }
 
+function addSubjectButtonClicked(){
+
+    const rightPanel = document.querySelector('.right-panel');
+
+    if (rightPanel.classList.contains('hidden')) {
+        console.log('Log1')
+        rightPanel.classList.remove('hidden'); // Pokazuje sekcję
+    } else {
+        console.log('Log2')
+        rightPanel.classList.add('hidden'); // Ukrywa sekcję
+    }
+}
+
 
 
 
@@ -167,7 +183,6 @@ function updateFieldOfStudyForStudent(student) {
 
     student.fieldOfStudy.forEach((field) => {
         const fieldOfStudyName = field.name;
-        console.log(fieldOfStudyName);
 
         if (fieldOfStudyName) {
             // Tworzenie elementu dla kierunku studiów
