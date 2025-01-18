@@ -5,14 +5,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (buttonShowMoreOrLess&&buttonEdit&&buttonCancel) {
         buttonShowMoreOrLess.addEventListener('click', showMoreOrLess);
-        buttonEdit.addEventListener('click', enableEdit);
+        buttonEdit.addEventListener('click', enableAndConfirmEditAction);
         buttonCancel.addEventListener('click', cancelEdit)
+
+        setInterval(fetchStudentData, 500);
     } else {
         console.error('chuj wie gdzie jest element');
     }
 });
 
-function enableEdit() {
+function enableAndConfirmEditAction() {
     const adminNote = document.getElementById('admin-note');
     const buttonEdit = document.getElementById('edit-btn');
     const buttonCancel = document.getElementById('cancel-btn');
@@ -41,15 +43,52 @@ function enableEdit() {
         buttonCancel.style.display = 'none';
         buttonEdit.textContent = 'Edit';
 
+        const newStudentData = {
+            id: null,
+            firstName: null,
+            lastName: null,
+            PESELNumber: null,
+            email: null,
+            phoneNumber: null,
+            indexNumber: null,
+            studySince: null,
+            totalECTS: null,
+            fieldOfStudy: [],
+            enrollments: [],
+        };
+
+
         fields.forEach(field => {
             const input = field.querySelector('input');
             if (input) {
+                if(input.value !== input.defaultValue){
+                    switch (input.id) {
+                        case 'studentFirstName':
+                            newStudentData.firstName = input.value;
+                            break;
+                        case 'studentLastName':
+                            newStudentData.lastName = input.value;
+                            break;
+                        case 'studentEmail':
+                            newStudentData.email = input.value;
+                            break;
+                        case 'studentPhoneNumber':
+                            newStudentData.phoneNumber = input.value;
+                            break;
+                        default:
+                            console.warn(`Nieznane pole: ${input.id}`);
+                            break;
+                    }
+                }
                 const span = document.createElement('span');
                 span.textContent = input.value;
                 span.id = input.id;
                 input.replaceWith(span);
             }
         });
+        if(newStudentData.firstName !== null || newStudentData.lastName !== null || newStudentData.email !== null ||newStudentData.phoneNumber !== null){
+            updateStudentData(newStudentData)
+        }
     }
 }
 
@@ -59,7 +98,6 @@ function cancelEdit() {
     const buttonCancel = document.getElementById('cancel-btn');
     const fields = document.querySelectorAll('#user-info p');
 
-    // Przywróć oryginalny tekst i ukryj tryb edycji
     adminNote.style.display = 'none';
     buttonCancel.style.display = 'none';
     buttonEdit.textContent = 'Edit';
@@ -75,11 +113,6 @@ function cancelEdit() {
     });
 }
 
-
-
-
-
-
 function showMoreOrLess() {
     const additionalInfoContainer = document.getElementById('additional-info');
     const toggleButton = document.getElementById('toggle-info-btn');
@@ -92,6 +125,35 @@ function showMoreOrLess() {
         additionalInfoContainer.style.display = 'block';
         toggleButton.textContent = 'Show Less';
     }
+}
+
+
+
+
+function updateView(student) {
+    const studentFirstName = document.getElementById('studentFirstName');
+    const studentLastName = document.getElementById('studentLastName');
+    const studentEmail = document.getElementById('studentEmail');
+    const studentPhoneNumber = document.getElementById('studentPhoneNumber');
+
+    // Additional
+    const studentPESEL = document.getElementById('studentPESELNumber');
+    const studentIndex = document.getElementById('studentIndexNumber');
+    const studentStudySince = document.getElementById('studentStudySince');
+    const studentTotalECTS = document.getElementById('studentTotalECTS');
+
+    studentFirstName.textContent = student.firstName || 'Loading...';
+    studentLastName.textContent = student.lastName || 'Loading...';
+    studentEmail.textContent = student.email || 'Loading...';
+    studentPhoneNumber.textContent = student.phoneNumber || 'Loading...';
+
+    studentPESEL.textContent = student.PESELNumber || 'Loading...';
+    studentIndex.textContent = student.indexNumber || 'Loading...';
+    studentStudySince.textContent = student.studySince || 'Loading...';
+    studentTotalECTS.textContent = student.totalECTS || 'Loading...';
+
+    updateEnrollments(student);
+    updateFieldOfStudyForStudent(student);
 }
 
 function updateFieldOfStudyForStudent(student) {
@@ -118,35 +180,6 @@ function updateFieldOfStudyForStudent(student) {
         }
     });
 }
-
-
-
-
-
-
-
-
-// Pobierz dane z backendu
-async function fetchStudentData() {
-    try {
-        const response = await fetch('/api/student/data', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-
-        if (!response.ok) {
-            throw new Error(`Błąd: ${response.status}`);
-        }
-
-        const personData = await response.json();
-        updateView(personData); // Aktualizuj widok HTML
-    } catch (error) {
-        console.error('Błąd podczas pobierania danych studenta:', error);
-    }
-}
-
 
 function updateEnrollments(student) {
     const enrollmentsContainer = document.getElementById('enrollments-container');
@@ -207,32 +240,27 @@ function updateEnrollments(student) {
 
 
 
-function updateView(student) {
-    const studentFirstName = document.getElementById('studentFirstName');
-    const studentLastName = document.getElementById('studentLastName');
-    const studentEmail = document.getElementById('studentEmail');
-    const studentPhoneNumber = document.getElementById('studentPhoneNumber');
 
-    // Additional
-    const studentPESEL = document.getElementById('studentPESELNumber');
-    const studentIndex = document.getElementById('studentIndexNumber');
-    const studentStudySince = document.getElementById('studentStudySince');
-    const studentTotalECTS = document.getElementById('studentTotalECTS');
 
-    studentFirstName.textContent = student.firstName || 'Loading...';
-    studentLastName.textContent = student.lastName || 'Loading...';
-    studentEmail.textContent = student.email || 'Loading...';
-    studentPhoneNumber.textContent = student.phoneNumber || 'Loading...';
+async function fetchStudentData() {
+    try {
+        const response = await fetch('/api/student/data', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
 
-    studentPESEL.textContent = student.PESELNumber || 'Loading...';
-    studentIndex.textContent = student.indexNumber || 'Loading...';
-    studentStudySince.textContent = student.studySince || 'Loading...';
-    studentTotalECTS.textContent = student.totalECTS || 'Loading...';
+        if (!response.ok) {
+            throw new Error(`Błąd: ${response.status}`);
+        }
 
-    updateEnrollments(student);
-    updateFieldOfStudyForStudent(student);
+        const personData = await response.json();
+        updateView(personData); // Aktualizuj widok HTML
+    } catch (error) {
+        console.error('Błąd podczas pobierania danych studenta:', error);
+    }
 }
-
 
 async function updateStudentData(student) {
     try {
@@ -254,5 +282,4 @@ async function updateStudentData(student) {
     }
 }
 
-// Odświeżaj dane co 0,5 sekund
-setInterval(fetchStudentData, 500);
+

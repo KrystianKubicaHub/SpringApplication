@@ -4,6 +4,10 @@ import bdbt_bada_project.SpringApplication.entities.CourseEntity;
 import bdbt_bada_project.SpringApplication.entities.EnrollmentEntity;
 import bdbt_bada_project.SpringApplication.entities.FieldOfStudyEntity;
 import bdbt_bada_project.SpringApplication.entities.LecturerEntity;
+import ch.qos.logback.core.joran.sanity.Pair;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.*;
 import java.util.concurrent.ScheduledExecutorService;
@@ -61,11 +65,27 @@ public class FAKE_DATA {
         studentData.totalECTS = 720;
     }
 
+    public static SerializationResult isSerializable(Object ob) {
+        if (ob == null) {
+            return new SerializationResult(false, "Object is null");
+        }
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            objectMapper.writeValueAsString(ob);
+            return new SerializationResult(true, null); // Sukces, brak błędu
+        } catch (Exception e) {
+            return new SerializationResult(false, e.getMessage()); // Niepowodzenie, zwracamy komunikat błędu
+        }
+    }
+
+
 
     public static void startUpdatingTask(ScheduledExecutorService scheduler, StudentData instance) {
         scheduler.scheduleAtFixedRate(() -> {
             Random random = new Random();
-
+            System.out.println("task działa" + System.currentTimeMillis());
             // Listy imion i nazwisk
             List<String> firstNames = List.of("John", "Jane", "Michael", "Emily", "Robert", "Olivia", "Daniel", "Sophia");
             List<String> lastNames = List.of("Smith", "Johnson", "Williams", "Brown", "Jones", "Miller", "Davis", "Garcia");
@@ -113,19 +133,24 @@ public class FAKE_DATA {
                 String fieldName = fieldOfStudyNames.get(random.nextInt(fieldOfStudyNames.size()));
                 instance.fieldOfStudy.add(new FieldOfStudyEntity(fieldName));
             }
-
-
-            // Aktualizowanie pól klasy
-            instance.updateFirstName(randomFirstName);
-            instance.updateLastName(randomLastName);
+            instance.setFirstName(randomFirstName);
+            instance.setLastName(randomLastName);
             instance.PESELNumber = randomPESEL;
-            instance.updateEmail(randomEmail);
-            instance.updatePhoneNumber(randomPhoneNumber);
+            instance.setEmail(randomEmail);
+            instance.setPhoneNumber(randomPhoneNumber);
             instance.indexNumber = randomIndexNumber;
             instance.totalECTS = randomTotalECTS;
             instance.studySince = randomStudySince;
 
         }, 0, 4, TimeUnit.SECONDS);
+    }
+
+    public static void stopUpdatingTask(ScheduledExecutorService scheduler) {
+        if (scheduler != null && !scheduler.isShutdown()) {
+            scheduler.shutdown();
+        } else {
+            System.out.println("Zadanie już zostało zatrzymane lub scheduler jest null.");
+        }
     }
 
 

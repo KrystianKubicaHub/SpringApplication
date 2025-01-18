@@ -15,6 +15,22 @@ public class StudentData extends PersonEntity {
     public List<FieldOfStudyEntity> fieldOfStudy;
     public List<EnrollmentEntity> enrollments;
 
+    @Override
+    public String toString() {
+        return "StudentData{" +
+                "indexNumber=" + indexNumber +
+                ", studySince='" + studySince + '\'' +
+                ", totalECTS=" + totalECTS +
+                ", fieldOfStudy=" + fieldOfStudy +
+                ", enrollments=" + enrollments +
+                ", id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", PESELNumber='" + PESELNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
+    }
 
     public StudentData() {
         super();

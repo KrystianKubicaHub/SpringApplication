@@ -1,6 +1,9 @@
 package bdbt_bada_project.SpringApplication.entities;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class PersonEntity {
 
     public Integer id;
@@ -14,6 +17,22 @@ public class PersonEntity {
     public String email;
 
     public String phoneNumber;
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
 
     public PersonEntity(Integer id, String firstName, String lastName, String PESELNumber, String email, String phoneNumber) {
         this.id = id;
@@ -34,17 +53,14 @@ public class PersonEntity {
 
 
 
-    public void updateFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void updateLastName(String lastName) {
+    public void setFirstName(String firstName) {this.firstName = firstName;}
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    public void updatePhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-    public void updateEmail(String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 }

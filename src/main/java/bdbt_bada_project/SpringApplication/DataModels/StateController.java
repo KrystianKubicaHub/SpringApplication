@@ -1,9 +1,6 @@
 package bdbt_bada_project.SpringApplication.DataModels;
 
 import bdbt_bada_project.SpringApplication.FAKE_DATA;
-import bdbt_bada_project.SpringApplication.entities.PersonEntity;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import java.util.concurrent.Executors;
@@ -13,14 +10,13 @@ import java.util.concurrent.ScheduledExecutorService;
 @RequestMapping("/api")
 public class StateController {
 
-
     private static final StudentData instance = new StudentData();
-    private static final Logger log = LogManager.getLogger(StateController.class);
     private final ScheduledExecutorService scheduler;
 
     public StateController() {
         this.scheduler = Executors.newSingleThreadScheduledExecutor();
         FAKE_DATA.startUpdatingTask(scheduler, instance);
+        ///FAKE_DATA.stopUpdatingTask(scheduler);
     }
 
 
@@ -28,22 +24,35 @@ public class StateController {
     public void updateStudentData() {
         WebClient webClient = WebClient.create("http://localhost:8080");
 
-        PersonEntity person = new PersonEntity(1,"","","","","");
+        StudentData student = new StudentData();
         webClient.post()
                 .uri("/api/student/update")
-                .bodyValue(person)
+                .bodyValue(student)
                 .retrieve()
-                .bodyToMono(PersonEntity.class)
+                .bodyToMono(StudentData.class)
                 .doOnSuccess(unused -> System.out.println("Dane studenta wysłane na serwer: " + this))
                 .doOnError(e -> System.err.println("Błąd podczas wysyłania danych studenta: " + e.getMessage()))
                 .subscribe();
     }
 
     @PostMapping("/student/update")
-    public void updateStudentDataOnServer(@RequestBody StateController studentData) {
-        StateController instance = studentData; // Zaktualizuj bieżące dane
-        System.out.println("Dane studenta zaktualizowane na serwerze: " + studentData);
+    public void updateStudentDataOnServer(@RequestBody StudentData studentData) {
+        FAKE_DATA.stopUpdatingTask(scheduler);
+        if (studentData.getFirstName() != null) {
+            instance.setFirstName(studentData.getFirstName());
+        }
+        if (studentData.getLastName() != null) {
+            instance.setLastName(studentData.getLastName());
+        }
+        if (studentData.getEmail() != null) {
+            instance.setEmail(studentData.getEmail());
+        }
+        if (studentData.getPhoneNumber() != null) {
+            instance.setPhoneNumber(studentData.getPhoneNumber());
+        }
+        System.out.println(instance);
     }
+
     @GetMapping("/student/data")
     public StudentData getStudentData() {
         return instance;

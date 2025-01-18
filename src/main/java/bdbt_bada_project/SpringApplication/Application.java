@@ -14,19 +14,8 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 		///EnrollmentDAO enrollmentDAO = new EnrollmentDAO();
 		///List<EnrollmentEntity> enrollments = enrollmentDAO.getAllEnrollments();
-		new StateController();
 
 		//testSerialization();
-	}
-
-	public static void testSerialization() throws Exception {
-		ObjectMapper objectMapper = new ObjectMapper();
-		StudentData student = new StudentData();
-		StateController ex = new StateController();
-
-		PersonEntity person = new PersonEntity(1,"","","","","");
-		String json = objectMapper.writeValueAsString(ex); // Spróbuj serializować
-		System.out.println(json);
 	}
 
 

@@ -30,7 +30,7 @@ public class ResignationController {
     @PostMapping("/updateFirstName")
     public ResponseEntity<String> updateFirstName(@RequestBody String firstName) {
         StudentData student = new StudentData();
-        student.updateFirstName(firstName);
+        student.setFirstName(firstName);
         System.out.println("Updated first name to: " + firstName);
         return ResponseEntity.ok("First name updated successfully");
     }
@@ -38,7 +38,7 @@ public class ResignationController {
     @PostMapping("/updateLastName")
     public ResponseEntity<String> updateLastName(@RequestBody String lastName) {
         StudentData student = new StudentData();
-        student.updateLastName(lastName);
+        student.setLastName(lastName);
         System.out.println("Updated last name to: " + lastName);
         return ResponseEntity.ok("Last name updated successfully");
     }
@@ -46,7 +46,7 @@ public class ResignationController {
     @PostMapping("/updateEmail")
     public ResponseEntity<String> updateEmail(@RequestBody String email) {
         StudentData student = new StudentData();
-        student.updateEmail(email);
+        student.setEmail(email);
         System.out.println("Updated email to: " + email);
         return ResponseEntity.ok("Email updated successfully");
     }
@@ -54,7 +54,7 @@ public class ResignationController {
     @PostMapping("/updatePhoneNumber")
     public ResponseEntity<String> updatePhoneNumber(@RequestBody String phoneNumber) {
         StudentData student = new StudentData();
-        student.updatePhoneNumber(phoneNumber);
+        student.setPhoneNumber(phoneNumber);
         System.out.println("Updated phone number to: " + phoneNumber);
         return ResponseEntity.ok("Phone number updated successfully");
     }
