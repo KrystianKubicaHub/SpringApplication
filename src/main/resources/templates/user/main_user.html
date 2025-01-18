@@ -22,7 +22,7 @@
 
 
     <section class="right-panel">
-        <button id="toggle-info-btn" class="show-all-btn">Show All</button>
+        <button id="toggle-info-btn" class="show-more-btn">Show More</button>
         <button id="edit-btn" class="edit-btn">Edit</button>
         <button id="cancel-btn" class="cancel-btn" style="display: none;">Cancel</button>
         <h2>User Information</h2>
@@ -33,16 +33,18 @@
             <p>Phone: <span id="studentPhoneNumber">Loading...</span></p>
         </div>
         <div id="additional-info" style="display: none;">
-            <p>Student ID: <span th:text="${student.id}"></span></p>
-            <p>PESEL Number: <span th:text="${student.PESELNumber}"></span></p>
-            <p>Index Number: <span th:text="${student.indexNumber}"></span></p>
-            <p>Study Since: <span th:text="${student.studySince}"></span></p>
-            <p>Total ECTS: <span th:text="${student.totalECTS}"></span></p>
-            <p>Field of Study:
-                <span th:each="course : ${student.fieldOfStudy}" th:text="${course.name}"></span>
-            </p>
+            <p>PESEL Number: <span id="studentPESELNumber">Loading...</span></p>
+            <p>Index Number: <span id="studentIndexNumber">Loading...</span></p>
+            <p>Study Since: <span id="studentStudySince">Loading...</span></p>
+            <p>Total ECTS: <span id="studentTotalECTS">Loading...</span></p>
+
+            <div id="field-of-study-container" style="overflow-x: auto; white-space: nowrap; border: 1px solid #001451; padding: 10px; border-radius: 5px; background-color: #333333;">
+                <!-- Kierunki będą generowane dynamicznie tutaj -->
+            </div>
+
+
+            <p id="admin-note" style="display: none">The rest of the fields might be edited only by admin!&!</p>
         </div>
-        <p id="admin-note" style="display: none;">The rest of the fields might be edited only by admin!&!</p>
     </section>
 
 

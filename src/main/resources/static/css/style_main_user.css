@@ -10,14 +10,6 @@ body {
     align-items: center;
     min-height: 100vh;
 }
-#enrollments-container {
-    max-height: 600px; /* Maksymalna wysokość sekcji */
-    overflow-y: auto;  /* Przewijanie w pionie */
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-}
 
 /* Kontener główny */
 .container {
@@ -27,8 +19,8 @@ body {
     display: flex;
     flex-wrap: wrap;
     background-color: #2c2c3b;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
     overflow: hidden;
     padding: 20px;
 }
@@ -40,64 +32,87 @@ body {
     display: flex;
     flex-direction: column;
     background-color: #3e3e4f;
-    border-radius: 10px;
+    border-radius: 15px;
     padding: 20px;
     position: relative;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
 /* Nagłówki paneli */
 .left-panel h2, .right-panel h2 {
-    margin-bottom: 20px;
-    font-size: 24px;
+    margin-bottom: 15px;
+    font-size: 22px;
     text-align: center;
     color: #ffffff;
-}
-
-/* Tabela */
-.left-panel table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    font-size: 14px;
-    color: #ddd;
-}
-
-.left-panel table thead th {
-    background-color: #7269d9;
-    color: white;
-    padding: 10px;
-    text-align: left;
-    font-weight: bold;
-    border-bottom: 2px solid #444;
-}
-
-.left-panel table tbody {
-    display: block;
-    max-height: 60vh;
-    overflow-y: auto;
-}
-
-.left-panel table tbody tr {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
-    background-color: #3e3e4f;
-}
-
-.left-panel table tbody tr:nth-child(even) {
     background-color: #4a4a5e;
-}
-
-.left-panel table tbody tr:hover {
-    background-color: #5c5c75;
-    cursor: pointer;
-}
-
-.left-panel table td {
     padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid #444;
+    border-radius: 8px;
+}
+
+/* Przycisk akcji */
+.edit-btn, .show-more-btn, .cancel-btn {
+    height: 40px;
+    min-width: 90px;
+    padding: 10px 15px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Przycisk "Edit" */
+.edit-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: #d66c84;
+    color: white;
+    transition: all 0.3s;
+}
+
+.edit-btn:hover {
+    background-color: #b6546b;
+}
+
+/* Przycisk "Show More" */
+.show-more-btn {
+    position: absolute;
+    top: 15px;
+    right: 120px;
+    background-color: #ffc107;
+    color: #1e1e2f;
+    transition: all 0.3s;
+}
+
+.show-more-btn:hover {
+    background-color: #e0a706;
+}
+
+/* Przycisk "Cancel" */
+.cancel-btn {
+    background-color: #e34e4e;
+    color: white;
+    position: absolute;
+    top: 15px;
+    right: 220px;
+    transition: all 0.3s;
+}
+
+.cancel-btn:hover {
+    background-color: #c94444;
+}
+
+/* Informacja admina */
+#admin-note {
+    margin-top: 15px;
+    font-style: italic;
+    color: #d66c84;
+    padding: 10px;
+    border-left: 5px solid #d66c84;
+    background-color: #4a4a5e;
+    border-radius: 8px;
 }
 
 /* Kontener przedmiotów */
@@ -112,16 +127,17 @@ body {
 
 /* Przewijanie */
 .enrollments-container::-webkit-scrollbar {
-    width: 10px;
+    width: 12px;
 }
 
 .enrollments-container::-webkit-scrollbar-thumb {
     background-color: #7269d9;
-    border-radius: 5px;
+    border-radius: 10px;
+    border: 2px solid #3e3e4f;
 }
 
 .enrollments-container::-webkit-scrollbar-track {
-    background-color: #3e3e4f;
+    background-color: #2c2c3b;
 }
 
 /* Stylizacja przedmiotu */
@@ -134,92 +150,107 @@ body {
     background-color: #4a4a5e;
     color: white;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s;
-}
-
-.enrollment h3 {
-    font-size: 18px;
-    margin-bottom: 10px;
-}
-
-.enrollment p {
-    font-size: 14px;
-    margin-bottom: 5px;
-    color: #ddd;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
 .enrollment:hover {
     background-color: #5c5c75;
+    transform: scale(1.02);
 }
 
-/* Przycisk "Resign" */
+/* Nagłówek "User Information" */
+.right-panel h2 {
+    margin-top: 50px;
+    font-size: 24px;
+    color: #ffffff;
+    background-color: #5c5c75;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+}
+/* Styl przycisku "Resign" */
 .resign-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: #ff4d4d;
-    color: white;
+    background-color: #ff3333; /* Jaskrawy czerwony kolor */
+    color: white; /* Kolor tekstu */
     border: none;
-    border-radius: 10px;
-    padding: 5px 10px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s;
+    border-radius: 5px; /* Zaokrąglone rogi */
+    padding: 10px 15px; /* Wewnętrzny odstęp */
+    font-size: 14px; /* Rozmiar tekstu */
+    font-weight: bold; /* Grubszy tekst */
+    cursor: pointer; /* Kursor wskazujący na przycisk */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Delikatny cień */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Animacje przy interakcji */
 }
 
+/* Efekt hover dla przycisku "Resign" */
 .resign-btn:hover {
-    background-color: #e60000;
+    background-color: #cc0000; /* Ciemniejszy czerwony kolor przy najechaniu */
+    transform: scale(1.05); /* Subtelne powiększenie */
 }
 
-/* Przycisk akcji */
-.edit-btn, .show-all-btn, .cancel-btn {
-    height: 40px;
-    min-width: 80px;
-    padding: 10px 15px;
-    font-size: 14px;
-    font-weight: bold;
-    border: none;
+/* Efekt aktywacji przycisku */
+.resign-btn:active {
+    background-color: #990000; /* Jeszcze ciemniejszy czerwony przy kliknięciu */
+    transform: scale(0.95); /* Subtelne zmniejszenie */
+}
+/* Stylizacja pojedynczego kierunku studiów */
+.field-of-study-item {
+    display: inline-block;
+    margin-right: 10px; /* Odstęp między elementami */
+    padding: 10px 15px; /* Wewnętrzny margines */
+    border: 2px solid #007bff; /* Obramowanie */
+    border-radius: 8px; /* Zaokrąglone rogi */
+    background-color: #e9f5ff; /* Jasnoniebieskie tło */
+    color: #007bff; /* Kolor tekstu */
+    font-size: 14px; /* Rozmiar czcionki */
+    font-weight: bold; /* Grubszy tekst */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Delikatny cień */
+    transition: transform 0.2s, background-color 0.3s; /* Animacje */
+}
+
+/* Efekt hover */
+.field-of-study-item:hover {
+    background-color: #cce5ff; /* Ciemniejsze tło przy najechaniu */
+    transform: scale(1.05); /* Subtelne powiększenie */
+}
+
+/* Efekt aktywacji */
+.field-of-study-item:active {
+    background-color: #99ccff; /* Jeszcze ciemniejsze tło przy kliknięciu */
+    transform: scale(0.95); /* Subtelne zmniejszenie */
+}
+
+
+
+#enrollments-container {
+    max-height: 600px; /* Maksymalna wysokość sekcji */
+    overflow-y: auto; /* Wymuszenie przewijania w pionie */
+    padding: 10px;
+    border: 1px solid #ccc;
     border-radius: 5px;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    background-color: #f9f9f9;
 }
 
-/* Przycisk "Edit" */
-.edit-btn {
-    position: absolute;
-    top: 10px; /* Odstęp od górnej krawędzi right-panel */
-    right: 10px; /* Odstęp od prawej krawędzi right-panel */
-    background-color: #b54a68;
-    color: white;
+/* Przewijanie (dla WebKit - Chrome, Edge, Safari) */
+#enrollments-container::-webkit-scrollbar {
+    width: 10px;
+    height: 10px; /* Jeśli chcesz pasek również w poziomie */
 }
 
-.edit-btn:hover {
-    background-color: #953753;
+#enrollments-container::-webkit-scrollbar-thumb {
+    background-color: #7269d9; /* Kolor uchwytu przewijania */
+    border-radius: 5px;
 }
 
-/* Przycisk "Show More" */
-.show-all-btn {
-    position: absolute;
-    top: 10px; /* Ten sam odstęp od góry */
-    right: 120px; /* Odstęp względem przycisku Edit */
-    background-color: #f5e342;
-    color: #1e1e2f;
+#enrollments-container::-webkit-scrollbar-track {
+    background-color: #3e3e4f; /* Kolor tła paska przewijania */
 }
 
-.show-all-btn:hover {
-    background-color: #e4d33a;
+/* Zapewnienie przewijania w innych przeglądarkach */
+#enrollments-container {
+    scrollbar-color: #7269d9 #3e3e4f; /* Kolor uchwytu i tła (dla Firefox) */
+    scrollbar-width: thin; /* Cienki pasek (dla Firefox) */
 }
 
-.cancel-btn {
-    background-color: #e34242;
-    color: white;
-    position: absolute;
-    top: 20px;
-    right: 200px;
-}
 
-.cancel-btn:hover {
-    background-color: #c73232;
-}
+

@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class StateController {
 
 
-    private static volatile StudentData instance = new StudentData();
+    private static final StudentData instance = new StudentData();
     private final ScheduledExecutorService scheduler;
 
     public StateController() {
@@ -31,28 +31,48 @@ public class StateController {
 
 
     private void startUpdatingTask() {
-
-
         scheduler.scheduleAtFixedRate(() -> {
             Random random = new Random();
 
+            // Listy imion i nazwisk
+            List<String> firstNames = List.of("John", "Jane", "Michael", "Emily", "Robert", "Olivia", "Daniel", "Sophia");
+            List<String> lastNames = List.of("Smith", "Johnson", "Williams", "Brown", "Jones", "Miller", "Davis", "Garcia");
 
-            String randomFirstName = "FirstName" + random.nextInt(1000);
-            String randomLastName = "LastName" + random.nextInt(1000);
-            String randomPESEL = String.valueOf(10000000000L + random.nextInt(899999999));
-            String randomEmail = "email" + random.nextInt(1000) + "@example.com";
+            // Losowanie imienia i nazwiska
+            String randomFirstName = firstNames.get(random.nextInt(firstNames.size()));
+            String randomLastName = lastNames.get(random.nextInt(lastNames.size()));
+
+            // Generowanie emaila
+            String randomEmail = randomFirstName.toLowerCase() + "." + randomLastName.toLowerCase() + "@example.com";
+
+            // Losowy PESEL (11 cyfr)
+            String randomPESEL = String.valueOf(10000000000L + random.nextLong(90000000000L));
+
+            // Losowy indexNumber (np. 6 cyfr)
+            int randomIndexNumber = 100000 + random.nextInt(900000);
+
+            // Losowy telefon (np. w zakresie 500000000 - 999999999)
             String randomPhoneNumber = String.valueOf(500000000 + random.nextInt(499999999));
 
+            // Losowa liczba ECTS (np. 0 - 300)
+            int randomTotalECTS = random.nextInt(301);
 
+            // Losowanie roku rozpoczęcia studiów (np. 2000 - 2025)
+            String randomStudySince = String.valueOf(2000 + random.nextInt(26));
+
+            // Aktualizowanie pól klasy
             instance.updateFirstName(randomFirstName);
             instance.updateLastName(randomLastName);
             instance.PESELNumber = randomPESEL;
             instance.updateEmail(randomEmail);
             instance.updatePhoneNumber(randomPhoneNumber);
-
+            instance.indexNumber = randomIndexNumber;
+            instance.totalECTS = randomTotalECTS;
+            instance.studySince = randomStudySince;
 
         }, 0, 4, TimeUnit.SECONDS);
     }
+
 
 
 
@@ -78,10 +98,6 @@ public class StateController {
     }
     @GetMapping("/student/data")
     public StudentData getStudentData() {
-        Random rand = new Random();
-        int wylos = rand.nextInt(0, 100);
-        System.out.println("Endpoint /api/student/data został wywołany");
-        PersonEntity person = new PersonEntity(wylos,"Krystiabn",""+wylos,"","","");
         return instance;
     }
 }

@@ -1,3 +1,60 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const button = document.getElementById('toggle-info-btn');
+    if (button) {
+        button.addEventListener('click', showMoreOrLess);
+    } else {
+        console.error('Element o id "toggle-info-btn" nie został znaleziony');
+    }
+});
+
+
+
+function showMoreOrLess() {
+    const additionalInfoContainer = document.getElementById('additional-info');
+    const toggleButton = document.getElementById('toggle-info-btn');
+
+
+    if (additionalInfoContainer.style.display === 'block') {
+        additionalInfoContainer.style.display = 'none';
+        toggleButton.textContent = 'Show More';
+    } else {
+        additionalInfoContainer.style.display = 'block';
+        toggleButton.textContent = 'Show Less';
+    }
+}
+
+function updateFieldOfStudyForStudent(student) {
+    if (!student.fieldOfStudy || !Array.isArray(student.fieldOfStudy)) {
+        console.error('fieldOfStudy is not defined or not an array');
+        return;
+    }
+
+    const container = document.getElementById('field-of-study-container');
+    container.innerHTML = ''; // Wyczyszczenie poprzedniej zawartości
+
+    student.fieldOfStudy.forEach((field) => {
+        const fieldOfStudyName = field.name;
+        console.log(fieldOfStudyName);
+
+        if (fieldOfStudyName) {
+            // Tworzenie elementu dla kierunku studiów
+            const studyElement = document.createElement('div');
+            studyElement.className = 'field-of-study-item'; // Przypisanie klasy CSS
+            studyElement.textContent = fieldOfStudyName;
+
+            // Dodanie elementu do kontenera
+            container.appendChild(studyElement);
+        }
+    });
+}
+
+
+
+
+
+
+
+
 // Pobierz dane z backendu
 async function fetchStudentData() {
     try {
@@ -78,28 +135,42 @@ function updateEnrollments(student) {
 }
 
 
-function updateView(person) {
+
+function updateView(student) {
     const studentFirstName = document.getElementById('studentFirstName');
     const studentLastName = document.getElementById('studentLastName');
     const studentEmail = document.getElementById('studentEmail');
     const studentPhoneNumber = document.getElementById('studentPhoneNumber');
 
-    studentFirstName.textContent = person.firstName || 'Loading...';
-    studentLastName.textContent = person.lastName || 'Loading...';
-    studentEmail.textContent = person.email || 'Loading...';
-    studentPhoneNumber.textContent = person.phoneNumber || 'Loading...';
-    updateEnrollments(person);
+    // Additional
+    const studentPESEL = document.getElementById('studentPESELNumber');
+    const studentIndex = document.getElementById('studentIndexNumber');
+    const studentStudySince = document.getElementById('studentStudySince');
+    const studentTotalECTS = document.getElementById('studentTotalECTS');
+
+    studentFirstName.textContent = student.firstName || 'Loading...';
+    studentLastName.textContent = student.lastName || 'Loading...';
+    studentEmail.textContent = student.email || 'Loading...';
+    studentPhoneNumber.textContent = student.phoneNumber || 'Loading...';
+
+    studentPESEL.textContent = student.PESELNumber || 'Loading...';
+    studentIndex.textContent = student.indexNumber || 'Loading...';
+    studentStudySince.textContent = student.studySince || 'Loading...';
+    studentTotalECTS.textContent = student.totalECTS || 'Loading...';
+
+    updateEnrollments(student);
+    updateFieldOfStudyForStudent(student);
 }
 
-// Funkcja wywoływana przez backend przy zmianach danych
-async function updateStudentData(person) {
+
+async function updateStudentData(student) {
     try {
         const response = await fetch('/api/student/update', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(person),
+            body: JSON.stringify(student),
         });
 
         if (!response.ok) {
@@ -112,5 +183,5 @@ async function updateStudentData(person) {
     }
 }
 
-// Odświeżaj dane co 5 sekund
+// Odświeżaj dane co 0,5 sekund
 setInterval(fetchStudentData, 500);
