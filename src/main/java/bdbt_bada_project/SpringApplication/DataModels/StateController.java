@@ -1,8 +1,12 @@
 package bdbt_bada_project.SpringApplication.DataModels;
 
 import bdbt_bada_project.SpringApplication.FAKE_DATA;
+import bdbt_bada_project.SpringApplication.entities.CourseEntity;
+import bdbt_bada_project.SpringApplication.entities.EnrollmentEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -12,9 +16,12 @@ public class StateController {
 
     private static final StudentData instance = new StudentData();
     private final ScheduledExecutorService scheduler;
+    private List<CourseEntity> serverCourses;
 
     public StateController() {
+        serverCourses = FAKE_DATA.generateCourses(20);
         this.scheduler = Executors.newSingleThreadScheduledExecutor();
+        System.out.println(serverCourses);
         FAKE_DATA.startUpdatingTask(scheduler, instance);
         FAKE_DATA.startRemovingEnrollmentTask(scheduler, instance);
         ///FAKE_DATA.stopUpdatingTask(scheduler);
@@ -67,5 +74,30 @@ public class StateController {
     @GetMapping("/enrollment/removed/{id}")
     public int notifyEnrollmentRemoval(@PathVariable int id) {
         return id;
+    }
+
+    @GetMapping("/courses")
+    public List<CourseEntity> getServerCourses() {
+        return serverCourses;
+    }
+
+    @PostMapping("/courses/register")
+    public String registerForCourse(@RequestBody int courseId) {
+        CourseEntity selectedCourse = serverCourses.stream()
+                .filter(course -> course.getId() == courseId)
+                .findFirst()
+                .orElse(null);
+
+        if (selectedCourse != null) {
+            boolean success = instance.addNewEnrollment(selectedCourse);
+            if(success){
+                return "Successfully registered for course: " + selectedCourse.getName();
+            }else{
+                return "Nima zapisu";
+            }
+
+        } else {
+            return "Course with ID " + courseId + " not found.";
+        }
     }
 }

@@ -133,13 +133,15 @@ function showMoreOrLess() {
 function addSubjectButtonClicked(){
 
     const rightPanel = document.querySelector('.right-panel');
+    const coursesPanel = document.querySelector('.courses-panel')
 
     if (rightPanel.classList.contains('hidden')) {
-        console.log('Log1')
-        rightPanel.classList.remove('hidden'); // Pokazuje sekcję
+        rightPanel.classList.remove('hidden');
+        coursesPanel.classList.add('hidden');
     } else {
-        console.log('Log2')
-        rightPanel.classList.add('hidden'); // Ukrywa sekcję
+        fetchAndDisplayCourses()
+        rightPanel.classList.add('hidden');
+        coursesPanel.classList.remove('hidden');
     }
 }
 
@@ -319,6 +321,100 @@ function removeEnrollmentById(enrollmentId) {
         .catch(error => {
             console.error('Error while removing enrollment:', error);
         });
+}
+
+async function fetchAndDisplayCourses() {
+    try {
+        const coursePanel = document.querySelector('.courses-panel');
+        if (!coursePanel) {
+            console.error('Element .right-panel not found');
+            return;
+        }
+
+        // Dodanie klasy dla stałego stylu
+        coursePanel.classList.add('courses-panel');
+
+        // Wyczyść zawartość, ale utrzymaj strukturę
+        coursePanel.innerHTML = '<h2 style="color: #4CAF50; text-align: center; border-bottom: 2px solid #4CAF50; padding-bottom: 10px;">Available Courses</h2>';
+
+        const response = await fetch('/api/courses', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch courses: ${response.status}`);
+        }
+
+        const courses = await response.json();
+
+        if (courses.length === 0) {
+            const emptyMessage = document.createElement('p');
+            emptyMessage.textContent = 'No courses available at the moment.';
+            emptyMessage.style.textAlign = 'center';
+            emptyMessage.style.color = '#FF5722';
+            emptyMessage.style.fontSize = '18px';
+            emptyMessage.style.fontWeight = 'bold';
+            coursePanel.appendChild(emptyMessage);
+            return;
+        }
+
+        const courseList = document.createElement('ul');
+        courseList.style.listStyle = 'none';
+        courseList.style.padding = '0';
+
+        courses.forEach((course) => {
+            const courseItem = document.createElement('li');
+            courseItem.style.border = '1px solid #ddd';
+            courseItem.style.borderRadius = '8px';
+            courseItem.style.margin = '15px 0';
+            courseItem.style.padding = '15px';
+            courseItem.style.backgroundColor = '#ffffff';
+            courseItem.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+            courseItem.style.transition = 'transform 0.2s, box-shadow 0.2s';
+
+            courseItem.addEventListener('mouseover', () => {
+                courseItem.style.transform = 'scale(1.02)';
+                courseItem.style.boxShadow = '0 6px 10px rgba(0, 0, 0, 0.2)';
+            });
+
+            courseItem.addEventListener('mouseout', () => {
+                courseItem.style.transform = 'scale(1)';
+                courseItem.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+            });
+
+            const courseName = document.createElement('h3');
+            courseName.textContent = course.name;
+            courseName.style.margin = '0 0 10px';
+            courseName.style.color = '#2196F3';
+
+            const courseDescription = document.createElement('p');
+            courseDescription.textContent = course.description;
+            courseDescription.style.color = '#757575';
+
+            const ectsInfo = document.createElement('p');
+            ectsInfo.textContent = `ECTS: ${course.ectsCredits}`;
+            ectsInfo.style.fontWeight = 'bold';
+            ectsInfo.style.color = '#009688';
+
+            const lecturerInfo = document.createElement('p');
+            lecturerInfo.textContent = `Lecturer: ${course.lecturer.academicTitle} ${course.lecturer.firstName} ${course.lecturer.lastName}`;
+            lecturerInfo.style.fontStyle = 'italic';
+            lecturerInfo.style.color = '#607D8B';
+
+            courseItem.appendChild(courseName);
+            courseItem.appendChild(courseDescription);
+            courseItem.appendChild(ectsInfo);
+            courseItem.appendChild(lecturerInfo);
+            courseList.appendChild(courseItem);
+        });
+
+        coursePanel.appendChild(courseList);
+    } catch (error) {
+        console.error('Error fetching or displaying courses:', error);
+    }
 }
 
 

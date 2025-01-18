@@ -1,9 +1,12 @@
 package bdbt_bada_project.SpringApplication.DataModels;
 
 import bdbt_bada_project.SpringApplication.FAKE_DATA;
+import bdbt_bada_project.SpringApplication.entities.CourseEntity;
 import bdbt_bada_project.SpringApplication.entities.EnrollmentEntity;
 import bdbt_bada_project.SpringApplication.entities.FieldOfStudyEntity;
 import bdbt_bada_project.SpringApplication.entities.PersonEntity;
+
+import java.util.Date;
 import java.util.List;
 
 
@@ -39,7 +42,7 @@ public class StudentData extends PersonEntity {
     public StudentData() {
         super();
         FAKE_DATA.setPersonsData(this);
-        this.enrollments = FAKE_DATA.getAllEnrollments();
+        this.enrollments = FAKE_DATA.generateEnrollments();
     }
 
     public boolean removeEnrollmentByIndex(int i) {
@@ -51,4 +54,29 @@ public class StudentData extends PersonEntity {
         }
     }
 
+    public boolean addNewEnrollment(CourseEntity courseEntity) {
+        if (courseEntity == null) {
+            return false;
+        }
+
+        int newId = 1;
+        List<EnrollmentEntity> enrollments = this.getEnrollments();
+
+        if (enrollments != null && !enrollments.isEmpty()) {
+            newId = enrollments.stream()
+                    .mapToInt(EnrollmentEntity::getId)
+                    .max()
+                    .orElse(0) + 1;
+        }
+
+        Date currentDate = new Date();
+        EnrollmentEntity newEnrollment = new EnrollmentEntity(courseEntity, currentDate, newId);
+
+        if (enrollments != null) {
+            enrollments.add(newEnrollment);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

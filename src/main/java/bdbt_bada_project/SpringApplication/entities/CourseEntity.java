@@ -23,6 +23,17 @@ public class CourseEntity {
         this.lecturer = lecturer;
     }
 
+    @Override
+    public String toString() {
+        return "CourseEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", ectsCredits=" + ectsCredits +
+                ", lecturer=" + lecturer +
+                '}';
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }

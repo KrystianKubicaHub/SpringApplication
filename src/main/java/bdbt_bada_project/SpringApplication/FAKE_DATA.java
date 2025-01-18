@@ -12,7 +12,8 @@ import java.util.concurrent.TimeUnit;
 
 public class FAKE_DATA {
 
-    public static List<EnrollmentEntity> getAllEnrollments() {
+
+    public static List<EnrollmentEntity> generateEnrollments() {
         List<LecturerEntity> generatedLecturers = generateLecturers();
         List<EnrollmentEntity> enrollments = new ArrayList<>();
 
@@ -70,6 +71,54 @@ public class FAKE_DATA {
     }
 
 
+    public static List<CourseEntity> generateCourses(int numberOfCourses) {
+        List<String> courseNames = List.of(
+                "Image Analysis in Caravaggio's Paintings",
+                "The Literary Depiction of Death in Concentration Camps",
+                "Impact of Classical Music on 18th Century Geopolitics",
+                "Symbolism in Romantic Landscape Paintings",
+                "Analyzing the Role of Shadows in Baroque Art",
+                "The Use of Imagery in Modernist Poetry",
+                "Influence of Ancient Greek Myths on Renaissance Art",
+                "Artistic Responses to the Industrial Revolution",
+                "The Evolution of Abstract Art in the 20th Century",
+                "Interpreting the Sublime in Gothic Literature",
+                "The Power of Visual Rhetoric in Political Cartoons",
+                "Analyzing Propaganda Posters from World War II",
+                "Music and Identity in Post-Colonial Societies",
+                "Gender Representation in Victorian Literature",
+                "The Interplay of Text and Image in Graphic Novels",
+                "Representation of War in Impressionist Paintings",
+                "Exploring Light and Color in Impressionism",
+                "Dystopian Themes in Contemporary Cinema",
+                "Art and Technology: The Rise of Digital Media",
+                "The Literary Influence of Historical Traumas"
+        );
+
+        Random random = new Random();
+        List<LecturerEntity> lecturers = FAKE_DATA.generateLecturers();
+        List<CourseEntity> courses = new ArrayList<>();
+
+        for (int i = 0; i < numberOfCourses; i++) {
+            LecturerEntity lecturer = lecturers.get(random.nextInt(lecturers.size()));
+
+            String courseName = courseNames.get(i % courseNames.size()); // Rotacja po liście nazw
+            String description = "Course focusing on " + courseName.toLowerCase();
+            int ectsCredits = random.nextInt(5) + 1; // ECTS od 1 do 5
+
+            CourseEntity course = new CourseEntity(
+                    i + 1, // ID kursu
+                    courseName,
+                    description,
+                    ectsCredits,
+                    lecturer
+            );
+
+            courses.add(course);
+        }
+
+        return courses;
+    }
 
     public static void startUpdatingTask(ScheduledExecutorService scheduler, StudentData instance) {
         scheduler.scheduleAtFixedRate(() -> {
