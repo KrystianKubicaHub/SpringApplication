@@ -216,7 +216,14 @@ function updateEnrollments(student) {
             const resignButton = document.createElement('button');
             resignButton.className = 'resign-btn';
             resignButton.textContent = 'Resign';
-            resignButton.onclick = () => removeEnrollmentById(enrollment.id);
+            resignButton.onclick = async () => {
+                try {
+                    await removeEnrollmentById(enrollment.id);
+                    await fetchAndDisplayCourses();
+                } catch (error) {
+                    console.error('Error during unenrollment or course fetch:', error);
+                }
+            };
 
             // Tworzymy tytuł przedmiotu
             const courseName = document.createElement('h3');
@@ -348,7 +355,6 @@ async function registerForCourse(courseId) {
     }
 }
 
-
 async function fetchAndDisplayCourses() {
     try {
         const coursePanel = document.querySelector('.courses-panel');
@@ -357,6 +363,8 @@ async function fetchAndDisplayCourses() {
             return;
         }
 
+        // Wywołaj fetchStudentData przed pobraniem kursów
+        await fetchStudentData();
 
         // Wyczyść zawartość, ale utrzymaj strukturę
         coursePanel.innerHTML = '<h2 style="color: #4CAF50; text-align: center; border-bottom: 2px solid #4CAF50; padding-bottom: 10px;">Available Courses</h2>';
@@ -428,22 +436,21 @@ async function fetchAndDisplayCourses() {
             lecturerInfo.style.fontStyle = 'italic';
             lecturerInfo.style.color = '#607D8B';
 
-            const enrollButtonGreem = document.createElement('button');
-            enrollButtonGreem.textContent = 'Enroll';
-            enrollButtonGreem.className = 'enroll-green-btn';
+            const enrollButtonGreen = document.createElement('button');
+            enrollButtonGreen.textContent = 'Enroll';
+            enrollButtonGreen.className = 'enroll-green-btn';
 
-            enrollButtonGreem.addEventListener('click', () => {
-                registerForCourse(course.id);
-                fetchAndDisplayCourses()
+            enrollButtonGreen.addEventListener('click', async () => {
+                await registerForCourse(course.id);
+                await fetchAndDisplayCourses();
             });
 
             courseItem.appendChild(courseName);
             courseItem.appendChild(courseDescription);
             courseItem.appendChild(ectsInfo);
             courseItem.appendChild(lecturerInfo);
-            courseItem.appendChild(enrollButtonGreem);
+            courseItem.appendChild(enrollButtonGreen);
             courseList.appendChild(courseItem);
-
         });
 
         coursePanel.appendChild(courseList);
@@ -451,6 +458,5 @@ async function fetchAndDisplayCourses() {
         console.error('Error fetching or displaying courses:', error);
     }
 }
-
 
 
