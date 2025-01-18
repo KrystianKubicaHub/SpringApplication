@@ -1,9 +1,13 @@
 package bdbt_bada_project.SpringApplication.DataModels;
 
+import bdbt_bada_project.SpringApplication.FAKE_DATA;
 import bdbt_bada_project.SpringApplication.entities.EnrollmentEntity;
 import bdbt_bada_project.SpringApplication.entities.FieldOfStudyEntity;
 import bdbt_bada_project.SpringApplication.entities.PersonEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -13,67 +17,19 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-
 @RestController
 @RequestMapping("/api")
 public class StateController {
 
 
     private static final StudentData instance = new StudentData();
+    private static final Logger log = LogManager.getLogger(StateController.class);
     private final ScheduledExecutorService scheduler;
 
     public StateController() {
         this.scheduler = Executors.newSingleThreadScheduledExecutor();
-        startUpdatingTask();
+        FAKE_DATA.startUpdatingTask(scheduler, instance);
     }
-
-
-
-
-    private void startUpdatingTask() {
-        scheduler.scheduleAtFixedRate(() -> {
-            Random random = new Random();
-
-            // Listy imion i nazwisk
-            List<String> firstNames = List.of("John", "Jane", "Michael", "Emily", "Robert", "Olivia", "Daniel", "Sophia");
-            List<String> lastNames = List.of("Smith", "Johnson", "Williams", "Brown", "Jones", "Miller", "Davis", "Garcia");
-
-            // Losowanie imienia i nazwiska
-            String randomFirstName = firstNames.get(random.nextInt(firstNames.size()));
-            String randomLastName = lastNames.get(random.nextInt(lastNames.size()));
-
-            // Generowanie emaila
-            String randomEmail = randomFirstName.toLowerCase() + "." + randomLastName.toLowerCase() + "@example.com";
-
-            // Losowy PESEL (11 cyfr)
-            String randomPESEL = String.valueOf(10000000000L + random.nextLong(90000000000L));
-
-            // Losowy indexNumber (np. 6 cyfr)
-            int randomIndexNumber = 100000 + random.nextInt(900000);
-
-            // Losowy telefon (np. w zakresie 500000000 - 999999999)
-            String randomPhoneNumber = String.valueOf(500000000 + random.nextInt(499999999));
-
-            // Losowa liczba ECTS (np. 0 - 300)
-            int randomTotalECTS = random.nextInt(301);
-
-            // Losowanie roku rozpoczęcia studiów (np. 2000 - 2025)
-            String randomStudySince = String.valueOf(2000 + random.nextInt(26));
-
-            // Aktualizowanie pól klasy
-            instance.updateFirstName(randomFirstName);
-            instance.updateLastName(randomLastName);
-            instance.PESELNumber = randomPESEL;
-            instance.updateEmail(randomEmail);
-            instance.updatePhoneNumber(randomPhoneNumber);
-            instance.indexNumber = randomIndexNumber;
-            instance.totalECTS = randomTotalECTS;
-            instance.studySince = randomStudySince;
-
-        }, 0, 4, TimeUnit.SECONDS);
-    }
-
-
 
 
     @PostMapping("/student/update-self")

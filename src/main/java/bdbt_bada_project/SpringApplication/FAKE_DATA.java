@@ -6,6 +6,8 @@ import bdbt_bada_project.SpringApplication.entities.FieldOfStudyEntity;
 import bdbt_bada_project.SpringApplication.entities.LecturerEntity;
 
 import java.util.*;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class FAKE_DATA {
 
@@ -54,10 +56,80 @@ public class FAKE_DATA {
         studentData.phoneNumber = "606309379";
         studentData.indexNumber = 331501;
         studentData.studySince = "2070L";
-        studentData.fieldOfStudy = Collections.singletonList(fose);
+        studentData.fieldOfStudy = new ArrayList<>();
+        studentData.fieldOfStudy.add(fose);
         studentData.totalECTS = 720;
-
     }
+
+
+    public static void startUpdatingTask(ScheduledExecutorService scheduler, StudentData instance) {
+        scheduler.scheduleAtFixedRate(() -> {
+            Random random = new Random();
+
+            // Listy imion i nazwisk
+            List<String> firstNames = List.of("John", "Jane", "Michael", "Emily", "Robert", "Olivia", "Daniel", "Sophia");
+            List<String> lastNames = List.of("Smith", "Johnson", "Williams", "Brown", "Jones", "Miller", "Davis", "Garcia");
+
+            // Losowanie imienia i nazwiska
+            String randomFirstName = firstNames.get(random.nextInt(firstNames.size()));
+            String randomLastName = lastNames.get(random.nextInt(lastNames.size()));
+
+            // Generowanie emaila
+            String randomEmail = randomFirstName.toLowerCase() + "." + randomLastName.toLowerCase() + "@example.com";
+
+            // Losowy PESEL (11 cyfr)
+            String randomPESEL = String.valueOf(10000000000L + random.nextLong(90000000000L));
+
+            // Losowy indexNumber (np. 6 cyfr)
+            int randomIndexNumber = 100000 + random.nextInt(900000);
+
+            // Losowy telefon (np. w zakresie 500000000 - 999999999)
+            String randomPhoneNumber = String.valueOf(500000000 + random.nextInt(499999999));
+
+            // Losowa liczba ECTS (np. 0 - 300)
+            int randomTotalECTS = random.nextInt(301);
+
+            // Losowanie roku rozpoczęcia studiów (np. 2000 - 2025)
+            String randomStudySince = String.valueOf(2000 + random.nextInt(26));
+
+            // Generowanie kierunków studiów
+            List<String> fieldOfStudyNames = List.of(
+                    "Artificial Intelligence",
+                    "Quantum Computing",
+                    "Space Engineering",
+                    "Cybersecurity",
+                    "Biomedical Sciences",
+                    "Robotics and Automation",
+                    "Environmental Science",
+                    "Data Science"
+            );
+            // Czyszczenie istniejącej listy kierunków
+            instance.fieldOfStudy.clear();
+
+            System.out.println("A czy tegho printa zobacze?2: Nie");
+
+
+            // Losowanie liczby kierunków studiów (1-4)
+            int numberOfFields = 1 + random.nextInt(3);
+            for (int i = 0; i < numberOfFields; i++) {
+                String fieldName = fieldOfStudyNames.get(random.nextInt(fieldOfStudyNames.size()));
+                instance.fieldOfStudy.add(new FieldOfStudyEntity(fieldName));
+            }
+
+
+            // Aktualizowanie pól klasy
+            instance.updateFirstName(randomFirstName);
+            instance.updateLastName(randomLastName);
+            instance.PESELNumber = randomPESEL;
+            instance.updateEmail(randomEmail);
+            instance.updatePhoneNumber(randomPhoneNumber);
+            instance.indexNumber = randomIndexNumber;
+            instance.totalECTS = randomTotalECTS;
+            instance.studySince = randomStudySince;
+
+        }, 0, 4, TimeUnit.SECONDS);
+    }
+
 
     public static List<LecturerEntity> generateLecturers() {
         List<LecturerEntity> lecturers = new ArrayList<>();

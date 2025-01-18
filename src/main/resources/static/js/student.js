@@ -1,11 +1,56 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const button = document.getElementById('toggle-info-btn');
-    if (button) {
-        button.addEventListener('click', showMoreOrLess);
+    const buttonShowMoreOrLess = document.getElementById('toggle-info-btn');
+    const buttonEdit = document.getElementById('edit-btn');
+
+    if (buttonShowMoreOrLess) {
+        buttonShowMoreOrLess.addEventListener('click', showMoreOrLess);
     } else {
-        console.error('Element o id "toggle-info-btn" nie został znaleziony');
+        console.error('chuj wie gdzie jest element');
+    }
+    if (buttonEdit) {
+        buttonEdit.addEventListener('click', enableEdit);
+    } else {
+        console.error('chuj wie gdzie jest element');
     }
 });
+
+function enableEdit() {
+    const adminNote = document.getElementById('admin-note');
+    const buttonEdit = document.getElementById('edit-btn');
+    const fields = document.querySelectorAll('#user-info p');
+
+    if (buttonEdit.textContent === 'Edit') {
+        adminNote.style.display = 'block';
+        buttonEdit.textContent = 'Confirm';
+
+        fields.forEach(field => {
+            const span = field.querySelector('span');
+            if (span) {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.value = span.textContent;
+                input.id = span.id;
+                input.className = 'edit-input';
+                span.replaceWith(input);
+            }
+        });
+    } else {
+        adminNote.style.display = 'none';
+        buttonEdit.textContent = 'Edit';
+
+        fields.forEach(field => {
+            const input = field.querySelector('input');
+            if (input) {
+                const span = document.createElement('span');
+                span.textContent = input.value;
+                span.id = input.id;
+                input.replaceWith(span);
+            }
+        });
+    }
+}
+
+
 
 
 

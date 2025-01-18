@@ -251,6 +251,16 @@ body {
     scrollbar-color: #7269d9 #3e3e4f; /* Kolor uchwytu i tła (dla Firefox) */
     scrollbar-width: thin; /* Cienki pasek (dla Firefox) */
 }
+.edit-input {
+    width: calc(100% - 20px); /* Dynamiczne dopasowanie do szerokości */
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
 
 
 
