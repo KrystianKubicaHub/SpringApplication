@@ -416,6 +416,27 @@ body {
     background-color: #388E3C; /* Jeszcze ciemniejszy zielony przy kliknięciu */
     transform: scale(0.95); /* Subtelne zmniejszenie */
 }
+/* Przycisk Sign Out */
+.sign-out-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #ff3333;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.sign-out-btn:hover {
+    background-color: #cc0000;
+    transform: scale(1.05);
+}
 
 
 

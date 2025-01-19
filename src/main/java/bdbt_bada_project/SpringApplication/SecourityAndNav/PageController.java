@@ -1,4 +1,4 @@
-package bdbt_bada_project.SpringApplication.entities.SecourityAndNav;
+package bdbt_bada_project.SpringApplication.SecourityAndNav;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

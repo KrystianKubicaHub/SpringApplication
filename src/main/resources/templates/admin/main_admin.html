@@ -1,67 +1,44 @@
-<!DOCTYPE HTML>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <title>Main Admin Page</title>
-
-    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css}"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Admin Panel</title>
+    <link rel="stylesheet" href="/css/admin.css">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
-    <div class="container">
-        <a class="navbar-brand" href="/">BDBT Spring Boot Project - Part II</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
-                aria-controls="navbarResponsive"
-                aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/index}">Home</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Main
-                        <span class="sr-only">(current)</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:inline="text" style="color:lightskyblue;">
-                        You are logged in as
-                        <b style="text-transform:capitalize">
-                            [[${#authentication != null} ? ${#authentication.name} : 'Guest']]
-                        </b>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<div class="main-container">
+    <button class="sign-out-btn" onclick="window.location.href='/login'">Sign Out</button>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-10 mt-5">
-            <form method="post" th:action="@{/index}">
-                <div class="form-group">
-                    <label style="font-size:30px" th:inline="text">
-                        Welcome
-                        <a style="color:lightskyblue; text-transform:capitalize">
-                            <b>[[${#authentication != null} ? ${#authentication.name} : 'Guest']]</b>
-                        </a> to the main page, dedicated for admins!
-                    </label>
-                    <div style="font-size:20px">If you want to logout, click "Logout" button under this text.</div>
-                </div>
-                <button class="btn btn-primary" type="submit" onclick="successfullyLogout()" value="Sign Out">
-                    Logout
-                </button>
-            </form>
+    <div class="buttons-container">
+        <button class="large-btn" id="add-person-btn">
+            <span class="icon">👤</span>
+            <span>Add Person</span>
+        </button>
+        <button class="large-btn" id="show-people-btn">
+            <span class="icon">📋</span>
+            <span>Show List of People</span>
+        </button>
+        <button class="large-btn" id="academy-details-btn">
+            <span class="icon">🏫</span>
+            <span>Academy Entity Details</span>
+        </button>
+        <button class="large-btn" id="show-courses-btn">
+            <span class="icon">📚</span>
+            <span>Show Courses</span>
+        </button>
+        <button class="large-btn" id="add-course-btn">
+            <span class="icon">➕</span>
+            <span>Add Course</span>
+        </button>
+    </div>
+
+    <div class="display-panel">
+        <h2>Information Panel</h2>
+        <div class="content-area">
+
         </div>
     </div>
 </div>
-
-<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
-<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
-<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-<script th:src="@{/js/script.js}"></script>
 </body>
 </html>

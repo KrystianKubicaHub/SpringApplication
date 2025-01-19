@@ -1,4 +1,4 @@
-package bdbt_bada_project.SpringApplication.entities.SecourityAndNav;
+package bdbt_bada_project.SpringApplication.SecourityAndNav;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

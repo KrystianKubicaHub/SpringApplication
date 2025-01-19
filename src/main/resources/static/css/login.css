@@ -17,6 +17,8 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
     overflow: hidden;
+    width: 80%;
+    max-width: 1000px;
 }
 
 .left {
@@ -27,11 +29,12 @@ body {
     align-items: center;
     text-align: center;
     color: white;
-    background-image: url('/images/uni1.jpg'); /* Domyślne tło */
+    background-image: url('/images/uni1.jpg');
     background-size: cover;
     background-position: center;
-    transition: background-image 1s ease-in-out, color 1s ease-in-out;
+    transition: background-image 1s ease-in-out;
     animation: backgroundChange 20s infinite;
+    padding: 20px;
 }
 
 .left h1 {
@@ -51,12 +54,14 @@ body {
     flex-direction: column;
     justify-content: center;
     background-color: #2c2c3b;
+    color: white;
 }
 
 .right h2 {
     color: white;
     margin-bottom: 20px;
     font-size: 22px;
+    text-align: center;
 }
 
 .form-group {
@@ -94,10 +99,12 @@ input:focus {
     font-size: 16px;
     cursor: pointer;
     width: 100%;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .btn:hover {
-    background-color: #5c55c6;
+    background-color: #5b4fb8;
+    transform: scale(1.05);
 }
 
 .text-center {
@@ -118,47 +125,19 @@ input:focus {
 @keyframes backgroundChange {
     0% {
         background-image: url('/images/uni1.jpg');
-        color: #ffffff;
     }
     25% {
         background-image: url('/images/uni2.jpg');
-        color: #737272;
     }
     50% {
         background-image: url('/images/uni3.jpg');
-        color: #49f57d;
     }
     75% {
         background-image: url('/images/uni4.jpg');
-        color: #212020;
     }
     100% {
         background-image: url('/images/uni1.jpg');
-        color: #ffffff;
     }
-}
-
-.container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    height: 100vh;
-    background-color: #1e1e2f;
-    color: white;
-    font-family: 'Lucida Sans Unicode', sans-serif;
-}
-
-.left {
-    flex: 1;
-    text-align: center;
-    padding: 20px;
-}
-
-.right {
-    flex: 1;
-    text-align: center;
-    padding: 20px;
 }
 
 .button-group {
@@ -186,6 +165,31 @@ input:focus {
 }
 
 .button:active {
+    background-color: #4a3e9d;
+    transform: scale(0.95);
+}
+.role-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #7269d9;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.role-button.selected {
+    background-color: #4caf50; /* Zielony kolor dla wybranego przycisku */
+    transform: scale(1.1); /* Lekkie powiększenie */
+}
+
+.role-button:hover {
+    background-color: #5b4fb8;
+}
+
+.role-button:active {
     background-color: #4a3e9d;
     transform: scale(0.95);
 }

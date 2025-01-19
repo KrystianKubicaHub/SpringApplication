@@ -1,4 +1,4 @@
-package bdbt_bada_project.SpringApplication.entities.SecourityAndNav;
+package bdbt_bada_project.SpringApplication.SecourityAndNav;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
