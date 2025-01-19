@@ -1,5 +1,5 @@
-package bdbt_bada_project.SpringApplication;
-import bdbt_bada_project.SpringApplication.DataModels.StudentData;
+package bdbt_bada_project.SpringApplication.Helpers;
+import bdbt_bada_project.SpringApplication.entities.StudentData;
 import bdbt_bada_project.SpringApplication.entities.CourseEntity;
 import bdbt_bada_project.SpringApplication.entities.EnrollmentEntity;
 import bdbt_bada_project.SpringApplication.entities.FieldOfStudyEntity;

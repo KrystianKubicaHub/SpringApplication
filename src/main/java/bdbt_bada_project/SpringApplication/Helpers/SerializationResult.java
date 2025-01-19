@@ -1,4 +1,4 @@
-package bdbt_bada_project.SpringApplication;
+package bdbt_bada_project.SpringApplication.Helpers;
 
 public class SerializationResult {
     private final boolean isSerializable;

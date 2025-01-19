@@ -121,15 +121,7 @@ body {
     border-radius: 8px;
 }
 
-/* Kontener przedmiotów */
-.enrollments-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    max-height: 60vh;
-    overflow-y: auto;
-    padding-right: 10px;
-}
+
 
 /* Przewijanie */
 .enrollments-container::-webkit-scrollbar {
@@ -146,7 +138,6 @@ body {
     background-color: #2c2c3b;
 }
 
-/* Stylizacja przedmiotu */
 .enrollment {
     position: relative;
     padding: 20px;
@@ -155,14 +146,14 @@ body {
     border-radius: 10px;
     background-color: #4a4a5e;
     color: white;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Standardowy cień */
+    transition: transform 0.3s ease; /* Tylko animacja transformacji */
 }
 
 .enrollment:hover {
-    background-color: #5c5c75;
-    transform: scale(1.02);
+    transform: scale(1.05); /* Subtelne powiększenie */
 }
+
 
 /* Nagłówek "User Information" */
 .right-panel h2 {

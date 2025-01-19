@@ -1,10 +1,10 @@
-package bdbt_bada_project.SpringApplication.DataModels;
+package bdbt_bada_project.SpringApplication.Persistence;
 
-import bdbt_bada_project.SpringApplication.FAKE_DATA;
+import bdbt_bada_project.SpringApplication.Helpers.FAKE_DATA;
 import bdbt_bada_project.SpringApplication.entities.CourseEntity;
-import bdbt_bada_project.SpringApplication.entities.EnrollmentEntity;
+import bdbt_bada_project.SpringApplication.entities.StudentData;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.client.WebClient;
+//import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -29,6 +29,7 @@ public class StateController {
     }
 
 
+    /*
     @PostMapping("/student/update-self")
     public void updateStudentData() {
         WebClient webClient = WebClient.create("http://localhost:8080");
@@ -43,6 +44,8 @@ public class StateController {
                 .doOnError(e -> System.err.println("Błąd podczas wysyłania danych studenta: " + e.getMessage()))
                 .subscribe();
     }
+
+     */
 
     @PostMapping("/student/update")
     public void updateStudentDataOnServer(@RequestBody StudentData studentData) {

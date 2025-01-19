@@ -1,10 +1,6 @@
-package bdbt_bada_project.SpringApplication.DataModels;
+package bdbt_bada_project.SpringApplication.entities;
 
-import bdbt_bada_project.SpringApplication.FAKE_DATA;
-import bdbt_bada_project.SpringApplication.entities.CourseEntity;
-import bdbt_bada_project.SpringApplication.entities.EnrollmentEntity;
-import bdbt_bada_project.SpringApplication.entities.FieldOfStudyEntity;
-import bdbt_bada_project.SpringApplication.entities.PersonEntity;
+import bdbt_bada_project.SpringApplication.Helpers.FAKE_DATA;
 
 import java.util.Date;
 import java.util.List;

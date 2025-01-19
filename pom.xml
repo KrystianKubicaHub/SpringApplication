@@ -6,7 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.1</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>bdbt_bada_project</groupId>
 	<artifactId>SpringApplication</artifactId>
@@ -22,18 +22,7 @@
 		<!-- Starter for Thymeleaf -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webflux</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.oracle.database.jdbc</groupId>
-			<artifactId>ojdbc8</artifactId>
-			<version>19.8.0.0</version> <!-- lub nowsza wersja -->
 		</dependency>
 
 		<!-- Starter for Web -->
@@ -48,12 +37,19 @@
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 
-		<!-- Dependency for Servlet API (optional, provided by spring-boot-starter-web) -->
+		<!-- Oracle JDBC -->
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>4.0.1</version>
-			<scope>provided</scope>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc8</artifactId>
+			<version>19.8.0.0</version>
+		</dependency>
+
+		<!-- DevTools for Development -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
 		</dependency>
 
 		<!-- Starter for Testing -->
@@ -73,5 +69,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

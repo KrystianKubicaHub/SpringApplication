@@ -1,17 +1,39 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Lucida+Sans+Unicode&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style_main_user.css">
-
     <script src="/js/student.js"></script>
+    <style>
+        .sign-out-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #ff4b5c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-family: 'Lucida Sans Unicode', sans-serif;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .sign-out-button:hover {
+            background-color: #e04352;
+        }
+    </style>
 </head>
 <body>
 
 <div class="container">
+    <button class="sign-out-button" onclick="window.location.href='/login'">Sign Out</button>
+
     <section class="left-panel">
         <div class="subjects-header">
             <h2>Your Subjects</h2>
@@ -20,11 +42,9 @@
             </button>
         </div>
         <div id="enrollments-container">
-            <!-- Dynamicznie generowane przedmioty -->
+
         </div>
     </section>
-
-
 
     <section class="right-panel">
         <button id="toggle-info-btn" class="show-more-btn">Show More</button>
@@ -44,7 +64,7 @@
             <p>Total ECTS: <span id="studentTotalECTS">Loading...</span></p>
 
             <div id="field-of-study-container" style="overflow-x: auto; white-space: nowrap; border: 1px solid #001451; padding: 10px; border-radius: 5px; background-color: #333333;">
-                <!-- Kierunki będą generowane dynamicznie tutaj -->
+
             </div>
         </div>
         <p id="admin-note" style="display: none">The rest of the fields might be edited only by admin!&!</p>
@@ -52,15 +72,8 @@
 
     <section class="courses-panel">
 
-
     </section>
-
-
-
-
 </div>
-
-
 
 </body>
 </html>
