@@ -1,80 +1,3 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const addPersonButton = document.getElementById('add-person-btn');
-    const showPeopleButton = document.getElementById('show-people-btn');
-    const academyDetailsButton = document.getElementById('academy-details-btn');
-    const showCoursesButton = document.getElementById('show-courses-btn');
-    const addCourseButton = document.getElementById('add-course-btn');
-    const buttonsContainer = document.querySelector('.buttons-container');
-    const buttons = document.querySelectorAll('.large-btn');
-
-    if (!buttonsContainer || !buttons.length) {
-        console.error('Buttons container or buttons not found');
-        return;
-    }
-
-    buttons.forEach(button => {
-        button.addEventListener('click', () => {
-            buttonsContainer.classList.add('sticky');
-        });
-    });
-
-    if (addPersonButton) {
-        let activeOption = '';
-        addPersonButton.addEventListener('click', () => {
-            const buttonsContainer = document.querySelector('.buttons-container');
-            const contentArea = document.querySelector('.content-area');
-
-            if (activeOption !== 'addPerson') {
-                activeOption = 'addPerson';
-
-                addPersonButton.querySelector('span').textContent = 'Cancel';
-                addPersonButton.querySelector('.icon').textContent = '❌';
-                addPersonButton.style.backgroundColor = '#FFC107'; // Żółty kolor
-
-                buttonsContainer.classList.add('sticky');
-
-                addPersonClicked();
-            } else {
-                activeOption = '';
-
-                addPersonButton.querySelector('span').textContent = 'Add Person';
-                addPersonButton.querySelector('.icon').textContent = '👤';
-                addPersonButton.style.backgroundColor = '#4CAF50';
-
-                buttonsContainer.classList.remove('sticky');
-
-                if (contentArea) {
-                    contentArea.innerHTML = '';
-                }
-            }
-        });
-    }
-
-    if (showPeopleButton) {
-        showPeopleButton.addEventListener('click', () => {
-            showPeopleClicked();
-        });
-    }
-
-    if (academyDetailsButton) {
-        academyDetailsButton.addEventListener('click', () => {
-            academyDetailsClicked();
-        });
-    }
-
-    if (showCoursesButton) {
-        showCoursesButton.addEventListener('click', () => {
-            showCoursesClicked();
-        });
-    }
-
-    if (addCourseButton) {
-        addCourseButton.addEventListener('click', () => {
-            addCourseClicked();
-        });
-    }
-});
-
 function addPersonClicked() {
     const contentArea = document.querySelector('.content-area');
     if (!contentArea) {
@@ -195,3 +118,114 @@ function createLabel(text, forId) {
     label.className = 'form-label';
     return label;
 }
+
+function resetToInitialState(button) {
+    const contentArea = document.querySelector('.content-area');
+    const buttonsContainer = document.querySelector('.buttons-container');
+
+    // Przywracanie wyglądu przycisku
+    if (button) {
+        button.querySelector('span').textContent = button.getAttribute('data-original-text');
+        button.querySelector('.icon').textContent = button.getAttribute('data-original-icon');
+        button.style.backgroundColor = '#4CAF50'; // Zielony
+    }
+
+    // Przywracanie kontenera przycisków do pierwotnego stanu
+    if (buttonsContainer) {
+        buttonsContainer.classList.remove('sticky');
+    }
+
+    // Czyszczenie panelu zawartości
+    if (contentArea) {
+        contentArea.innerHTML = '';
+    }
+
+    // Resetowanie globalnej zmiennej
+    if (typeof activeOption !== 'undefined') {
+        activeOption = '';
+    }
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const addPersonButton = document.getElementById('add-person-btn');
+    const showPeopleButton = document.getElementById('show-people-btn');
+    const academyDetailsButton = document.getElementById('academy-details-btn');
+    const showCoursesButton = document.getElementById('show-courses-btn');
+    const addCourseButton = document.getElementById('add-course-btn');
+    const buttonsContainer = document.querySelector('.buttons-container');
+    const buttons = document.querySelectorAll('.large-btn');
+
+    let activeOption = '';
+    console.log(
+        'activeOption',
+        activeOption
+    )
+
+    if (!buttonsContainer || !buttons.length) {
+        console.error('Buttons container or buttons not found');
+        return;
+    }
+    buttons.forEach(button => {
+        button.addEventListener('click', () => {
+            buttonsContainer.classList.add('sticky');
+        });
+    });
+    function handleOptionSelection(button, option, callback) {
+        const contentArea = document.querySelector('.content-area');
+
+        if (activeOption !== option) {
+            activeOption = option;
+
+            button.querySelector('span').textContent = 'Cancel';
+            button.querySelector('.icon').textContent = '❌';
+            button.style.backgroundColor = '#FFC107';
+
+            buttonsContainer.classList.add('sticky');
+
+            // Wywołanie odpowiedniej funkcji
+            callback();
+        } else {
+            activeOption = '';
+
+            // Przywracamy wygląd przycisku
+            button.querySelector('span').textContent = button.getAttribute('data-original-text');
+            button.querySelector('.icon').textContent = button.getAttribute('data-original-icon');
+            button.style.backgroundColor = '#4CAF50';
+
+            buttonsContainer.classList.remove('sticky');
+
+            if (contentArea) {
+                contentArea.innerHTML = '';
+            }
+        }
+    }
+    const initializeButton = (button, option, callback) => {
+        const text = button.querySelector('span').textContent;
+        const icon = button.querySelector('.icon').textContent;
+        button.setAttribute('data-original-text', text);
+        button.setAttribute('data-original-icon', icon);
+
+        button.addEventListener('click', () => handleOptionSelection(button, option, callback));
+    };
+
+    if (addPersonButton) {
+        initializeButton(addPersonButton, 'addPerson', addPersonClicked);
+    }
+
+    if (showPeopleButton) {
+        initializeButton(showPeopleButton, 'showPeople', showPeopleClicked);
+    }
+
+    if (academyDetailsButton) {
+        initializeButton(academyDetailsButton, 'academyDetails', academyDetailsClicked);
+    }
+
+    if (showCoursesButton) {
+        initializeButton(showCoursesButton, 'showCourses', showCoursesClicked);
+    }
+
+    if (addCourseButton) {
+        initializeButton(addCourseButton, 'addCourse', addCourseClicked);
+    }
+});

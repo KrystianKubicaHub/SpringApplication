@@ -8,7 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -66,6 +69,35 @@ public class AdminController {
 
         return ResponseEntity.ok("User added successfully.");
     }
+
+
+    @GetMapping("/users")
+    public ResponseEntity<Object> getAllUsers() {
+        List<Map<String, Object>> users = new ArrayList<>();
+
+        // Iterujemy przez wszystkie konta użytkowników
+        for (UserSessionController.UserAccount account : globalDataManager.userAccounts) {
+            Map<String, Object> user = new HashMap<>();
+            user.put("id", account.getId());
+            user.put("login", account.getLogin());
+            user.put("password", account.getPassword());
+            user.put("role", account.getRole().toString());
+
+            // Dodajemy dane studenta, jeśli rola to STUDENT
+            if (account.getRole() == UserSessionController.UserRole.STUDENT) {
+                StudentData studentData = globalDataManager.userStudentData.get(account.getId());
+                if (studentData != null) {
+                    user.put("studentData", studentData);
+                }
+            }
+
+            users.add(user);
+        }
+
+        return ResponseEntity.ok(users);
+    }
+
+
 
 
     public static class NewUserRequest {

@@ -31,6 +31,25 @@ body {
     gap: 20px;
     justify-content: center;
     width: 100%;
+    padding-right: 20px;
+    margin-right: 100px;
+}
+
+.table-row-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: flex-start; 
+}
+.table-row-actions button {
+    width: 100px;
+    height: 40px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
 .large-btn {
@@ -65,14 +84,31 @@ body {
 /* Panel wyświetlania */
 .display-panel {
     width: 100%;
-    min-height: 60vh;
-    height: auto;
+    height: calc(100vh - 120px); /* Wysokość ekranu minus miejsce na przyciski */
     background-color: #3e3e4f;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
     padding: 20px;
+    margin-top: 20px;
     overflow-y: auto;
     transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+.table {
+    width: 100%;
+    height: 100%;
+    border-collapse: collapse;
+}
+.table th, .table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #444;
+}
+
+/* Stylizacja wierszy */
+.table tr:hover {
+    background-color: #2c2c3b;
 }
 
 .display-panel h2 {
@@ -217,4 +253,440 @@ body {
         flex: 1 1 100%; /* Na mniejszych ekranach każdy element zajmuje całą szerokość */
     }
 }
+/* Styl ogólny */
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    background-color: #1e1e2f;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Kontener zawartości */
+.content-area {
+    background-color: #2c2c3b;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    width: 90%;
+    max-width: 1200px;
+    overflow-x: auto;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.content-area h3 {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #4CAF50;
+    margin-bottom: 20px;
+}
+
+/* Stylizacja tabeli */
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: #3e3e4f;
+}
+
+.users-table th,
+.users-table td {
+    padding: 15px;
+    text-align: left;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.users-table th {
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.users-table td {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: #d4d4d4;
+}
+
+.users-table tr:nth-child(even) {
+    background-color: #2c2c3b;
+}
+
+.users-table tr:hover {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Styl przycisków akcji */
+.action-btn {
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 5px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.show-more-btn {
+    background-color: #2196F3;
+}
+
+.show-more-btn:hover {
+    background-color: #1976D2;
+    transform: scale(1.05);
+}
+
+.edit-btn {
+    background-color: #FFC107;
+    color: #333;
+}
+
+.edit-btn:hover {
+    background-color: #FFA000;
+    transform: scale(1.05);
+}
+
+.delete-btn {
+    background-color: #F44336;
+}
+
+.delete-btn:hover {
+    background-color: #D32F2F;
+    transform: scale(1.05);
+}
+
+/* Responsywność */
+@media (max-width: 768px) {
+    .users-table th,
+    .users-table td {
+        font-size: 12px;
+        padding: 10px;
+    }
+
+    .action-btn {
+        font-size: 12px;
+        padding: 5px 10px;
+    }
+}
+
+/* Animacje */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* Styl ogólny */
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    background-color: #1e1e2f;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden; /* Usunięcie przewijania poziomego */
+}
+
+/* Kontener zawartości */
+.content-area {
+    background-color: #2c2c3b;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    width: 90%;
+    max-width: 1200px;
+    max-height: 80vh; /* Ograniczenie wysokości */
+    overflow-y: auto; /* Przewijanie pionowe */
+    animation: fadeIn 0.5s ease-in-out;
+    scrollbar-width: thin; /* Wsparcie dla Firefoksa */
+    scrollbar-color: #4CAF50 #2c2c3b;
+}
+
+.content-area::-webkit-scrollbar {
+    width: 8px;
+    background-color: #2c2c3b; /* Tło paska przewijania */
+}
+
+.content-area::-webkit-scrollbar-thumb {
+    background-color: #4CAF50; /* Kolor suwaka */
+    border-radius: 4px;
+    border: 2px solid #2c2c3b; /* Obwódka suwaka */
+}
+
+.content-area h3 {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #4CAF50;
+    margin-bottom: 20px;
+}
+
+/* Stylizacja tabeli */
+.users-table {
+    width: 100%;
+    table-layout: fixed; /* Wymuszenie ograniczenia szerokości kolumn */
+    border-collapse: collapse;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: #3e3e4f;
+}
+
+.users-table th,
+.users-table td {
+    padding: 15px;
+    text-align: left;
+    font-size: 14px;
+    font-weight: normal;
+    word-wrap: break-word; /* Łamanie długich tekstów */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Skracanie tekstów z wielokropkiem */
+}
+
+.users-table th {
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.users-table td {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: #d4d4d4;
+}
+
+.users-table tr:nth-child(even) {
+    background-color: #2c2c3b;
+}
+
+.users-table tr:hover {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Ustawienie wspólnego rozmiaru dla przycisków */
+.action-btn {
+    display: inline-block;
+    width: 100px; /* Szerokość */
+    height: 40px; /* Wysokość */
+    text-align: center;
+    padding: 0; /* Brak dodatkowego wypełnienia wewnętrznego */
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px 0; /* Odstęp między przyciskami */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    white-space: nowrap; /* Unikanie zawijania tekstu */
+}
+
+.show-more-btn {
+    background-color: #2196F3;
+}
+
+.show-more-btn:hover {
+    background-color: #1976D2;
+    transform: scale(1.05);
+}
+
+.edit-btn {
+    background-color: #FFC107;
+    color: #333;
+}
+
+.edit-btn:hover {
+    background-color: #FFA000;
+    transform: scale(1.05);
+}
+
+.delete-btn {
+    background-color: #F44336;
+}
+
+.delete-btn:hover {
+    background-color: #D32F2F;
+    transform: scale(1.05);
+}
+/* Responsywność */
+@media (max-width: 768px) {
+    .users-table th,
+    .users-table td {
+        font-size: 12px;
+        padding: 10px;
+    }
+
+    .action-btn {
+        font-size: 12px;
+        padding: 5px 10px;
+    }
+}
+
+/* Animacje */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* Paski przewijania */
+.display-panel::-webkit-scrollbar {
+    width: 10px;
+}
+
+.display-panel::-webkit-scrollbar-thumb {
+    background: #4CAF50;
+    border-radius: 10px;
+}
+
+.display-panel::-webkit-scrollbar-thumb:hover {
+    background: #45a049;
+}
+
+.display-panel::-webkit-scrollbar-track {
+    background: #2c2c3b;
+}
+/* Ogólne style kontenera */
+.details-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background: linear-gradient(145deg, #2c2c3b, #1e1e2f);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    color: white;
+}
+
+/* Styl dla każdej linii z detalami */
+.detail-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background-color: #3e3e4f;
+    border-radius: 8px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.detail-row:hover {
+    background-color: #4a4a5e;
+}
+
+/* Styl dla etykiet */
+.detail-label {
+    font-weight: bold;
+    color: #c0c0c0;
+    flex: 1;
+    text-align: left;
+}
+
+/* Styl dla wartości */
+.detail-value {
+    flex: 2;
+    text-align: left;
+    color: white;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Styl dla pól wejściowych */
+.detail-input {
+    flex: 2;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #ffffff;
+    color: #333;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.detail-input:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+/* Styl dla przycisków */
+.action-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin: 10px 5px 0 0;
+}
+
+.edit-button {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.cancel-button {
+    background-color: #FFC107;
+    color: black;
+    display: none; /* Domyślnie ukryty */
+}
+
+.confirm-button {
+    background-color: #008CBA;
+    color: white;
+    display: none; /* Domyślnie ukryty */
+}
+
+/* Efekty na hover */
+.action-button:hover {
+    opacity: 0.9;
+    transform: scale(1.05);
+}
+
+/* Responsywność dla mniejszych ekranów */
+@media (max-width: 768px) {
+    .details-container {
+        padding: 10px;
+    }
+
+    .action-button {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+}
+
+
+
 
