@@ -14,17 +14,14 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Walidacja hasła
         if (!password) {
             alert('Password cannot be empty.');
             return;
         }
 
-        // Wysyłanie danych na serwer
         sendSessionDataToServer(login, password);
     });
 
-    // Funkcja wysyłania danych na serwer
     function sendSessionDataToServer(login, password) {
         const sessionData = {
             login: login,
@@ -42,12 +39,13 @@ document.addEventListener('DOMContentLoaded', () => {
         })
             .then(response => {
                 if (response.ok) {
-                    return response.json(); // Oczekujemy odpowiedzi w formacie JSON przy sukcesie
+                    return response.json();
                 } else {
-                    return response.text().then(text => { throw new Error(text); }); // Obsługujemy tekst przy błędzie
+                    return response.text().then(text => { throw new Error(text); });
                 }
             })
             .then(data => {
+                localStorage.setItem('sessionToken', data.sessionToken);
                 localStorage.setItem('userId', data.id);
                 if (data.role === 'ADMIN') {
                     window.location.href = '/main_admin';

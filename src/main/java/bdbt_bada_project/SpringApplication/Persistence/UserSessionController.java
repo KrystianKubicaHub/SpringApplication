@@ -123,7 +123,7 @@ public class UserSessionController {
 
     @GetMapping("/check")
     public Object checkSession(@RequestParam String sessionToken) {
-        // Pobieramy sesję na podstawie tokena
+        System.out.println("Zapytanie:");
         UserSession session = sessionManager.getSessionByToken(sessionToken);
 
         if (session != null) {
@@ -155,7 +155,9 @@ public class UserSessionController {
 
         if (!sessionManager.isSessionActive(account.getId())) {
             UserSession session = new UserSession(account.getId(), account.getRole());
-            String token = sessionManager.addSession(session); // Dodajemy sesję i generujemy token
+            String token = sessionManager.addSession(session);
+            System.out.println("Generated token for user "  + token);
+
             return Map.of(
                     "message", "Login successful",
                     "sessionToken", token,
