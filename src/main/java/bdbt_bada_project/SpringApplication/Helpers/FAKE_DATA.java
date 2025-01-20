@@ -1,10 +1,6 @@
 package bdbt_bada_project.SpringApplication.Helpers;
 import bdbt_bada_project.SpringApplication.Persistence.UserSessionController;
-import bdbt_bada_project.SpringApplication.entities.StudentData;
-import bdbt_bada_project.SpringApplication.entities.CourseEntity;
-import bdbt_bada_project.SpringApplication.entities.EnrollmentEntity;
-import bdbt_bada_project.SpringApplication.entities.FieldOfStudyEntity;
-import bdbt_bada_project.SpringApplication.entities.LecturerEntity;
+import bdbt_bada_project.SpringApplication.entities.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.*;
@@ -379,6 +375,16 @@ public class FAKE_DATA {
     private static String generateRandomFieldOfStudy() {
         String[] fields = {"Computer Science", "Mathematics", "Physics", "Biology", "Tailoring"};
         return fields[(int) (Math.random() * fields.length)];
+    }
+    public static AcademyEntity loadFromSQLAcademyEntity() {
+        return new AcademyEntity(
+                1, // id
+                "Zurich Medical Academy",
+                "+41-44-123-4567",
+                "info@zurichmedicalacademy.ch",
+                200,
+                12
+        );
     }
 
 }

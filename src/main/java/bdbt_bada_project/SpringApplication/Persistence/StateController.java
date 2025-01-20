@@ -1,6 +1,5 @@
 package bdbt_bada_project.SpringApplication.Persistence;
 
-import bdbt_bada_project.SpringApplication.Helpers.FAKE_DATA;
 import bdbt_bada_project.SpringApplication.entities.CourseEntity;
 import bdbt_bada_project.SpringApplication.entities.StudentData;
 import org.springframework.web.bind.annotation.*;
@@ -15,13 +14,10 @@ public class StateController {
 
 
     private final GlobalDataManager globalDataManager;
-    private final List<CourseEntity> serverCourses;
+
 
     public StateController(GlobalDataManager globalDataManager) {
         this.globalDataManager = globalDataManager;
-        serverCourses = FAKE_DATA.generateCourses(20);
-
-        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     }
 
     @PostMapping("/student/update")
@@ -128,7 +124,7 @@ public class StateController {
         }
 
         // Sprawdzenie czy kurs istnieje
-        CourseEntity selectedCourse = serverCourses.stream()
+        CourseEntity selectedCourse = this.globalDataManager.serverCourses.stream()
                 .filter(course -> course.getId() == courseIdInt)
                 .findFirst()
                 .orElse(null);
@@ -171,7 +167,7 @@ public class StateController {
                 .toList();
 
         // Filtrowanie kursów, na które użytkownik nie jest zapisany
-        List<CourseEntity> availableCourses = serverCourses.stream()
+        List<CourseEntity> availableCourses = this.globalDataManager.serverCourses.stream()
                 .filter(course -> !enrolledCourseIds.contains(course.getId()))
                 .toList();
 

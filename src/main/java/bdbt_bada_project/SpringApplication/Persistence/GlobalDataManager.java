@@ -1,5 +1,8 @@
 package bdbt_bada_project.SpringApplication.Persistence;
 
+import bdbt_bada_project.SpringApplication.Helpers.FAKE_DATA;
+import bdbt_bada_project.SpringApplication.entities.AcademyEntity;
+import bdbt_bada_project.SpringApplication.entities.CourseEntity;
 import bdbt_bada_project.SpringApplication.entities.StudentData;
 import org.springframework.stereotype.Component;
 import java.util.*;
@@ -12,6 +15,8 @@ public class GlobalDataManager {
     public final Map<Integer, UserSessionController.UserSession> activeSessions = new HashMap<>();
     public final Map<String, UserSessionController.UserSession> sessionTokens = new HashMap<>();
     public final Map<Integer, StudentData> userStudentData = new HashMap<>();
+    public final List<CourseEntity> serverCourses = FAKE_DATA.generateCourses(20);
+    public final AcademyEntity academyEntity = FAKE_DATA.loadFromSQLAcademyEntity();
 
     public String addSession(UserSessionController.UserSession session) {
         activeSessions.put(session.getId(), session);
