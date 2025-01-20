@@ -1,4 +1,5 @@
 package bdbt_bada_project.SpringApplication.Helpers;
+import bdbt_bada_project.SpringApplication.Persistence.UserSessionController;
 import bdbt_bada_project.SpringApplication.entities.StudentData;
 import bdbt_bada_project.SpringApplication.entities.CourseEntity;
 import bdbt_bada_project.SpringApplication.entities.EnrollmentEntity;
@@ -11,6 +12,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class FAKE_DATA {
+
+    public static int numberOfStudents = 20;
 
 
     public static List<EnrollmentEntity> generateEnrollments() {
@@ -274,6 +277,108 @@ public class FAKE_DATA {
         exampleStudent.getEnrollments().add(new EnrollmentEntity(course2, new Date(), 2));
 
         return exampleStudent;
+    }
+
+    public static List<UserSessionController.UserAccount> getAccountsCredentialsFromSQL(int countPerRole) {
+        List<UserSessionController.UserAccount> accounts = new ArrayList<>();
+
+        for (int i = 1; i <= countPerRole; i++) {
+            accounts.add(new UserSessionController.UserAccount(
+                    i,
+                    "student" + i,
+                    "pass",
+                    UserSessionController.UserRole.STUDENT
+            ));
+        }
+
+        for (int i = 1; i <= countPerRole; i++) {
+            accounts.add(new UserSessionController.UserAccount(
+                    countPerRole + i,
+                    "lecturer" + i,
+                    "pass",
+                    UserSessionController.UserRole.LECTURER
+            ));
+        }
+
+
+        for (int i = 1; i <= countPerRole; i++) {
+            accounts.add(new UserSessionController.UserAccount(
+                    countPerRole * 2 + i,
+                    "admin" + i,
+                    "admin",
+                    UserSessionController.UserRole.ADMIN
+            ));
+        }
+
+        return accounts;
+    }
+
+    public static List<StudentData> getAllUserInfo(List<UserSessionController.UserAccount> accounts) {
+        List<StudentData> studentDataList = new ArrayList<>();
+
+        for (UserSessionController.UserAccount account : accounts) {
+            if (account.getRole() == UserSessionController.UserRole.STUDENT) {
+                StudentData studentData = new StudentData();
+
+
+                studentData.id = account.getId(); // Przypisanie ID z konta
+                studentData.PESELNumber = generateRandomPESEL(); // Generowanie przykładowego PESEL
+                studentData.firstName = generateRandomFirstName(); // Generowanie losowego imienia
+                studentData.lastName = generateRandomLastName(); // Generowanie losowego nazwiska
+                studentData.email = generateEmailForStudent(studentData.firstName, studentData.lastName); // Generowanie e-maila
+                studentData.phoneNumber = generateRandomPhoneNumber(); // Generowanie numeru telefonu
+                studentData.indexNumber = generateIndexNumber(account.getId()); // Generowanie indeksu na podstawie ID
+                studentData.studySince = generateRandomStudySince(); // Generowanie losowego semestru rozpoczęcia
+                studentData.totalECTS = 0; // Nowi studenci zaczynają z zerowymi punktami ECTS
+
+                // Przypisanie kierunku studiów
+                FieldOfStudyEntity fose = new FieldOfStudyEntity(generateRandomFieldOfStudy()); // Losowy kierunek
+                studentData.fieldOfStudy = new ArrayList<>();
+                studentData.fieldOfStudy.add(fose);
+
+                // Dodanie do listy
+                studentDataList.add(studentData);
+            }
+        }
+
+        return studentDataList;
+    }
+
+    // Generatory danych przykładowych
+    private static String generateRandomPESEL() {
+        return "042308" + (int) (Math.random() * 1000000); // Przykładowy PESEL
+    }
+
+    private static String generateRandomFirstName() {
+        String[] firstNames = {"Krystian", "Anna", "Michał", "Karolina", "Tomasz"};
+        return firstNames[(int) (Math.random() * firstNames.length)];
+    }
+
+    private static String generateRandomLastName() {
+        String[] lastNames = {"Kubica", "Nowak", "Kowalski", "Wiśniewski", "Zieliński"};
+        return lastNames[(int) (Math.random() * lastNames.length)];
+    }
+
+    private static String generateEmailForStudent(String firstName, String lastName) {
+        return firstName.toLowerCase() + "." + lastName.toLowerCase() + "@student.university.edu";
+    }
+
+    private static String generateRandomPhoneNumber() {
+        return "600" + (int) (Math.random() * 1000000);
+    }
+
+    private static int generateIndexNumber(int id) {
+        return 100000 + id; // Indeks bazujący na ID użytkownika
+    }
+
+    private static String generateRandomStudySince() {
+        String[] semesters = {"2021L", "2022L", "2023L", "2024L"};
+        return semesters[(int) (Math.random() * semesters.length)];
+    }
+
+    private static String generateRandomFieldOfStudy() {
+        String[] fields = {"Computer Science", "Mathematics", "Physics", "Biology", "Tailoring"};
+        return fields[(int) (Math.random() * fields.length)];
     }
 
 }

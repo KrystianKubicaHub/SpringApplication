@@ -1,5 +1,7 @@
 package bdbt_bada_project.SpringApplication.Persistence;
 
+import bdbt_bada_project.SpringApplication.Helpers.FAKE_DATA;
+import bdbt_bada_project.SpringApplication.entities.StudentData;
 import jakarta.annotation.PostConstruct;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,18 +16,21 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping("/api/sessions")
 public class UserSessionController {
 
-    private final List<UserAccount> userAccounts = new ArrayList<>();
-    private final SessionManager sessionManager;
 
-    public UserSessionController(SessionManager sessionManager) {
-        this.sessionManager = sessionManager;
+    private final GlobalDataManager globalDataManager;
 
-        userAccounts.add(new UserAccount(1, "student", "pass", UserRole.STUDENT));
-        userAccounts.add(new UserAccount(2, "lecturer", "pass", UserRole.LECTURER));
-        userAccounts.add(new UserAccount(3, "admin", "admin", UserRole.ADMIN));
-        userAccounts.add(new UserAccount(4, "student2", "pass", UserRole.STUDENT));
-        userAccounts.add(new UserAccount(5, "lecturer2", "pass", UserRole.LECTURER));
-        userAccounts.add(new UserAccount(6, "admin2", "admin", UserRole.ADMIN));
+    public UserSessionController(GlobalDataManager globalDataManager) {
+        this.globalDataManager = globalDataManager;
+
+        this.globalDataManager.userAccounts.addAll(FAKE_DATA.getAccountsCredentialsFromSQL(FAKE_DATA.numberOfStudents));
+        List<StudentData> allUserInfo = FAKE_DATA.getAllUserInfo(this.globalDataManager.userAccounts);
+        if (allUserInfo != null) {
+            for (StudentData studentData : allUserInfo) {
+                if (studentData != null && studentData.getId() != null) {
+                    this.globalDataManager.userStudentData.put(studentData.getId(), studentData);
+                }
+            }
+        }
     }
 
     public enum UserRole {
@@ -124,7 +129,7 @@ public class UserSessionController {
     @GetMapping("/check")
     public Object checkSession(@RequestParam String sessionToken) {
         System.out.println("Zapytanie:");
-        UserSession session = sessionManager.getSessionByToken(sessionToken);
+        UserSession session = globalDataManager.getSessionByToken(sessionToken);
 
         if (session != null) {
             // Jeśli sesja aktywna, zwracamy szczegóły użytkownika
@@ -144,7 +149,7 @@ public class UserSessionController {
 
     @PostMapping("/login")
     public Object login(@RequestBody LoginRequest loginRequest) {
-        UserAccount account = userAccounts.stream()
+        UserAccount account = this.globalDataManager.userAccounts.stream()
                 .filter(user -> user.getLogin().equals(loginRequest.getLogin()) && user.getPassword().equals(loginRequest.getPassword()))
                 .findFirst()
                 .orElse(null);
@@ -153,9 +158,9 @@ public class UserSessionController {
             return "Invalid login or password.";
         }
 
-        if (!sessionManager.isSessionActive(account.getId())) {
+        if (!globalDataManager.isSessionActive(account.getId())) {
             UserSession session = new UserSession(account.getId(), account.getRole());
-            String token = sessionManager.addSession(session);
+            String token = globalDataManager.addSession(session);
             System.out.println("Generated token for user "  + token);
 
             return Map.of(
@@ -171,7 +176,7 @@ public class UserSessionController {
 
     @PostMapping("/logout")
     public String logout(@RequestParam String sessionToken) {
-        boolean removed = sessionManager.removeSessionByToken(sessionToken);
+        boolean removed = globalDataManager.removeSessionByToken(sessionToken);
         return removed ? "User logged out successfully." : "No active session found for the given token.";
     }
 
@@ -180,10 +185,10 @@ public class UserSessionController {
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(() -> {
             System.out.println("========================================");
-            System.out.println("Number of active sessions: " + sessionManager.getActiveSessions().size());
-            if (!sessionManager.getActiveSessions().isEmpty()) {
+            System.out.println("Number of active sessions: " + globalDataManager.getActiveSessions().size());
+            if (!globalDataManager.getActiveSessions().isEmpty()) {
                 System.out.println("Active sessions:");
-                sessionManager.getActiveSessions().forEach(session ->
+                globalDataManager.getActiveSessions().forEach(session ->
                         System.out.println("ID: " + session.getId() + ", Role: " + session.getRole())
                 );
             } else {

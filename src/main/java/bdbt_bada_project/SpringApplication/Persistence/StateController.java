@@ -5,9 +5,7 @@ import bdbt_bada_project.SpringApplication.entities.CourseEntity;
 import bdbt_bada_project.SpringApplication.entities.StudentData;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -15,28 +13,24 @@ import java.util.concurrent.ScheduledExecutorService;
 @RequestMapping("/api")
 public class StateController {
 
-    private final Map<Integer, StudentData> userStudentData = new HashMap<>();
-    private final ScheduledExecutorService scheduler;
-    private final SessionManager sessionManager; // Wstrzyknięcie SessionManager
-    private List<CourseEntity> serverCourses;
 
-    public StateController(SessionManager sessionManager) {
-        this.sessionManager = sessionManager;
+    private final GlobalDataManager globalDataManager;
+    private final List<CourseEntity> serverCourses;
+
+    public StateController(GlobalDataManager globalDataManager) {
+        this.globalDataManager = globalDataManager;
         serverCourses = FAKE_DATA.generateCourses(20);
-        this.scheduler = Executors.newSingleThreadScheduledExecutor();
 
-        for (int i = 1; i <= 6; i++) {
-            userStudentData.put(i, FAKE_DATA.createExampleStudent());
-        }
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     }
 
     @PostMapping("/student/update")
     public String updateStudentDataOnServer(@RequestParam int userId, @RequestBody StudentData studentData) {
-        if (!sessionManager.isSessionActive(userId)) {
+        if (!globalDataManager.isSessionActive(userId)) {
             return "Session not active. Please log in.";
         }
 
-        StudentData currentData = userStudentData.get(userId);
+        StudentData currentData = globalDataManager.userStudentData.get(userId);
         if (currentData == null) {
             return "No data found for the given user ID.";
         }
@@ -59,11 +53,11 @@ public class StateController {
 
     @GetMapping("/student/data")
     public Object getStudentData(@RequestParam int userId) {
-        if (!sessionManager.isSessionActive(userId)) {
+        if (!globalDataManager.isSessionActive(userId)) {
             return "Session not active. Please log in.";
         }
 
-        StudentData currentData = userStudentData.get(userId);
+        StudentData currentData = globalDataManager.userStudentData.get(userId);
         if (currentData == null) {
             return "No data found for the given user ID.";
         }
@@ -83,12 +77,12 @@ public class StateController {
             return "Enrollment ID is not a valid integer.";
         }
 
-        if (!sessionManager.isSessionActive(userId)) {
+        if (!globalDataManager.isSessionActive(userId)) {
             System.out.println("Session not active for userId: " + userId);
             return "Session not active. Please log in.";
         }
 
-        StudentData currentData = userStudentData.get(userId);
+        StudentData currentData = globalDataManager.userStudentData.get(userId);
         if (currentData == null) {
             System.out.println("No data found for userId: " + userId);
             return "No data found for the given user ID.";
@@ -121,13 +115,13 @@ public class StateController {
         }
 
         // Sprawdzenie aktywności sesji
-        if (!sessionManager.isSessionActive(userId)) {
+        if (!globalDataManager.isSessionActive(userId)) {
             System.out.println("Session not active for userId: " + userId);
             return "Session not active. Please log in.";
         }
 
         // Pobranie danych użytkownika
-        StudentData currentData = userStudentData.get(userId);
+        StudentData currentData = globalDataManager.userStudentData.get(userId);
         if (currentData == null) {
             System.out.println("No data found for userId: " + userId);
             return "No data found for the given user ID.";
@@ -161,12 +155,12 @@ public class StateController {
 
     @GetMapping("/courses")
     public Object getServerCourses(@RequestParam int userId) {
-        if (!sessionManager.isSessionActive(userId)) {
+        if (!globalDataManager.isSessionActive(userId)) {
             return "Session not active. Please log in.";
         }
 
         // Pobranie danych użytkownika
-        StudentData currentData = userStudentData.get(userId);
+        StudentData currentData = globalDataManager.userStudentData.get(userId);
         if (currentData == null) {
             return "No data found for the given user ID.";
         }

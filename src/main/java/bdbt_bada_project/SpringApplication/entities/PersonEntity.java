@@ -51,7 +51,9 @@ public class PersonEntity {
         this.phoneNumber = "phoneNumber";
     }
 
-
+    public Integer getId() {
+        return id;
+    }
 
     public void setFirstName(String firstName) {this.firstName = firstName;}
     public void setLastName(String lastName) {
@@ -63,4 +65,6 @@ public class PersonEntity {
     public void setEmail(String email) {
         this.email = email;
     }
+
+
 }
