@@ -1,6 +1,5 @@
-
 .sign-out-btn {
-    position: absolute;
+    position: fixed; /* Zawsze w tej samej pozycji względem okna przeglądarki */
     top: 20px;
     right: 20px;
     background-color: #ff3333;
@@ -13,6 +12,8 @@
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     transition: background-color 0.3s, transform 0.2s;
+    z-index: 9999; /* Ustaw najwyższy priorytet nakładania */
+    pointer-events: auto; /* Upewnij się, że kliknięcia są obsługiwane */
 }
 
 .sign-out-btn:hover {
