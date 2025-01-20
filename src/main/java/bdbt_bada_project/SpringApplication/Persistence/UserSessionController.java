@@ -1,11 +1,11 @@
 package bdbt_bada_project.SpringApplication.Persistence;
 
 import jakarta.annotation.PostConstruct;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -14,8 +14,19 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping("/api/sessions")
 public class UserSessionController {
 
-    private final List<UserSession> activeSessions = new CopyOnWriteArrayList<>();
     private final List<UserAccount> userAccounts = new ArrayList<>();
+    private final SessionManager sessionManager;
+
+    public UserSessionController(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
+
+        userAccounts.add(new UserAccount(1, "student", "pass", UserRole.STUDENT));
+        userAccounts.add(new UserAccount(2, "lecturer", "pass", UserRole.LECTURER));
+        userAccounts.add(new UserAccount(3, "admin", "admin", UserRole.ADMIN));
+        userAccounts.add(new UserAccount(4, "student2", "pass", UserRole.STUDENT));
+        userAccounts.add(new UserAccount(5, "lecturer2", "pass", UserRole.LECTURER));
+        userAccounts.add(new UserAccount(6, "admin2", "admin", UserRole.ADMIN));
+    }
 
     public enum UserRole {
         STUDENT,
@@ -27,8 +38,7 @@ public class UserSessionController {
         private int id;
         private UserRole role;
 
-        public UserSession() {
-        }
+        public UserSession() {}
 
         public UserSession(int id, UserRole role) {
             this.id = id;
@@ -90,54 +100,6 @@ public class UserSessionController {
         }
     }
 
-    public UserSessionController() {
-        userAccounts.add(new UserAccount(1, "student", "pass", UserRole.STUDENT));
-        userAccounts.add(new UserAccount(2, "lecturer", "pass", UserRole.LECTURER));
-        userAccounts.add(new UserAccount(3, "admin", "admin", UserRole.ADMIN));
-        userAccounts.add(new UserAccount(4, "student2", "pass", UserRole.STUDENT));
-        userAccounts.add(new UserAccount(5, "lecturer2", "pass", UserRole.LECTURER));
-        userAccounts.add(new UserAccount(6, "admin2", "admin", UserRole.ADMIN));
-    }
-
-    @PostConstruct
-    public void printActiveSessionsPeriodically() {
-        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(() -> {
-            System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-            System.out.println("Number of active sessions: " + activeSessions.size());
-            activeSessions.forEach(session ->
-                    System.out.println("ID: " + session.getId() + ", Role: " + session.getRole())
-            );
-            System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-        }, 0, 3, TimeUnit.SECONDS);
-    }
-
-    @PostMapping("/login")
-    public Object login(@RequestBody LoginRequest loginRequest) {
-        UserAccount account = userAccounts.stream()
-                .filter(user -> user.getLogin().equals(loginRequest.getLogin()) && user.getPassword().equals(loginRequest.getPassword()))
-                .findFirst()
-                .orElse(null);
-
-        if (account == null) {
-            return "Invalid login or password.";
-        }
-
-        boolean alreadyLoggedIn = activeSessions.stream().anyMatch(session -> session.getId() == account.getId());
-        if (!alreadyLoggedIn) {
-            UserSession session = new UserSession(account.getId(), account.getRole());
-            activeSessions.add(session);
-            return session;
-        } else {
-            return "User is already logged in.";
-        }
-    }
-
-    @PostMapping("/logout")
-    public void logout(@RequestBody int userId) {
-        activeSessions.removeIf(session -> session.getId() == userId);
-    }
-
     public static class LoginRequest {
         private String login;
         private String password;
@@ -157,5 +119,75 @@ public class UserSessionController {
         public void setPassword(String password) {
             this.password = password;
         }
+    }
+
+    @GetMapping("/check")
+    public Object checkSession(@RequestParam String sessionToken) {
+        // Pobieramy sesję na podstawie tokena
+        UserSession session = sessionManager.getSessionByToken(sessionToken);
+
+        if (session != null) {
+            // Jeśli sesja aktywna, zwracamy szczegóły użytkownika
+            return new ResponseEntity<>(Map.of(
+                    "active", true,
+                    "id", session.getId(),
+                    "role", session.getRole()
+            ), HttpStatus.OK);
+        } else {
+            // Jeśli sesja nieaktywna, zwracamy odpowiednią informację
+            return new ResponseEntity<>(Map.of(
+                    "active", false,
+                    "message", "Session not active."
+            ), HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @PostMapping("/login")
+    public Object login(@RequestBody LoginRequest loginRequest) {
+        UserAccount account = userAccounts.stream()
+                .filter(user -> user.getLogin().equals(loginRequest.getLogin()) && user.getPassword().equals(loginRequest.getPassword()))
+                .findFirst()
+                .orElse(null);
+
+        if (account == null) {
+            return "Invalid login or password.";
+        }
+
+        if (!sessionManager.isSessionActive(account.getId())) {
+            UserSession session = new UserSession(account.getId(), account.getRole());
+            String token = sessionManager.addSession(session); // Dodajemy sesję i generujemy token
+            return Map.of(
+                    "message", "Login successful",
+                    "sessionToken", token,
+                    "role", account.getRole(),
+                    "id", account.getId()
+            );
+        } else {
+            return "User is already logged in.";
+        }
+    }
+
+    @PostMapping("/logout")
+    public String logout(@RequestParam String sessionToken) {
+        boolean removed = sessionManager.removeSessionByToken(sessionToken);
+        return removed ? "User logged out successfully." : "No active session found for the given token.";
+    }
+
+    @PostConstruct
+    public void logActiveSessionsPeriodically() {
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.scheduleAtFixedRate(() -> {
+            System.out.println("========================================");
+            System.out.println("Number of active sessions: " + sessionManager.getActiveSessions().size());
+            if (!sessionManager.getActiveSessions().isEmpty()) {
+                System.out.println("Active sessions:");
+                sessionManager.getActiveSessions().forEach(session ->
+                        System.out.println("ID: " + session.getId() + ", Role: " + session.getRole())
+                );
+            } else {
+                System.out.println("No active sessions.");
+            }
+            System.out.println("========================================");
+        }, 0, 3, TimeUnit.SECONDS);
     }
 }

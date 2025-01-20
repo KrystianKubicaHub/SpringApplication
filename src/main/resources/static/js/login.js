@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const login = document.getElementById('login').value.trim();
         const password = document.getElementById('password').value.trim();
 
-        // Walidacja loginu
         if (!login) {
             alert('Login cannot be empty.');
             return;
@@ -49,8 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             })
             .then(data => {
-                console.log('Login successful:', data);
-                // Przekierowanie na odpowiednią stronę na podstawie roli zwróconej przez serwer
+                localStorage.setItem('userId', data.id);
                 if (data.role === 'ADMIN') {
                     window.location.href = '/main_admin';
                 } else if (data.role === 'LECTURER') {
