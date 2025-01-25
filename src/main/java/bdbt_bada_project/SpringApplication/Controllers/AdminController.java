@@ -1,5 +1,6 @@
-package bdbt_bada_project.SpringApplication.Persistence;
+package bdbt_bada_project.SpringApplication.Controllers;
 
+import bdbt_bada_project.SpringApplication.Persistence.GlobalDataManager;
 import bdbt_bada_project.SpringApplication.entities.AcademyEntity;
 import bdbt_bada_project.SpringApplication.entities.CourseEntity;
 import bdbt_bada_project.SpringApplication.entities.LecturerEntity;
@@ -61,7 +62,7 @@ public class AdminController {
             if (newUserData.getStudentData() == null) {
                 return ResponseEntity.badRequest().body("Student data is required for role STUDENT.");
             }
-            globalDataManager.userStudentData.put(newUserData.getStudentData().getId(), newUserData.getStudentData());
+            globalDataManager.studentsData.put(newUserData.getStudentData().getId(), newUserData.getStudentData());
         }
 
         UserSessionController.UserAccount newAccount = new UserSessionController.UserAccount(
@@ -91,7 +92,7 @@ public class AdminController {
 
             // Dodajemy dane studenta, jeśli rola to STUDENT
             if (account.getRole() == UserSessionController.UserRole.STUDENT) {
-                StudentData studentData = globalDataManager.userStudentData.get(account.getId());
+                StudentData studentData = globalDataManager.studentsData.get(account.getId());
                 if (studentData != null) {
                     user.put("studentData", studentData);
                 }

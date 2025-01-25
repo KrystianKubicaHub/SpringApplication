@@ -1,7 +1,7 @@
-package bdbt_bada_project.SpringApplication.Persistence;
+package bdbt_bada_project.SpringApplication.Controllers;
 
 import bdbt_bada_project.SpringApplication.Helpers.FAKE_DATA;
-import bdbt_bada_project.SpringApplication.entities.StudentData;
+import bdbt_bada_project.SpringApplication.Persistence.GlobalDataManager;
 import jakarta.annotation.PostConstruct;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +21,6 @@ public class UserSessionController {
 
     public UserSessionController(GlobalDataManager globalDataManager) {
         this.globalDataManager = globalDataManager;
-
-        this.globalDataManager.userAccounts.addAll(FAKE_DATA.getAccountsCredentialsFromSQL(FAKE_DATA.numberOfStudents));
-        FAKE_DATA.getAllUserInfo(this.globalDataManager);
     }
 
     public enum UserRole {

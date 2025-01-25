@@ -12,7 +12,7 @@ public class StudentData extends PersonEntity {
     public String studySince;
     public int totalECTS;
     public List<FieldOfStudyEntity> fieldOfStudy;
-    private List<EnrollmentEntity> enrollments;
+    private final List<EnrollmentEntity> enrollments;
 
     public List<EnrollmentEntity> getEnrollments() {
         return enrollments;

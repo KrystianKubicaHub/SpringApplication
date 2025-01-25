@@ -1,22 +1,21 @@
-package bdbt_bada_project.SpringApplication.Persistence;
+package bdbt_bada_project.SpringApplication.Controllers;
 
+import bdbt_bada_project.SpringApplication.Persistence.GlobalDataManager;
 import bdbt_bada_project.SpringApplication.entities.CourseEntity;
 import bdbt_bada_project.SpringApplication.entities.StudentData;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 @RestController
 @RequestMapping("/api")
-public class StateController {
+public class StudentController {
 
 
     private final GlobalDataManager globalDataManager;
 
 
-    public StateController(GlobalDataManager globalDataManager) {
+    public StudentController(GlobalDataManager globalDataManager) {
         this.globalDataManager = globalDataManager;
     }
 
@@ -26,7 +25,7 @@ public class StateController {
             return "Session not active. Please log in.";
         }
 
-        StudentData currentData = globalDataManager.userStudentData.get(userId);
+        StudentData currentData = globalDataManager.studentsData.get(userId);
         if (currentData == null) {
             return "No data found for the given user ID.";
         }
@@ -53,7 +52,7 @@ public class StateController {
             return "Session not active. Please log in.";
         }
 
-        StudentData currentData = globalDataManager.userStudentData.get(userId);
+        StudentData currentData = globalDataManager.studentsData.get(userId);
         if (currentData == null) {
             return "No data found for the given user ID.";
         }
@@ -78,7 +77,7 @@ public class StateController {
             return "Session not active. Please log in.";
         }
 
-        StudentData currentData = globalDataManager.userStudentData.get(userId);
+        StudentData currentData = globalDataManager.studentsData.get(userId);
         if (currentData == null) {
             System.out.println("No data found for userId: " + userId);
             return "No data found for the given user ID.";
@@ -117,7 +116,7 @@ public class StateController {
         }
 
         // Pobranie danych użytkownika
-        StudentData currentData = globalDataManager.userStudentData.get(userId);
+        StudentData currentData = globalDataManager.studentsData.get(userId);
         if (currentData == null) {
             System.out.println("No data found for userId: " + userId);
             return "No data found for the given user ID.";
@@ -156,7 +155,7 @@ public class StateController {
         }
 
         // Pobranie danych użytkownika
-        StudentData currentData = globalDataManager.userStudentData.get(userId);
+        StudentData currentData = globalDataManager.studentsData.get(userId);
         if (currentData == null) {
             return "No data found for the given user ID.";
         }

@@ -1,6 +1,6 @@
 package bdbt_bada_project.SpringApplication.Helpers;
 import bdbt_bada_project.SpringApplication.Persistence.GlobalDataManager;
-import bdbt_bada_project.SpringApplication.Persistence.UserSessionController;
+import bdbt_bada_project.SpringApplication.Controllers.UserSessionController;
 import bdbt_bada_project.SpringApplication.entities.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -310,11 +310,11 @@ public class FAKE_DATA {
         return accounts;
     }
 
-    public static void getAllUserInfo(GlobalDataManager globalDataManager) {
-        List<StudentData> studentDataList = new ArrayList<>();
-        List<LecturerEntity> lecturerDataList = new ArrayList<>();
 
-        for (UserSessionController.UserAccount account : globalDataManager.userAccounts) {
+    public static Map<Integer, StudentData> generateStudentDataEntries(List<UserSessionController.UserAccount> userAccounts) {
+        Map<Integer, StudentData> studentDataMap = new HashMap<>();
+
+        for (UserSessionController.UserAccount account : userAccounts) {
             if (account.getRole() == UserSessionController.UserRole.STUDENT) {
                 StudentData studentData = new StudentData();
 
@@ -332,9 +332,18 @@ public class FAKE_DATA {
                 studentData.fieldOfStudy = new ArrayList<>();
                 studentData.fieldOfStudy.add(fose);
 
+                studentDataMap.put(studentData.id, studentData);
+            }
+        }
 
-                studentDataList.add(studentData);
-            } else if (account.getRole() == UserSessionController.UserRole.LECTURER) {
+        return studentDataMap;
+    }
+
+    public static Map<Integer, LecturerEntity> generateLecturerDataEntries(List<UserSessionController.UserAccount> userAccounts) {
+        Map<Integer, LecturerEntity> lecturerDataMap = new HashMap<>();
+
+        for (UserSessionController.UserAccount account : userAccounts) {
+            if (account.getRole() == UserSessionController.UserRole.LECTURER) {
                 String firstName = generateRandomFirstName();
                 String lastName = generateRandomLastName();
                 LecturerEntity lecturerData = new LecturerEntity(
@@ -347,22 +356,15 @@ public class FAKE_DATA {
                         generateRandomAcademicTitle(),
                         generateRandomSpecialization()
                 );
-                lecturerDataList.add(lecturerData);
+
+                lecturerDataMap.put(lecturerData.getId(), lecturerData);
             }
         }
 
-        for (StudentData studentData : studentDataList) {
-            if (studentData != null && studentData.getId() != null) {
-                globalDataManager.userStudentData.put(studentData.getId(), studentData);
-            }
-        }
-
-        for (LecturerEntity lecturerData : lecturerDataList) {
-            if (lecturerData != null && lecturerData.getId() != null) {
-                globalDataManager.lecturersData.put(lecturerData.getId(), lecturerData);
-            }
-        }
+        return lecturerDataMap;
     }
+
+
 
 
     private static String generateRandomPESEL() {

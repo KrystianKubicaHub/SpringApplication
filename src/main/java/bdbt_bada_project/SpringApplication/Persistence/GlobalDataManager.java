@@ -1,5 +1,6 @@
 package bdbt_bada_project.SpringApplication.Persistence;
 
+import bdbt_bada_project.SpringApplication.Controllers.UserSessionController;
 import bdbt_bada_project.SpringApplication.Helpers.FAKE_DATA;
 import bdbt_bada_project.SpringApplication.entities.AcademyEntity;
 import bdbt_bada_project.SpringApplication.entities.CourseEntity;
@@ -15,10 +16,22 @@ public class GlobalDataManager {
     public final List<UserSessionController.UserAccount> userAccounts = new ArrayList<>();
     public final Map<Integer, UserSessionController.UserSession> activeSessions = new HashMap<>();
     public final Map<String, UserSessionController.UserSession> sessionTokens = new HashMap<>();
-    public final Map<Integer, StudentData> userStudentData = new HashMap<>();
-    public final Map<Integer, LecturerEntity> lecturersData = new HashMap<>();
-    public final List<CourseEntity> serverCourses = FAKE_DATA.generateCourses(20);
-    public final AcademyEntity academyEntity = FAKE_DATA.loadFromSQLAcademyEntity();
+
+    public final Map<Integer, StudentData> studentsData;
+    public final Map<Integer, LecturerEntity> lecturersData;
+
+    public final List<CourseEntity> serverCourses;
+    public final AcademyEntity academyEntity;
+
+    public GlobalDataManager() {
+        this.userAccounts.addAll(FAKE_DATA.getAccountsCredentialsFromSQL(FAKE_DATA.numberOfStudents));
+
+        studentsData = FAKE_DATA.generateStudentDataEntries(this.userAccounts);
+        lecturersData = FAKE_DATA.generateLecturerDataEntries(this.userAccounts);
+
+        academyEntity = FAKE_DATA.loadFromSQLAcademyEntity();
+        serverCourses = FAKE_DATA.generateCourses(20);
+    }
 
     public String addSession(UserSessionController.UserSession session) {
         activeSessions.put(session.getId(), session);
