@@ -2,6 +2,7 @@ package bdbt_bada_project.SpringApplication.Persistence;
 
 import bdbt_bada_project.SpringApplication.entities.AcademyEntity;
 import bdbt_bada_project.SpringApplication.entities.CourseEntity;
+import bdbt_bada_project.SpringApplication.entities.LecturerEntity;
 import bdbt_bada_project.SpringApplication.entities.StudentData;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ public class AdminController {
         List<CourseEntity> courses = globalDataManager.serverCourses;
         return ResponseEntity.ok(courses);
     }
+
     @GetMapping("/courses/update")
     public ResponseEntity<List<CourseEntity>> getUpdatedCourses() {
         List<CourseEntity> updatedCourses = globalDataManager.serverCourses;
@@ -35,8 +37,12 @@ public class AdminController {
         ///  tu będzie problem
         return ResponseEntity.ok(updatedCourses);
     }
+
     @PostMapping("/courses/add")
     public ResponseEntity<String> addCourse(@RequestBody CourseEntity newCourse) {
+        System.out.println("New course has arrived");
+        System.out.println(newCourse);
+        System.out.println(newCourse.getLecturer());
         if (newCourse == null || newCourse.getName() == null || newCourse.getName().isEmpty()) {
             return ResponseEntity.badRequest().body("Invalid course data. Name is required.");
         }
@@ -95,6 +101,19 @@ public class AdminController {
         }
 
         return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/lecturers")
+    public ResponseEntity<List<LecturerEntity>> getAllLecturers() {
+        try {
+            List<LecturerEntity> lecturers = globalDataManager.getAllLecturers();
+            if (lecturers.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.ok(lecturers);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
@@ -156,6 +175,7 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Academy data not found.");
         }
     }
+
     @PostMapping("/notify-change")
     public ResponseEntity<String> notifyAcademyChange(@RequestBody String targetUrl) {
         AcademyEntity academyEntity = globalDataManager.academyEntity;

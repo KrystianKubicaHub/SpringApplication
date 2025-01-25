@@ -686,6 +686,312 @@ body {
         font-size: 14px;
     }
 }
+.add-course-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Form Field Styling */
+.form-field {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+label {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #b0b0b0;
+    margin-bottom: 4px;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    color: #ffffff;
+    background-color: #1c1c29;
+    border: 1px solid #444;
+    border-radius: 5px;
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus, textarea:focus {
+    border-color: #00ffab;
+    box-shadow: 0 0 10px rgba(0, 255, 171, 0.5);
+}
+
+textarea {
+    resize: none;
+}
+
+/* ECTS Adjust Buttons */
+.adjust-button {
+    background-color: #2e2e44;
+    color: #ffffff;
+    border: 1px solid #444;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.adjust-button:hover {
+    background-color: #00ffab;
+    color: #1c1c29;
+    box-shadow: 0 4px 10px rgba(0, 255, 171, 0.4);
+}
+
+/* Selected Lecturers List */
+.selected-lecturers-list {
+    width: 100%;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.selected-lecturers-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 5px 0;
+    background-color: #292942;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.selected-lecturers-list li button {
+    background-color: #ff5e5e;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.selected-lecturers-list li button:hover {
+    background-color: #ff4040;
+}
+
+/* Select Lecturer Button */
+.select-lecturer-button {
+    padding: 10px;
+    font-size: 1rem;
+    color: #ffffff;
+    background-color: #00aaff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.select-lecturer-button:hover {
+    background-color: #007acc;
+    box-shadow: 0 4px 10px rgba(0, 122, 204, 0.4);
+}
+
+/* Submit Button */
+.submit-button {
+    padding: 15px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #00ffab;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.submit-button:hover {
+    background-color: #00cc88;
+    box-shadow: 0 4px 10px rgba(0, 255, 171, 0.5);
+}
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 600px;
+    background-color: #2e2e38;
+    color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.modal-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.modal-header {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #00ffab;
+    text-align: center;
+    margin-bottom: 10px;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.loading-message, .no-lecturers-message, .error-message {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #b0b0b0;
+}
+
+.lecturers-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #393945;
+    color: #ffffff;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.lecturers-table th, .lecturers-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #444;
+}
+
+.lecturers-table th {
+    background-color: #44475a;
+    font-weight: bold;
+    color: #00ffab;
+}
+
+.lecturers-table tr:hover {
+    background-color: #50506b;
+    cursor: pointer;
+}
+
+.action-btn {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #007acc;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.action-btn:hover {
+    background-color: #005f99;
+}
+
+.remove-button {
+    margin-left: 10px;
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    color: #ffffff;
+    background-color: #ff5e5e;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.remove-button:hover {
+    background-color: #ff4040;
+}
+
+.modal-close-btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #444;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    align-self: center;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.modal-close-btn:hover {
+    background-color: #333;
+    transform: scale(1.05);
+}
+
+body {
+    overflow: hidden; /* Prevent background scrolling when modal is open */
+}
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+/* Table Styling */
+.courses-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #292942;
+    color: #ffffff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.courses-table th, .courses-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #444;
+}
+
+.courses-table th {
+    background-color: #44475a;
+    font-weight: bold;
+    color: #00ffab;
+    text-transform: uppercase;
+}
+
+.courses-table tr:hover {
+    background-color: #50506b;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.courses-table td {
+    font-size: 0.9rem;
+    color: #e0e0e0;
+}
+
+.courses-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Loading and Error Messages */
+.loading-message, .no-courses-message, .error-message {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #ff5e5e;
+    text-align: center;
+    margin-top: 20px;
+}
+
+
+
 
 
 

@@ -1,4 +1,5 @@
 package bdbt_bada_project.SpringApplication.Helpers;
+import bdbt_bada_project.SpringApplication.Persistence.GlobalDataManager;
 import bdbt_bada_project.SpringApplication.Persistence.UserSessionController;
 import bdbt_bada_project.SpringApplication.entities.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -309,38 +310,61 @@ public class FAKE_DATA {
         return accounts;
     }
 
-    public static List<StudentData> getAllUserInfo(List<UserSessionController.UserAccount> accounts) {
+    public static void getAllUserInfo(GlobalDataManager globalDataManager) {
         List<StudentData> studentDataList = new ArrayList<>();
+        List<LecturerEntity> lecturerDataList = new ArrayList<>();
 
-        for (UserSessionController.UserAccount account : accounts) {
+        for (UserSessionController.UserAccount account : globalDataManager.userAccounts) {
             if (account.getRole() == UserSessionController.UserRole.STUDENT) {
                 StudentData studentData = new StudentData();
 
+                studentData.id = account.getId();
+                studentData.PESELNumber = generateRandomPESEL();
+                studentData.firstName = generateRandomFirstName();
+                studentData.lastName = generateRandomLastName();
+                studentData.email = generateEmailForStudent(studentData.firstName, studentData.lastName);
+                studentData.phoneNumber = generateRandomPhoneNumber();
+                studentData.indexNumber = generateIndexNumber(account.getId());
+                studentData.studySince = generateRandomStudySince();
+                studentData.totalECTS = 0;
 
-                studentData.id = account.getId(); // Przypisanie ID z konta
-                studentData.PESELNumber = generateRandomPESEL(); // Generowanie przykładowego PESEL
-                studentData.firstName = generateRandomFirstName(); // Generowanie losowego imienia
-                studentData.lastName = generateRandomLastName(); // Generowanie losowego nazwiska
-                studentData.email = generateEmailForStudent(studentData.firstName, studentData.lastName); // Generowanie e-maila
-                studentData.phoneNumber = generateRandomPhoneNumber(); // Generowanie numeru telefonu
-                studentData.indexNumber = generateIndexNumber(account.getId()); // Generowanie indeksu na podstawie ID
-                studentData.studySince = generateRandomStudySince(); // Generowanie losowego semestru rozpoczęcia
-                studentData.totalECTS = 0; // Nowi studenci zaczynają z zerowymi punktami ECTS
-
-                // Przypisanie kierunku studiów
-                FieldOfStudyEntity fose = new FieldOfStudyEntity(generateRandomFieldOfStudy()); // Losowy kierunek
+                FieldOfStudyEntity fose = new FieldOfStudyEntity(generateRandomFieldOfStudy());
                 studentData.fieldOfStudy = new ArrayList<>();
                 studentData.fieldOfStudy.add(fose);
 
-                // Dodanie do listy
+
                 studentDataList.add(studentData);
+            } else if (account.getRole() == UserSessionController.UserRole.LECTURER) {
+                String firstName = generateRandomFirstName();
+                String lastName = generateRandomLastName();
+                LecturerEntity lecturerData = new LecturerEntity(
+                        account.getId(),
+                        firstName,
+                        lastName,
+                        generateRandomPESEL(),
+                        generateEmailForLecturer(firstName, lastName),
+                        generateRandomPhoneNumber(),
+                        generateRandomAcademicTitle(),
+                        generateRandomSpecialization()
+                );
+                lecturerDataList.add(lecturerData);
             }
         }
 
-        return studentDataList;
+        for (StudentData studentData : studentDataList) {
+            if (studentData != null && studentData.getId() != null) {
+                globalDataManager.userStudentData.put(studentData.getId(), studentData);
+            }
+        }
+
+        for (LecturerEntity lecturerData : lecturerDataList) {
+            if (lecturerData != null && lecturerData.getId() != null) {
+                globalDataManager.lecturersData.put(lecturerData.getId(), lecturerData);
+            }
+        }
     }
 
-    // Generatory danych przykładowych
+
     private static String generateRandomPESEL() {
         return "042308" + (int) (Math.random() * 1000000); // Przykładowy PESEL
     }
@@ -376,6 +400,7 @@ public class FAKE_DATA {
         String[] fields = {"Computer Science", "Mathematics", "Physics", "Biology", "Tailoring"};
         return fields[(int) (Math.random() * fields.length)];
     }
+
     public static AcademyEntity loadFromSQLAcademyEntity() {
         return new AcademyEntity(
                 1, // id
@@ -385,6 +410,22 @@ public class FAKE_DATA {
                 200,
                 12
         );
+    }
+
+    private static final List<String> ACADEMIC_TITLES = Arrays.asList("Professor", "Associate Professor", "Assistant Professor", "Dr.", "PhD");
+
+    public static String generateRandomAcademicTitle() {
+        return ACADEMIC_TITLES.get(new Random().nextInt(ACADEMIC_TITLES.size()));
+    }
+
+    private static final List<String> SPECIALIZATIONS = Arrays.asList("Mathematics", "Computer Science", "Physics", "Chemistry", "Biology", "Engineering");
+
+    public static String generateRandomSpecialization() {
+        return SPECIALIZATIONS.get(new Random().nextInt(SPECIALIZATIONS.size()));
+    }
+
+    public static String generateEmailForLecturer(String firstName, String lastName) {
+        return firstName.toLowerCase() + "." + lastName.toLowerCase() + "@university.edu";
     }
 
 }

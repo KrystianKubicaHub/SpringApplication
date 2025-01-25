@@ -23,14 +23,7 @@ public class UserSessionController {
         this.globalDataManager = globalDataManager;
 
         this.globalDataManager.userAccounts.addAll(FAKE_DATA.getAccountsCredentialsFromSQL(FAKE_DATA.numberOfStudents));
-        List<StudentData> allUserInfo = FAKE_DATA.getAllUserInfo(this.globalDataManager.userAccounts);
-        if (allUserInfo != null) {
-            for (StudentData studentData : allUserInfo) {
-                if (studentData != null && studentData.getId() != null) {
-                    this.globalDataManager.userStudentData.put(studentData.getId(), studentData);
-                }
-            }
-        }
+        FAKE_DATA.getAllUserInfo(this.globalDataManager);
     }
 
     public enum UserRole {

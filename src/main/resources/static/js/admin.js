@@ -147,6 +147,8 @@ function resetToInitialState(button) {
 }
 
 
+
+
 document.addEventListener('DOMContentLoaded', () => {
     const addPersonButton = document.getElementById('add-person-btn');
     const showPeopleButton = document.getElementById('show-people-btn');
@@ -157,10 +159,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const buttons = document.querySelectorAll('.large-btn');
 
     let activeOption = '';
-    console.log(
-        'activeOption',
-        activeOption
-    )
 
     if (!buttonsContainer || !buttons.length) {
         console.error('Buttons container or buttons not found');
@@ -183,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             buttonsContainer.classList.add('sticky');
 
-            // Wywołanie odpowiedniej funkcji
+            console.log('activeOption', activeOption);
             callback();
         } else {
             activeOption = '';
@@ -205,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const icon = button.querySelector('.icon').textContent;
         button.setAttribute('data-original-text', text);
         button.setAttribute('data-original-icon', icon);
-
+        console.log('inicjalizacja buttonow');
         button.addEventListener('click', () => handleOptionSelection(button, option, callback));
     };
 
