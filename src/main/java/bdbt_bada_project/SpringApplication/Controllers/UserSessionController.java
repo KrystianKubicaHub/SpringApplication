@@ -72,11 +72,23 @@ public class UserSessionController {
         private String password;
         private UserRole role;
 
+        @Override
+        public String toString() {
+            return "UserAccount{" +
+                    "id=" + id +
+                    ", login='" + login + '\'' +
+                    ", password='" + password + '\'' +
+                    ", role=" + role +
+                    '}';
+        }
+
         public UserAccount(int id, String login, String password, UserRole role) {
             this.id = id;
             this.login = login;
             this.password = password;
             this.role = role;
+
+
         }
 
         public int getId() {
@@ -193,8 +205,9 @@ public class UserSessionController {
                 System.out.println("No active sessions.");
             }
             System.out.println("*********************************");
-            System.out.println("Academy Details:");
-            System.out.println(globalDataManager.academyEntity);
+            //System.out.println("Academy Details:");
+            //System.out.println(globalDataManager.academyEntity);
+            System.out.println("Amount of user account: " + globalDataManager.userAccounts.size());
             System.out.println("========================================");
         }, 0, 3, TimeUnit.SECONDS);
     }
