@@ -21,7 +21,7 @@ public class GlobalDataManager {
     public final Map<Integer, LecturerEntity> lecturersData;
 
     public final List<CourseEntity> serverCourses;
-    public final AcademyEntity academyEntity;
+    public AcademyEntity academyEntity;
 
     public GlobalDataManager() {
         this.userAccounts.addAll(FAKE_DATA.getAccountsCredentialsFromSQL(FAKE_DATA.numberOfStudents));
@@ -61,4 +61,11 @@ public class GlobalDataManager {
         return new ArrayList<>(lecturersData.values());
     }
 
+    public AcademyEntity getAcademyEntity() {
+        return academyEntity;
+    }
+
+    public void setAcademyEntity(AcademyEntity newAcademyEntity) {
+        academyEntity = newAcademyEntity;
+    }
 }

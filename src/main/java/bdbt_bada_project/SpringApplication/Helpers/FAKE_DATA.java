@@ -404,13 +404,33 @@ public class FAKE_DATA {
     }
 
     public static AcademyEntity loadFromSQLAcademyEntity() {
+        AddressEntity address = new AddressEntity(
+                1,
+                "Main Street",
+                "12",
+                null,
+                "Zurich",
+                "8001",
+                "Switzerland"
+        );
+        LecturerEntity dean = new LecturerEntity(
+                12,
+                "John",
+                "Doe",
+                "87012345678",
+                "john.doe@zurichmedicalacademy.ch",
+                "+41-44-765-4321",
+                "Professor",
+                "Surgery"
+        );
+
         return new AcademyEntity(
-                1, // id
+                1,
                 "Zurich Medical Academy",
                 "+41-44-123-4567",
                 "info@zurichmedicalacademy.ch",
-                200,
-                12
+                address,
+                dean
         );
     }
 

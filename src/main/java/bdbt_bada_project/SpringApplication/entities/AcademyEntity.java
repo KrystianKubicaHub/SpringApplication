@@ -7,18 +7,18 @@ public class AcademyEntity implements Serializable {
     private String name;
     private String phone;
     private String email;
-    private int addressId;
-    private int dean;
+    private AddressEntity address;
+    private LecturerEntity dean;
 
     public AcademyEntity() {
     }
 
-    public AcademyEntity(int idUnit, String name, String phone, String email, int addressId, int dean) {
+    public AcademyEntity(int idUnit, String name, String phone, String email, AddressEntity address, LecturerEntity dean) {
         this.idUnit = idUnit;
         this.name = name;
         this.phone = phone;
         this.email = email;
-        this.addressId = addressId;
+        this.address = address;
         this.dean = dean;
     }
 
@@ -54,19 +54,19 @@ public class AcademyEntity implements Serializable {
         this.email = email;
     }
 
-    public int getAddressId() {
-        return addressId;
+    public AddressEntity getAddress() {
+        return address;
     }
 
-    public void setAddressId(int addressId) {
-        this.addressId = addressId;
+    public void setAddress(AddressEntity address) {
+        this.address = address;
     }
 
-    public int getDean() {
+    public LecturerEntity getDean() {
         return dean;
     }
 
-    public void setDean(int dean) {
+    public void setDean(LecturerEntity dean) {
         this.dean = dean;
     }
 
@@ -77,7 +77,7 @@ public class AcademyEntity implements Serializable {
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
-                ", addressId=" + addressId +
+                ", address=" + address +
                 ", dean=" + dean +
                 '}';
     }

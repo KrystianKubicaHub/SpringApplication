@@ -1,10 +1,7 @@
 package bdbt_bada_project.SpringApplication.Controllers;
 
 import bdbt_bada_project.SpringApplication.Persistence.GlobalDataManager;
-import bdbt_bada_project.SpringApplication.entities.AcademyEntity;
-import bdbt_bada_project.SpringApplication.entities.CourseEntity;
-import bdbt_bada_project.SpringApplication.entities.LecturerEntity;
-import bdbt_bada_project.SpringApplication.entities.StudentData;
+import bdbt_bada_project.SpringApplication.entities.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -176,6 +173,52 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Academy data not found.");
         }
     }
+
+    @PostMapping("/academy/update")
+    public ResponseEntity<String> updateAcademy(@RequestBody AcademyEntity updatedAcademy) {
+        System.out.println(updatedAcademy);
+        AcademyEntity currentAcademy = globalDataManager.getAcademyEntity();
+
+        if (currentAcademy == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Academy data not found.");
+        }
+
+        // Aktualizacja pól akademii, o ile są one inne niż null (z wyjątkiem ID)
+        if (updatedAcademy.getName() != null) {
+            currentAcademy.setName(updatedAcademy.getName());
+        }
+        if (updatedAcademy.getPhone() != null) {
+            currentAcademy.setPhone(updatedAcademy.getPhone());
+        }
+        if (updatedAcademy.getEmail() != null) {
+            currentAcademy.setEmail(updatedAcademy.getEmail());
+        }
+
+        // Aktualizacja adresu, z wykluczeniem ID
+        AddressEntity currentAddress = currentAcademy.getAddress();
+        AddressEntity updatedAddress = updatedAcademy.getAddress();
+
+        if (currentAddress != null && updatedAddress != null) {
+            if (updatedAddress.getStreet() != null) {
+                currentAddress.setStreet(updatedAddress.getStreet());
+            }
+            if (updatedAddress.getCity() != null) {
+                currentAddress.setCity(updatedAddress.getCity());
+            }
+            if (updatedAddress.getCountry() != null) {
+                currentAddress.setCountry(updatedAddress.getCountry());
+            }
+            if (updatedAddress.getPostalCode() != null) {
+                currentAddress.setPostalCode(updatedAddress.getPostalCode());
+            }
+        }
+
+        // Zapis zaktualizowanego obiektu do globalDataManager
+        globalDataManager.setAcademyEntity(currentAcademy);
+
+        return ResponseEntity.ok("Academy updated successfully.");
+    }
+
 
     @PostMapping("/notify-change")
     public ResponseEntity<String> notifyAcademyChange(@RequestBody String targetUrl) {
