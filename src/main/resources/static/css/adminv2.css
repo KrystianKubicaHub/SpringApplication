@@ -1,0 +1,505 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', Arial, sans-serif;
+    background: linear-gradient(to bottom, #1E2136, #141624);
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+.main-container {
+    width: 90%;
+    max-width: 1200px;
+    background-color: #23263A;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    text-align: center;
+}
+
+
+.buttons-container {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    position: static;
+    top: auto;
+    left: auto;
+    transform: none;
+    transition: all 0.5s ease; /* Animacja dla płynnego przesuwania */
+}
+
+.buttons-container.fixed {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 1000;
+}
+
+
+.buttons-container .large-btn {
+    background: #0198af;
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    padding: 20px 40px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    margin: 10px;
+    flex: 1;
+    min-width: 180px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.buttons-container .large-btn:hover {
+    transform: translateY(-5px);
+    background: linear-gradient(to right, #afff00, #ff9322);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+}
+.display-panel {
+    background: linear-gradient(to bottom, #2C2F48, #1B1E31);
+    border-radius: 15px;
+    text-align: center;
+    width: 100%;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease-in-out;
+    overflow: hidden;
+}
+
+.panel-collapsed {
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.panel-expanded {
+    height: calc(100vh - 250px);
+    width: 100vw;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow: auto;
+}
+
+.display-panel h2 {
+    color: #FFD700; /* Złoty kolor, aby nagłówek się wyróżniał */
+    font-size: 28px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: 20px auto; /* Aby nagłówek miał trochę miejsca wokół */
+    padding: 10px 20px; /* Dodanie odstępów wewnętrznych */
+    background: linear-gradient(90deg, #4C5277, #6A70A9); /* Gradient tła */
+    border-radius: 12px; /* Zaokrąglone rogi */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Subtelny cień */
+    display: inline-block; /* Szerokość nagłówka dopasowana do treści */
+    text-align: center;
+}
+
+
+.panel-expanded {
+    height: 85vh; /* 85% wysokości ekranu */
+    width: 70%; /* 70% szerokości */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow-y: auto; /* Dodaje pionowy pasek przewijania */
+    overflow-x: hidden; /* Ukrywa poziomy pasek przewijania */
+    margin: 12% auto 0; /* Przesunięcie o 15% od góry, wyśrodkowanie w poziomie */
+    border-radius: 15px; /* Zaokrąglone rogi dla estetyki */
+    background: linear-gradient(to bottom, #2C2F48, #1B1E31); /* Gradient tła */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* Subtelny cień */
+    transition: all 0.3s ease-in-out; /* Płynna animacja zmian */
+}
+
+
+
+.cancel-btn {
+    background: linear-gradient(90deg, #ff0c0c, #ff6c6c); /* Czerwony gradient */
+    color: #FFFFFF; /* Biały tekst */
+    border-radius: 12px;
+    padding: 20px 40px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    margin: 10px;
+    flex: 1;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 15px rgba(76, 175, 80, 0.6);
+    border: none;
+    transform: scale(1.05);
+    transition: all 0.3s ease;
+}
+
+.cancel-btn:hover {
+    background: linear-gradient(90deg, #ff00de, #ff0cf2); /* Intensywniejszy gradient */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4), 0 0 20px rgba(118, 255, 3, 0.7); /* Wyrazisty cień */
+    transform: scale(1.08); /* Dodatkowe powiększenie */
+}
+
+/*ADP */
+
+.adp-add-person-form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+    background: linear-gradient(to bottom, #2C2F48, #1B1E31);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.adp-add-person-form .form-field {
+    flex: 1 1 calc(50% - 20px); /* Dwa pola obok siebie */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.adp-add-person-form input,
+.adp-add-person-form select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #4C5277;
+    background-color: #141624;
+    color: #ffffff;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.adp-add-person-form input:focus,
+.adp-add-person-form select:focus {
+    border-color: #FFD700;
+}
+
+.adp-add-person-form .submit-button {
+    flex: 1 1 100%; /* Cała szerokość */
+    padding: 15px;
+    background: linear-gradient(90deg, #0198af, #00d9d9);
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.adp-add-person-form .submit-button:hover {
+    background: linear-gradient(90deg, #00d9d9, #0198af);
+    transform: scale(1.05);
+}
+
+.adp-submit-button {
+    width: 100%; /* Przycisk zajmuje pełną szerokość */
+    padding: 15px 20px;
+    background: linear-gradient(90deg, #4CAF50, #81C784); /* Gradient w odcieniach zieleni */
+    color: #FFFFFF; /* Biały tekst */
+    font-size: 18px; /* Rozmiar tekstu */
+    font-weight: bold; /* Pogrubiony tekst */
+    text-transform: uppercase; /* Wielkie litery */
+    border: none; /* Bez obramowania */
+    border-radius: 12px; /* Zaokrąglone rogi */
+    cursor: pointer; /* Wskaźnik "kliknięcia" */
+    transition: all 0.3s ease; /* Płynne animacje zmian */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Subtelny cień */
+}
+
+.adp-submit-button:hover {
+    background: linear-gradient(90deg, #388E3C, #66BB6A); /* Intensywniejszy gradient */
+    transform: translateY(-3px); /* Subtelne przesunięcie do góry */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5); /* Mocniejszy cień */
+}
+
+.adp-submit-button:active {
+    transform: translateY(1px); /* Kliknięcie przycisku (lekko do dołu) */
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4); /* Mniejszy cień */
+    background: linear-gradient(90deg, #2E7D32, #558B2F); /* Jeszcze ciemniejszy gradient */
+}
+
+
+
+/* SHP */
+
+/* Styl dla tabeli użytkowników */
+.shp-users-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+    text-align: left;
+    background-color: #2C2F48;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Nagłówki tabeli */
+.shp-users-table th {
+    background: linear-gradient(to right, #4C5277, #6A70A9);
+    color: #FFFFFF;
+    font-weight: bold;
+    padding: 12px;
+    text-transform: uppercase;
+    border-bottom: 2px solid #1B1E31;
+}
+
+/* Wiersze tabeli */
+.shp-users-table tr {
+    border-bottom: 1px solid #1B1E31;
+}
+
+/* Wiersze na przemian */
+.shp-users-table tr:nth-child(even) {
+    background-color: #23263A;
+}
+
+/* Komórki tabeli */
+.shp-users-table td {
+    padding: 12px;
+    color: #FFFFFF;
+}
+
+/* Akcja - przycisk */
+.shp-action-btn {
+    background: linear-gradient(90deg, #0198af, #3ae6f7);
+    border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+/* Hover dla przycisków */
+.shp-action-btn:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(90deg, #00d2d2, #1ec2ff);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Styl dla przycisku Show More */
+.shp-show-more-btn {
+    background: linear-gradient(90deg, #FFD700, #FFC107);
+    color: #141624;
+}
+
+/* Hover dla Show More */
+.shp-show-more-btn:hover {
+    background: linear-gradient(90deg, #FFC107, #FF8C00);
+}
+
+/* Styl dla przycisku Edit */
+.shp-edit-btn {
+    background: linear-gradient(90deg, #4CAF50, #8BC34A);
+}
+
+/* Hover dla Edit */
+.shp-edit-btn:hover {
+    background: linear-gradient(90deg, #66BB6A, #388E3C);
+}
+
+/* Styl dla przycisku Delete */
+.shp-delete-btn {
+    background: linear-gradient(90deg, #FF5722, #FF3D00);
+}
+
+/* Hover dla Delete */
+.shp-delete-btn:hover {
+    background: linear-gradient(90deg, #FF7043, #D32F2F);
+}
+
+/* Styl dla komunikatu ładowania */
+.shp-loading-message {
+    color: #FFD700;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Styl dla komunikatu o błędzie */
+.shp-error-message {
+    color: #FF5722;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Styl dla komunikatu o braku użytkowników */
+.shp-no-users-message {
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* SD */
+
+/* Styl ogólny dla sekcji */
+.sd-form-header {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #FFD700; /* Złoty kolor nagłówka */
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #4C5277, #6A70A9);
+    padding: 10px 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    display: inline-block;
+}
+
+/* Kontener na szczegóły */
+.sd-details-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background: #23263A;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    overflow-y: auto;
+    max-height: 70vh;
+}
+
+/* Pojedynczy wiersz szczegółów */
+.sd-detail-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(90deg, #2C2F48, #1B1E31);
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Etykiety szczegółów */
+.sd-detail-label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #FFD700;
+}
+
+/* Wartości szczegółów */
+.sd-detail-value {
+    font-size: 16px;
+    color: #FFFFFF;
+}
+
+/* Pole wejściowe szczegółów */
+.sd-detail-input {
+    font-size: 16px;
+    padding: 5px 10px;
+    border: 1px solid #6A70A9;
+    border-radius: 8px;
+    background: #1B1E31;
+    color: #FFFFFF;
+    width: 60%;
+    transition: all 0.3s ease;
+}
+
+.sd-detail-input:focus {
+    outline: none;
+    border-color: #FFD700;
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
+/* Przycisk akcji */
+.sd-action-button {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 10px;
+}
+
+/* Styl przycisku Edytuj */
+.sd-edit-button {
+    background: linear-gradient(90deg, #0198af, #33b1c9);
+    color: #FFFFFF;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.sd-edit-button:hover {
+    background: linear-gradient(90deg, #0198af, #3bd6f2);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Styl przycisku Anuluj */
+.sd-cancel-button {
+    background: linear-gradient(90deg, #ff4d4d, #ff8080);
+    color: #FFFFFF;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.sd-cancel-button:hover {
+    background: linear-gradient(90deg, #ff4d4d, #ff9999);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Styl przycisku Potwierdź */
+.sd-confirm-button {
+    background: linear-gradient(90deg, #4CAF50, #76d375);
+    color: #FFFFFF;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.sd-confirm-button:hover {
+    background: linear-gradient(90deg, #4CAF50, #98e09b);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Komunikat błędu */
+.sd-error-message {
+    color: red;
+    font-size: 18px;
+    text-align: center;
+    background: #2C2F48;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+/* Pasek przewijania */
+.sd-details-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sd-details-container::-webkit-scrollbar-thumb {
+    background: #6A70A9;
+    border-radius: 10px;
+}
+
+.sd-details-container::-webkit-scrollbar-thumb:hover {
+    background: #FFD700;
+}
+
+
+
+

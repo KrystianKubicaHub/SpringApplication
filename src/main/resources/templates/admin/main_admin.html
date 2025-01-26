@@ -4,11 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Main Admin Panel</title>
-    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/adminv2.css">
     <link rel="stylesheet" href="/css/common.css">
     <script src="/js/authAndRedirect.js"></script>
-    <script src="/js/admin.js"></script>
-    <script src="/js/adminEndPoints.js"></script>
+    <script src="/js/admin/admin.js"></script>
+    <script src="/js/admin/adminv2.js"></script>
+    <script src="/js/admin/adminEndPoints.js"></script>
+    <script src="/js/admin/addPerson.js"></script>
+    <script src="/js/admin/showListOfPeople.js"></script>
+    <script src="/js/admin/academyEntityDetails.js"></script>
 </head>
 <body>
 <div class="main-container">
@@ -37,11 +41,8 @@
         </button>
     </div>
 
-    <div class="display-panel">
+    <div class="display-panel" id="content-panel">
         <h2>SELECT OPERATION</h2>
-        <div class="content-area">
-
-        </div>
     </div>
 </div>
 </body>
