@@ -20,7 +20,6 @@ public class GlobalDataManager {
     public final Map<Integer, StudentData> studentsData;
     public final Map<Integer, LecturerEntity> lecturersData;
 
-    public final List<CourseEntity> serverCourses;
     public AcademyEntity academyEntity;
 
     public GlobalDataManager() {
@@ -30,7 +29,6 @@ public class GlobalDataManager {
         lecturersData = FAKE_DATA.generateLecturerDataEntries(this.userAccounts);
 
         academyEntity = FAKE_DATA.loadFromSQLAcademyEntity();
-        serverCourses = FAKE_DATA.generateCourses(20);
     }
 
     public String addSession(UserSessionController.UserSession session) {

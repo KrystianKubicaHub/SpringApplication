@@ -30,7 +30,7 @@ async function academyDetailsClicked() {
         const detailsContainer = document.createElement('div');
         detailsContainer.className = 'sd-details-container';
 
-        // Sekcja General Information
+
         const generalSection = createSection('General Information', [
             { key: 'name', label: 'Name', value: academyData.name },
             { key: 'phone', label: 'Phone', value: academyData.phone },
@@ -44,6 +44,9 @@ async function academyDetailsClicked() {
         ], true, async (updatedData) => {
             const success = await updateAcademyData(updatedData);
             if (success) {
+                resetButtonStyles();
+                resetButtonsPosition();
+                resetContentPanel();
                 return true
             } else {
                 alert('Failed to update academy details.');
@@ -62,7 +65,27 @@ async function academyDetailsClicked() {
         changeDeanButton.textContent = 'Change Dean';
         changeDeanButton.className = 'sd-action-button sd-change-dean-button';
         changeDeanButton.addEventListener('click', () => {
-            changeDean(); // Funkcja do zaimplementowania
+            selectDeanClicked().then(selectedDean => {
+                console.log(selectedDean)
+                if (selectedDean) {
+                    changeDean(selectedDean)
+                        .then(() => {
+                            resetButtonStyles();
+                            resetButtonsPosition();
+                            resetContentPanel();
+                        })
+                        .catch(error => {
+                            console.error('Failed to change dean:', error);
+                            alert('An error occurred while changing the dean.');
+                        });
+                } else {
+                    console.log('No dean selected.');
+                }
+            })
+                .catch(error => {
+                    console.error('Error in dean selection:', error);
+                    alert('An error occurred during dean selection.');
+                });
         });
         deanSection.appendChild(changeDeanButton);
 
@@ -158,7 +181,17 @@ function createSection(title, fields, editable = false, onSave = null) {
             fields.forEach(field => {
                 const inputValue = inputs[field.key].value;
                 if (inputValue !== field.value) {
-                    updatedData[field.key] = inputValue;
+                    console.log(field.key);
+
+                    if (['street', 'houseNumber', 'apartmentNumber', 'city', 'postalCode', 'country'].includes(field.key)) {
+                        if (!updatedData.address) {
+                            updatedData.address = {};
+                        }``
+                        updatedData.address[field.key] = inputValue;
+                    } else {
+                        updatedData[field.key] = inputValue;
+                    }
+
                     dataChanged = true;
                 }
             });
@@ -180,6 +213,12 @@ function createSection(title, fields, editable = false, onSave = null) {
     return section;
 }
 async function updateAcademyData(updatedData) {
+    if (updatedData.address) {
+        console.log("Address data:", updatedData.address);
+    } else {
+        console.warn("No address data found in updatedData.");
+    }
+
     try {
         // Wysłanie żądania POST z zaktualizowanymi danymi akademii
         const response = await fetch('/api/admin/academy/update', {
@@ -209,5 +248,152 @@ async function updateAcademyData(updatedData) {
         return false; // Zwracamy `false` w przypadku błędu
     }
 }
+async function selectDeanClicked() {
+    return new Promise((resolve) => {
+        const modal = document.createElement('div');
+        modal.className = 'chd-modal';
+
+        const modalContent = document.createElement('div');
+        modalContent.className = 'chd-modal-content';
+        modalContent.innerHTML = '<h3 class="chd-modal-header">Select Dean</h3><p class="chd-loading-message">Loading deans...</p>';
+
+        modal.appendChild(modalContent);
+        document.body.appendChild(modal);
+
+        fetch('/api/admin/lecturers', { method: 'GET' })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch deans. Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((deans) => {
+                modalContent.innerHTML = ''; // Clear loading message
+
+                if (deans.length === 0) {
+                    modalContent.innerHTML = '<p class="chd-no-deans-message">No deans found.</p>';
+                    return;
+                }
+
+                const deansTable = document.createElement('table');
+                deansTable.className = 'chd-deans-table';
+
+                // Table header
+                const headerRow = document.createElement('tr');
+                headerRow.innerHTML = `
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Academic Title</th>
+                    <th>Specialization</th>
+                    <th>Actions</th>
+                `;
+                deansTable.appendChild(headerRow);
+
+                // Populate table rows
+                deans.forEach((dean) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${dean.id}</td>
+                        <td>${dean.firstName}</td>
+                        <td>${dean.lastName}</td>
+                        <td>${dean.academicTitle}</td>
+                        <td>${dean.specialization}</td>
+                        <td>
+                            <button 
+                                class="chd-action-btn chd-select-dean-btn" 
+                                data-dean-id="${dean.id}" 
+                                data-dean-first-name="${dean.firstName}" 
+                                data-dean-last-name="${dean.lastName}" 
+                                data-dean-title="${dean.academicTitle}" 
+                                data-dean-specialization="${dean.specialization}" 
+                                data-dean-email="${dean.email}" 
+                                data-dean-phone-number="${dean.phoneNumber}">
+                                Select
+                            </button>
+                        </td>
+                    `;
+                    deansTable.appendChild(row);
+                });
+
+
+                modalContent.appendChild(deansTable);
+
+                const selectDeanButtons = modal.querySelectorAll('.chd-select-dean-btn');
+
+                selectDeanButtons.forEach(button => {
+                    button.addEventListener('click', (event) => {
+                        const deanId = event.target.getAttribute('data-dean-id');
+                        const deanFirstName = event.target.getAttribute('data-dean-first-name');
+                        const deanLastName = event.target.getAttribute('data-dean-last-name');
+                        const deanTitle = event.target.getAttribute('data-dean-title');
+                        const deanSpecialization = event.target.getAttribute('data-dean-specialization');
+                        const deanEmail = event.target.getAttribute('data-dean-email');
+                        const deanPhoneNumber = event.target.getAttribute('data-dean-phone-number');
+
+                        const selectedDean = {
+                            id: deanId,
+                            firstName: deanFirstName,
+                            lastName: deanLastName,
+                            academicTitle: deanTitle,
+                            specialization: deanSpecialization,
+                            email: deanEmail,
+                            phoneNumber: deanPhoneNumber
+                        };
+
+                        console.log('Selected Dean:', selectedDean);
+
+                        document.body.removeChild(modal);
+
+                        resolve(selectedDean);
+                    });
+                });
+
+
+            })
+            .catch((error) => {
+                console.error('Error fetching deans:', error);
+                modalContent.innerHTML = '<p class="chd-error-message">Failed to load deans. Please try again later.</p>';
+            });
+
+        // Add close button to modal
+        const closeButton = document.createElement('button');
+        closeButton.textContent = 'Close';
+        closeButton.className = 'chd-modal-close-btn';
+        closeButton.addEventListener('click', () => {
+            document.body.removeChild(modal);
+            resolve(null); // Resolve Promise with null if modal is closed
+        });
+        modalContent.appendChild(closeButton);
+    });
+}
+
+async function changeDean(selectedDean) {
+    console.log('Dean sent to server:', selectedDean);
+    try {
+        const response = await fetch('/api/admin/dean/change', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(selectedDean)
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to change dean. Status: ${response.status}`);
+        }
+
+        const successMessage = await response.text();
+        console.log('Dean changed successfully:', successMessage);
+        return true;
+    } catch (error) {
+        console.error('Error changing dean:', error);
+        throw error;
+    }
+}
+
+
+
+
 
 

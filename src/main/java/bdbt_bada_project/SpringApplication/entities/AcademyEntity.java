@@ -1,6 +1,9 @@
 package bdbt_bada_project.SpringApplication.entities;
 
+import bdbt_bada_project.SpringApplication.Helpers.FAKE_DATA;
+
 import java.io.Serializable;
+import java.util.List;
 
 public class AcademyEntity implements Serializable {
     private int idUnit;
@@ -9,6 +12,17 @@ public class AcademyEntity implements Serializable {
     private String email;
     private AddressEntity address;
     private LecturerEntity dean;
+
+    public List<CourseEntity> getEntityCourses() {
+        return entityCourses;
+    }
+
+    public List<FieldOfStudyEntity> getFieldOfStudies() {
+        return fieldOfStudies;
+    }
+
+    private final List<CourseEntity> entityCourses = FAKE_DATA.generateCourses(20);
+    private final List<FieldOfStudyEntity> fieldOfStudies = FAKE_DATA.generateFieldsOfStudy(20);
 
     public AcademyEntity() {
     }
@@ -72,13 +86,18 @@ public class AcademyEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "AcademyEntity{" +
-                "idUnit=" + idUnit +
-                ", name='" + name + '\'' +
-                ", phone='" + phone + '\'' +
-                ", email='" + email + '\'' +
-                ", address=" + address +
-                ", dean=" + dean +
-                '}';
+        return "AcademyEntity {\n" +
+                "  idUnit = " + idUnit + ",\n" +
+                "  name = '" + name + "',\n" +
+                "  phone = '" + phone + "',\n" +
+                "  email = '" + email + "',\n" +
+                "  address = {\n" +
+                address + "\n" +
+                "  },\n" +
+                "  dean = {\n" +
+                dean + "\n" +
+                "  }\n" +
+                "}";
     }
+
 }

@@ -109,13 +109,11 @@ public class StudentController {
             return "Course ID is not a valid integer.";
         }
 
-        // Sprawdzenie aktywności sesji
         if (!globalDataManager.isSessionActive(userId)) {
             System.out.println("Session not active for userId: " + userId);
             return "Session not active. Please log in.";
         }
 
-        // Pobranie danych użytkownika
         StudentData currentData = globalDataManager.studentsData.get(userId);
         if (currentData == null) {
             System.out.println("No data found for userId: " + userId);
@@ -123,7 +121,7 @@ public class StudentController {
         }
 
         // Sprawdzenie czy kurs istnieje
-        CourseEntity selectedCourse = this.globalDataManager.serverCourses.stream()
+        CourseEntity selectedCourse = this.globalDataManager.academyEntity.getEntityCourses().stream()
                 .filter(course -> course.getId() == courseIdInt)
                 .findFirst()
                 .orElse(null);
@@ -166,7 +164,7 @@ public class StudentController {
                 .toList();
 
         // Filtrowanie kursów, na które użytkownik nie jest zapisany
-        List<CourseEntity> availableCourses = this.globalDataManager.serverCourses.stream()
+        List<CourseEntity> availableCourses = this.globalDataManager.academyEntity.getEntityCourses().stream()
                 .filter(course -> !enrolledCourseIds.contains(course.getId()))
                 .toList();
 

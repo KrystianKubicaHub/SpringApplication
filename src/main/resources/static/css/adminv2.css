@@ -500,6 +500,155 @@ body {
     background: #FFD700;
 }
 
+/* Change Dean Button */
+.sd-change-dean-button {
+    background: linear-gradient(to right, #4caf50, #81c784); /* Zielony gradient */
+    color: #ffffff; /* Biały tekst */
+    border: none;
+    border-radius: 12px; /* Zaokrąglone rogi */
+    padding: 10px 20px; /* Odstępy wewnętrzne */
+    font-size: 16px; /* Wielkość tekstu */
+    font-weight: bold; /* Pogrubienie tekstu */
+    text-transform: uppercase; /* Wielkie litery */
+    cursor: pointer; /* Kursor wskazujący */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Subtelny cień */
+    transition: all 0.3s ease; /* Animacja przejścia */
+    display: inline-block; /* Wyświetlanie jako blok wewnętrzny */
+}
+
+/* Hover effect */
+.sd-change-dean-button:hover {
+    background: linear-gradient(to right, #388e3c, #66bb6a); /* Intensywniejszy gradient */
+    transform: scale(1.05); /* Powiększenie przy najechaniu */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4); /* Mocniejszy cień */
+}
+
+/* Active effect */
+.sd-change-dean-button:active {
+    background: linear-gradient(to right, #2e7d32, #4caf50); /* Ciemniejszy gradient */
+    transform: scale(0.98); /* Lekkie zmniejszenie przy kliknięciu */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Zmniejszony cień */
+}
+
+
+
+
+/* CHD */
+.chd-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Modal content */
+.chd-modal-content {
+    background: #23263A;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    width: 80%;
+    max-width: 800px;
+    text-align: center;
+    overflow-y: auto;
+    max-height: 80%;
+}
+
+/* Modal header */
+.chd-modal-header {
+    font-size: 24px;
+    color: #FFD700;
+    margin-bottom: 15px;
+}
+
+/* Table styling */
+.chd-deans-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.chd-deans-table th {
+    background: #2C2F48;
+    color: #ffffff;
+    text-align: left;
+    padding: 10px;
+    border-bottom: 2px solid #141624;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.chd-deans-table td {
+    padding: 10px;
+    border-bottom: 1px solid #141624;
+    color: #D1D4ED;
+    font-size: 14px;
+}
+
+.chd-deans-table tr:nth-child(even) {
+    background: #1E2136;
+}
+
+.chd-deans-table tr:hover {
+    background: #343a56;
+}
+
+/* Action button */
+.chd-action-btn {
+    background: #0198af;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.chd-action-btn:hover {
+    background: linear-gradient(to right, #afff00, #ff9322);
+    transform: scale(1.05);
+}
+
+/* Close button */
+.chd-modal-close-btn {
+    background: #ff3b3b;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.chd-modal-close-btn:hover {
+    background: #ff7575;
+    transform: scale(1.05);
+}
+
+/* Messages */
+.chd-loading-message,
+.chd-no-deans-message,
+.chd-error-message {
+    font-size: 16px;
+    color: #ffffff;
+    background: #2C2F48;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 10px 0;
+}
+
+
 
 
 

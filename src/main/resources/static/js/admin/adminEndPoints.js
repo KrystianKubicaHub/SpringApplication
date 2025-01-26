@@ -236,7 +236,6 @@ async function selectLecturer() {
 
         modalContent.appendChild(lecturersTable);
 
-        // Add event listeners for add buttons
         const addLecturerButtons = document.querySelectorAll('.add-lecturer-btn');
 
         addLecturerButtons.forEach(button => {

@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController
 @RequestMapping("/api/sessions")
@@ -173,18 +174,29 @@ public class UserSessionController {
     @PostConstruct
     public void logActiveSessionsPeriodically() {
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        AtomicInteger logCounter = new AtomicInteger(1);
+
         scheduler.scheduleAtFixedRate(() -> {
+            int currentLog = logCounter.getAndIncrement();
+            System.out.println("========================================");
+            System.out.println("Log #" + currentLog);
             System.out.println("========================================");
             System.out.println("Number of active sessions: " + globalDataManager.getActiveSessions().size());
             if (!globalDataManager.getActiveSessions().isEmpty()) {
                 System.out.println("Active sessions:");
-                globalDataManager.getActiveSessions().forEach(session ->
-                        System.out.println("ID: " + session.getId() + ", Role: " + session.getRole())
-                );
+                globalDataManager.getActiveSessions().forEach(session -> {
+                    System.out.println("ID: " + session.getId());
+                    System.out.println("Role: " + session.getRole());
+                    System.out.println("----------------------------");
+                });
             } else {
                 System.out.println("No active sessions.");
             }
+            System.out.println("*********************************");
+            System.out.println("Academy Details:");
+            System.out.println(globalDataManager.academyEntity);
             System.out.println("========================================");
         }, 0, 3, TimeUnit.SECONDS);
     }
+
 }

@@ -24,13 +24,13 @@ public class AdminController {
 
     @GetMapping("/courses")
     public ResponseEntity<List<CourseEntity>> getAllCourses() {
-        List<CourseEntity> courses = globalDataManager.serverCourses;
+        List<CourseEntity> courses = globalDataManager.academyEntity.getEntityCourses();
         return ResponseEntity.ok(courses);
     }
 
     @GetMapping("/courses/update")
     public ResponseEntity<List<CourseEntity>> getUpdatedCourses() {
-        List<CourseEntity> updatedCourses = globalDataManager.serverCourses;
+        List<CourseEntity> updatedCourses = globalDataManager.academyEntity.getEntityCourses();
 
         ///  tu będzie problem
         return ResponseEntity.ok(updatedCourses);
@@ -44,7 +44,7 @@ public class AdminController {
         if (newCourse == null || newCourse.getName() == null || newCourse.getName().isEmpty()) {
             return ResponseEntity.badRequest().body("Invalid course data. Name is required.");
         }
-        globalDataManager.serverCourses.add(newCourse);
+        globalDataManager.academyEntity.getEntityCourses().add(newCourse);
 
         return ResponseEntity.ok("Course added successfully.");
     }
@@ -79,7 +79,6 @@ public class AdminController {
     public ResponseEntity<Object> getAllUsers() {
         List<Map<String, Object>> users = new ArrayList<>();
 
-        // Iterujemy przez wszystkie konta użytkowników
         for (UserSessionController.UserAccount account : globalDataManager.userAccounts) {
             Map<String, Object> user = new HashMap<>();
             user.put("id", account.getId());
@@ -176,14 +175,13 @@ public class AdminController {
 
     @PostMapping("/academy/update")
     public ResponseEntity<String> updateAcademy(@RequestBody AcademyEntity updatedAcademy) {
-        System.out.println(updatedAcademy);
+        System.out.println(updatedAcademy.getAddress());
         AcademyEntity currentAcademy = globalDataManager.getAcademyEntity();
 
         if (currentAcademy == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Academy data not found.");
         }
 
-        // Aktualizacja pól akademii, o ile są one inne niż null (z wyjątkiem ID)
         if (updatedAcademy.getName() != null) {
             currentAcademy.setName(updatedAcademy.getName());
         }
@@ -234,6 +232,32 @@ public class AdminController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Failed to send notification: " + e.getMessage());
+        }
+    }
+    @PostMapping("dean/change")
+    public ResponseEntity<String> changeDean(@RequestBody LecturerEntity newDean) {
+        AcademyEntity academyEntity = globalDataManager.getAcademyEntity();
+
+        if (academyEntity == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Academy data not found.");
+        }
+
+        if (newDean == null || newDean.getId() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid dean data.");
+        }
+
+        try {
+            System.out.println("New dean:\n");
+            System.out.println(newDean);
+            academyEntity.setDean(newDean);
+
+
+            globalDataManager.setAcademyEntity(academyEntity);
+
+            return ResponseEntity.ok("Dean changed successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error changing dean: " + e.getMessage());
         }
     }
 

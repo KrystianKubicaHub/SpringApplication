@@ -41,7 +41,14 @@ public class FAKE_DATA {
     }
 
     public static void setPersonsData(StudentData studentData) {
-        FieldOfStudyEntity fose = new FieldOfStudyEntity("Tailoring");
+        FieldOfStudyEntity fose = new FieldOfStudyEntity(
+                1,
+                "Tailoring",
+                FieldOfStudyEntity.StudyLevel.BACHELOR,
+                (short) 7,
+                "A field of study focusing on tailoring and garment design."
+        );
+
         studentData.id = 1;
         studentData.PESELNumber = "04230809071";
         studentData.firstName = "Krystian";
@@ -120,68 +127,6 @@ public class FAKE_DATA {
         return courses;
     }
 
-    public static void startUpdatingTask(ScheduledExecutorService scheduler, StudentData instance) {
-        scheduler.scheduleAtFixedRate(() -> {
-            Random random = new Random();
-            System.out.println("task działa" + System.currentTimeMillis());
-            // Listy imion i nazwisk
-            List<String> firstNames = List.of("John", "Jane", "Michael", "Emily", "Robert", "Olivia", "Daniel", "Sophia");
-            List<String> lastNames = List.of("Smith", "Johnson", "Williams", "Brown", "Jones", "Miller", "Davis", "Garcia");
-
-            // Losowanie imienia i nazwiska
-            String randomFirstName = firstNames.get(random.nextInt(firstNames.size()));
-            String randomLastName = lastNames.get(random.nextInt(lastNames.size()));
-
-            // Generowanie emaila
-            String randomEmail = randomFirstName.toLowerCase() + "." + randomLastName.toLowerCase() + "@example.com";
-
-            // Losowy PESEL (11 cyfr)
-            String randomPESEL = String.valueOf(10000000000L + random.nextLong(90000000000L));
-
-            // Losowy indexNumber (np. 6 cyfr)
-            int randomIndexNumber = 100000 + random.nextInt(900000);
-
-            // Losowy telefon (np. w zakresie 500000000 - 999999999)
-            String randomPhoneNumber = String.valueOf(500000000 + random.nextInt(499999999));
-
-            // Losowa liczba ECTS (np. 0 - 300)
-            int randomTotalECTS = random.nextInt(301);
-
-            // Losowanie roku rozpoczęcia studiów (np. 2000 - 2025)
-            String randomStudySince = String.valueOf(2000 + random.nextInt(26));
-
-            // Generowanie kierunków studiów
-            List<String> fieldOfStudyNames = List.of(
-                    "Artificial Intelligence",
-                    "Quantum Computing",
-                    "Space Engineering",
-                    "Cybersecurity",
-                    "Biomedical Sciences",
-                    "Robotics and Automation",
-                    "Environmental Science",
-                    "Data Science"
-            );
-            // Czyszczenie istniejącej listy kierunków
-            instance.fieldOfStudy.clear();
-
-
-            // Losowanie liczby kierunków studiów (1-4)
-            int numberOfFields = 1 + random.nextInt(3);
-            for (int i = 0; i < numberOfFields; i++) {
-                String fieldName = fieldOfStudyNames.get(random.nextInt(fieldOfStudyNames.size()));
-                instance.fieldOfStudy.add(new FieldOfStudyEntity(fieldName));
-            }
-            instance.setFirstName(randomFirstName);
-            instance.setLastName(randomLastName);
-            instance.PESELNumber = randomPESEL;
-            instance.setEmail(randomEmail);
-            instance.setPhoneNumber(randomPhoneNumber);
-            instance.indexNumber = randomIndexNumber;
-            instance.totalECTS = randomTotalECTS;
-            instance.studySince = randomStudySince;
-
-        }, 0, 4, TimeUnit.SECONDS);
-    }
 
     public static void startRemovingEnrollmentTask(ScheduledExecutorService taskExecutor, StudentData studentData) {
         taskExecutor.scheduleAtFixedRate(() -> {
@@ -237,44 +182,6 @@ public class FAKE_DATA {
         return lecturers;
     }
 
-    public static StudentData createExampleStudent() {
-        StudentData exampleStudent = new StudentData();
-
-        exampleStudent.setFirstName("Alexis");
-        exampleStudent.setLastName("Valentine");
-        exampleStudent.PESELNumber = "92110312345";
-        exampleStudent.setEmail("alexis.valentine@example.com");
-        exampleStudent.setPhoneNumber("789456123");
-        exampleStudent.indexNumber = 654321;
-        exampleStudent.studySince = "2021";
-        exampleStudent.totalECTS = 180;
-
-        FieldOfStudyEntity primaryField = new FieldOfStudyEntity("Art History");
-        FieldOfStudyEntity secondaryField = new FieldOfStudyEntity("Fashion Design");
-        exampleStudent.fieldOfStudy.add(primaryField);
-        exampleStudent.fieldOfStudy.add(secondaryField);
-
-        CourseEntity course1 = new CourseEntity(
-                101,
-                "History of Modern Art",
-                "Exploration of key movements and figures in modern art.",
-                6,
-                new LecturerEntity(1, "Sophia", "Marquez", "92110333345", "s.marquez@university.com", "123-456-789", "Professor", "Art History")
-        );
-
-        CourseEntity course2 = new CourseEntity(
-                102,
-                "Luxury Brand Strategy",
-                "Understanding the psychology behind high-end fashion brands.",
-                5,
-                new LecturerEntity(2, "Julian", "Royce", "88050555512", "j.royce@university.com", "987-654-321", "Associate Professor", "Fashion Business")
-        );
-
-        exampleStudent.getEnrollments().add(new EnrollmentEntity(course1, new Date(), 1));
-        exampleStudent.getEnrollments().add(new EnrollmentEntity(course2, new Date(), 2));
-
-        return exampleStudent;
-    }
 
     public static List<UserSessionController.UserAccount> getAccountsCredentialsFromSQL(int countPerRole) {
         List<UserSessionController.UserAccount> accounts = new ArrayList<>();
@@ -328,7 +235,7 @@ public class FAKE_DATA {
                 studentData.studySince = generateRandomStudySince();
                 studentData.totalECTS = 0;
 
-                FieldOfStudyEntity fose = new FieldOfStudyEntity(generateRandomFieldOfStudy());
+                FieldOfStudyEntity fose = generateRandomFieldOfStudy();
                 studentData.fieldOfStudy = new ArrayList<>();
                 studentData.fieldOfStudy.add(fose);
 
@@ -398,10 +305,24 @@ public class FAKE_DATA {
         return semesters[(int) (Math.random() * semesters.length)];
     }
 
-    private static String generateRandomFieldOfStudy() {
-        String[] fields = {"Computer Science", "Mathematics", "Physics", "Biology", "Tailoring"};
-        return fields[(int) (Math.random() * fields.length)];
+    private static FieldOfStudyEntity generateRandomFieldOfStudy() {
+        String[] fieldNames = {"Computer Science", "Mathematics", "Physics", "Biology", "Tailoring"};
+        FieldOfStudyEntity.StudyLevel[] studyLevels = FieldOfStudyEntity.StudyLevel.values();
+
+        String randomFieldName = fieldNames[(int) (Math.random() * fieldNames.length)];
+        FieldOfStudyEntity.StudyLevel randomStudyLevel = studyLevels[(int) (Math.random() * studyLevels.length)];
+        short randomDuration = (short) (4 + Math.random() * 4); // Losowa liczba od 4 do 8 semestrów
+        String randomDescription = "This is a description for " + randomFieldName;
+
+        return new FieldOfStudyEntity(
+                (int) (Math.random() * 1000), // Losowe ID
+                randomFieldName,
+                randomStudyLevel,
+                randomDuration,
+                randomDescription
+        );
     }
+
 
     public static AcademyEntity loadFromSQLAcademyEntity() {
         AddressEntity address = new AddressEntity(
@@ -448,6 +369,16 @@ public class FAKE_DATA {
 
     public static String generateEmailForLecturer(String firstName, String lastName) {
         return firstName.toLowerCase() + "." + lastName.toLowerCase() + "@university.edu";
+    }
+
+    public static List<FieldOfStudyEntity> generateFieldsOfStudy(int count) {
+        List<FieldOfStudyEntity> fieldsOfStudy = new ArrayList<>();
+
+        for (int j = 0; j < count; j++) {
+            fieldsOfStudy.add(generateRandomFieldOfStudy());
+        }
+
+        return fieldsOfStudy;
     }
 
 }

@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 case 'academy-details-btn':
                     academyDetailsClicked().then(result => {
                         if (result) {
-                            console.log("truew")
                             resetButtonStyles();
                             resetButtonsPosition();
                             resetContentPanel();
