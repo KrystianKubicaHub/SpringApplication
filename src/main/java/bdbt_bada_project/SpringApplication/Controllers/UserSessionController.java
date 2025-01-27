@@ -1,6 +1,5 @@
 package bdbt_bada_project.SpringApplication.Controllers;
 
-import bdbt_bada_project.SpringApplication.Helpers.FAKE_DATA;
 import bdbt_bada_project.SpringApplication.Persistence.GlobalDataManager;
 import jakarta.annotation.PostConstruct;
 import org.springframework.http.HttpStatus;

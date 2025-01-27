@@ -2,6 +2,7 @@ package bdbt_bada_project.SpringApplication.Persistence;
 
 import bdbt_bada_project.SpringApplication.Controllers.UserSessionController;
 import bdbt_bada_project.SpringApplication.Helpers.FAKE_DATA;
+import bdbt_bada_project.SpringApplication.Helpers.ServerGUI;
 import bdbt_bada_project.SpringApplication.SQLCoincidence.SQLService;
 import bdbt_bada_project.SpringApplication.entities.AcademyEntity;
 import bdbt_bada_project.SpringApplication.entities.CourseEntity;
@@ -25,7 +26,7 @@ public class GlobalDataManager {
 
 
     public GlobalDataManager() {
-        //this.userAccounts.addAll(FAKE_DATA.getAccountsCredentialsFromSQL(FAKE_DATA.numberOfStudents));
+        ServerGUI.start(this);
     }
 
     public String addSession(UserSessionController.UserSession session) {
