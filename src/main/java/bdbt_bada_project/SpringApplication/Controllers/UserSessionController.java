@@ -182,7 +182,7 @@ public class UserSessionController {
         return removed ? "User logged out successfully." : "No active session found for the given token.";
     }
 
-    @PostConstruct
+    //@PostConstruct
     public void logActiveSessionsPeriodically() {
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
         AtomicInteger logCounter = new AtomicInteger(1);

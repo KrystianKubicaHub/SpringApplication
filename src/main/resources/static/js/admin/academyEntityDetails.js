@@ -20,12 +20,14 @@ async function academyDetailsClicked() {
             }
         });
 
+
         if (!response.ok) {
             const errorText = await response.text();
             throw new Error(errorText);
         }
 
         const academyData = await response.json();
+
 
         const detailsContainer = document.createElement('div');
         detailsContainer.className = 'sd-details-container';

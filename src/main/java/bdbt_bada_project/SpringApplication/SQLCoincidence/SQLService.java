@@ -5,6 +5,7 @@ import bdbt_bada_project.SpringApplication.Helpers.FAKE_DATA;
 import bdbt_bada_project.SpringApplication.Persistence.GlobalDataManager;
 import bdbt_bada_project.SpringApplication.entities.AcademyEntity;
 import bdbt_bada_project.SpringApplication.entities.AddressEntity;
+import bdbt_bada_project.SpringApplication.entities.LecturerEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -57,6 +58,15 @@ public class SQLService {
 
             // Przypisz wynik do globalnego menadżera danych
             globalDataManager.academyEntity = academyEntity;
+            globalDataManager.academyEntity.setDean(new LecturerEntity(205,
+                    "DeanName",
+                    "DeanLastName",
+                    "04230809071",
+                    "dean@wp.pl",
+                    "606309379",
+                    "majster",
+                    "Picie wódeczki"
+            ));
             System.out.println("AcademyEntity loaded successfully: " + academyEntity);
         } catch (Exception e) {
             System.err.println("Error while loading AcademyEntity: " + e.getMessage());

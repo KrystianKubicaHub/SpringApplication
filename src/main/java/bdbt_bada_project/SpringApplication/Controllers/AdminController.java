@@ -167,8 +167,10 @@ public class AdminController {
         AcademyEntity academyEntity = globalDataManager.academyEntity;
 
         if (academyEntity != null) {
+            System.out.println(academyEntity);
             return ResponseEntity.ok(academyEntity);
         } else {
+            System.out.println("CVhuj");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Academy data not found.");
         }
     }
