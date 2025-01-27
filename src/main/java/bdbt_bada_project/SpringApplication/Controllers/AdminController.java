@@ -1,6 +1,7 @@
 package bdbt_bada_project.SpringApplication.Controllers;
 
 import bdbt_bada_project.SpringApplication.Persistence.GlobalDataManager;
+import bdbt_bada_project.SpringApplication.SQLCoincidence.SQLService;
 import bdbt_bada_project.SpringApplication.entities.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +18,11 @@ import java.util.Map;
 public class AdminController {
 
     private final GlobalDataManager globalDataManager;
+    private final SQLService sqlService;
 
-    public AdminController(GlobalDataManager globalDataManager) {
+    public AdminController(GlobalDataManager globalDataManager, SQLService sqlService) {
         this.globalDataManager = globalDataManager;
+        this.sqlService = sqlService;
     }
 
     @GetMapping("/courses")
@@ -177,13 +180,14 @@ public class AdminController {
 
     @PostMapping("/academy/update")
     public ResponseEntity<String> updateAcademy(@RequestBody AcademyEntity updatedAcademy) {
-        System.out.println(updatedAcademy.getAddress());
-        AcademyEntity currentAcademy = globalDataManager.getAcademyEntity();
+        System.out.println("Received update request for academy: " + updatedAcademy);
 
+        AcademyEntity currentAcademy = globalDataManager.getAcademyEntity();
         if (currentAcademy == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Academy data not found.");
         }
 
+        // Aktualizacja pól w GlobalDataManager
         if (updatedAcademy.getName() != null) {
             currentAcademy.setName(updatedAcademy.getName());
         }
@@ -194,10 +198,9 @@ public class AdminController {
             currentAcademy.setEmail(updatedAcademy.getEmail());
         }
 
-        // Aktualizacja adresu, z wykluczeniem ID
+        // Aktualizacja adresu
         AddressEntity currentAddress = currentAcademy.getAddress();
         AddressEntity updatedAddress = updatedAcademy.getAddress();
-
         if (currentAddress != null && updatedAddress != null) {
             if (updatedAddress.getStreet() != null) {
                 currentAddress.setStreet(updatedAddress.getStreet());
@@ -213,11 +216,21 @@ public class AdminController {
             }
         }
 
-        // Zapis zaktualizowanego obiektu do globalDataManager
+        try {
+            sqlService.updateAcademyInDatabase(currentAcademy);
+            assert currentAddress != null;
+            sqlService.updateAddressInDatabase(currentAddress);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to update academy in the database: " + e.getMessage());
+        }
+
+        // Aktualizacja danych w GlobalDataManager
         globalDataManager.setAcademyEntity(currentAcademy);
 
         return ResponseEntity.ok("Academy updated successfully.");
     }
+
 
 
     @PostMapping("/notify-change")

@@ -27,6 +27,7 @@ public class GlobalDataManager {
 
     public GlobalDataManager() {
         ServerGUI.start(this);
+        this.studentsData = new HashMap<>();
     }
 
     public String addSession(UserSessionController.UserSession session) {

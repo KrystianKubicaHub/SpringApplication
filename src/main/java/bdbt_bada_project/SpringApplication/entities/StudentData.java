@@ -18,6 +18,17 @@ public class StudentData extends PersonEntity {
         return enrollments;
     }
 
+    public StudentData(Integer id, String firstName, String lastName, String PESELNumber, String email, String phoneNumber,
+                       List<EnrollmentEntity> enrollments, List<FieldOfStudyEntity> fieldOfStudy,
+                       int totalECTS, String studySince, int indexNumber) {
+        super(id, firstName, lastName, PESELNumber, email, phoneNumber);
+        this.enrollments = enrollments;
+        this.fieldOfStudy = fieldOfStudy;
+        this.totalECTS = totalECTS;
+        this.studySince = studySince;
+        this.indexNumber = indexNumber;
+    }
+
     @Override
     public String toString() {
         return "StudentData{" +
