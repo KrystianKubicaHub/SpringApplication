@@ -24,6 +24,7 @@ public class SQLService {
         loadAcademyEntity();
         loadStudentsFromDatabase();
         loadLecturersFromDatabase();
+        loadCoursesFromDatabase();
     }
     public void loadAcademyEntity() {
         final int ACADEMY_ID = 1;
@@ -72,6 +73,7 @@ public class SQLService {
         }
     }
 
+
     public void loadUserAccountsFromDatabase() {
         String query = "SELECT ID, LOGIN, PASSWORD, ROLE FROM USER_ACCOUNTS";
 
@@ -93,10 +95,6 @@ public class SQLService {
             System.err.println("Error while loading user accounts from database: " + e.getMessage());
         }
     }
-
-
-
-
 
     private void loadStudentsFromDatabase() {
         // Zapytanie SQL do pobrania wszystkich rekordów z person_entities
@@ -238,7 +236,68 @@ public class SQLService {
         }
     }
 
+    private void loadCoursesFromDatabase() {
+        // Upewnij się, że lista kursów jest zainicjalizowana
+        if (globalDataManager.academyEntity.getEntityCourses() == null) {
+            return;
+        }
 
+        String courseQuery = "SELECT id, name, description, ects_credits, id_unit FROM courses";
+        String lecturersLinkTableQuery = "SELECT lecturer_id FROM course_lecturers WHERE course_id = ?";
+
+        try {
+            // Pobranie danych z tabeli courses
+            List<Map<String, Object>> courses = jdbcTemplate.query(courseQuery, (rs, rowNum) -> {
+                Map<String, Object> course = new HashMap<>();
+                course.put("id", rs.getInt("id"));
+                course.put("name", rs.getString("name"));
+                course.put("description", rs.getString("description"));
+                course.put("ectsCredits", rs.getInt("ects_credits"));
+                course.put("idUnit", rs.getInt("id_unit"));
+                return course;
+            });
+
+            for (Map<String, Object> course : courses) {
+                Integer courseId = (Integer) course.get("id");
+                Integer idUnit = (Integer) course.get("idUnit");
+                LecturerEntity lecturer = null;
+
+                // Sprawdzenie, czy id_unit jest równe 1
+                if (idUnit == 1) {
+                    // Pobierz ID wykładowców przypisanych do kursu z tabeli łączącej
+                    List<Integer> lecturerIds = jdbcTemplate.query(lecturersLinkTableQuery, new Object[]{courseId}, (rs, rowNum) -> rs.getInt("lecturer_id"));
+
+                    if (!lecturerIds.isEmpty()) {
+                        // Wybierz losowego wykładowcę z listy
+                        Random random = new Random();
+                        Integer randomLecturerId = lecturerIds.get(random.nextInt(lecturerIds.size()));
+
+                        // Pobierz wykładowcę z globalDataManager.lecturersData
+                        lecturer = globalDataManager.lecturersData.get(randomLecturerId);
+
+                        if (lecturer == null) {
+                            System.err.println("Warning: Lecturer with ID " + randomLecturerId + " not found in globalDataManager.lecturersData");
+                        }
+                    }
+                }
+
+                // Utworzenie obiektu CourseEntity
+                CourseEntity courseEntity = new CourseEntity(
+                        courseId,
+                        (String) course.get("name"),
+                        (String) course.get("description"),
+                        (Integer) course.get("ectsCredits"),
+                        lecturer
+                );
+
+                // Dodanie kursu do entityCourses
+                globalDataManager.academyEntity.addCourse(courseEntity);
+            }
+        } catch (Exception e) {
+            System.err.println("Błąd podczas ładowania kursów z bazy danych: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
 
     public void updateAcademyInDatabase(AcademyEntity academyEntity) {

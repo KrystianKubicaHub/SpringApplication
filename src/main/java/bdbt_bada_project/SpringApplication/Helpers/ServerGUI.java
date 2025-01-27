@@ -5,6 +5,7 @@ import bdbt_bada_project.SpringApplication.Persistence.GlobalDataManager;
 import bdbt_bada_project.SpringApplication.entities.AcademyEntity;
 import bdbt_bada_project.SpringApplication.entities.LecturerEntity;
 import bdbt_bada_project.SpringApplication.entities.StudentData;
+import bdbt_bada_project.SpringApplication.entities.CourseEntity;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -20,7 +21,7 @@ public class ServerGUI {
             JFrame frame = new JFrame("Server State");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Pełny ekran
-            frame.setLayout(new GridLayout(3, 1)); // Podział na 3 sekcje pionowe
+            frame.setLayout(new GridLayout(6, 1)); // Podział na 6 sekcji pionowych
 
             // Sekcja 1: Informacje o akademii
             JPanel academyPanel = createPanel("Academy Information");
@@ -46,12 +47,17 @@ public class ServerGUI {
             studentsPanel.add(new JScrollPane(studentsTable));
             frame.add(studentsPanel);
 
-// Sekcja 5: Informacje o wykładowcach
+            // Sekcja 5: Informacje o wykładowcach
             JPanel lecturersPanel = createPanel("Lecturers Data");
             JTable lecturersTable = createTable();
             lecturersPanel.add(new JScrollPane(lecturersTable));
             frame.add(lecturersPanel);
 
+            // Sekcja 6: Informacje o kursach
+            JPanel coursesPanel = createPanel("Courses Data");
+            JTable coursesTable = createTable();
+            coursesPanel.add(new JScrollPane(coursesTable));
+            frame.add(coursesPanel);
 
             // Timer do dynamicznego odświeżania
             Timer timer = new Timer(1000, e -> {
@@ -60,6 +66,7 @@ public class ServerGUI {
                 updateActiveSessionsTable(globalDataManager, (DefaultTableModel) activeSessionsTable.getModel());
                 updateStudentsTable(globalDataManager, (DefaultTableModel) studentsTable.getModel());
                 updateLecturersTable(globalDataManager, (DefaultTableModel) lecturersTable.getModel());
+                updateCoursesTable(globalDataManager, (DefaultTableModel) coursesTable.getModel());
             });
             timer.start();
 
@@ -69,6 +76,7 @@ public class ServerGUI {
             updateActiveSessionsTable(globalDataManager, (DefaultTableModel) activeSessionsTable.getModel());
             updateStudentsTable(globalDataManager, (DefaultTableModel) studentsTable.getModel());
             updateLecturersTable(globalDataManager, (DefaultTableModel) lecturersTable.getModel());
+            updateCoursesTable(globalDataManager, (DefaultTableModel) coursesTable.getModel());
 
             // Wyświetlenie okna
             frame.setVisible(true);
@@ -137,7 +145,6 @@ public class ServerGUI {
         }
     }
 
-
     private static void updateActiveSessionsTable(GlobalDataManager globalDataManager, DefaultTableModel tableModel) {
         tableModel.setRowCount(0); // Wyczyść tabelę przed aktualizacją
         if (!globalDataManager.getActiveSessions().isEmpty()) {
@@ -149,6 +156,7 @@ public class ServerGUI {
             tableModel.addRow(new Object[]{"No active sessions", null});
         }
     }
+
     private static void updateStudentsTable(GlobalDataManager globalDataManager, DefaultTableModel tableModel) {
         tableModel.setRowCount(0); // Wyczyść tabelę przed aktualizacją
         if (globalDataManager.studentsData != null && !globalDataManager.studentsData.isEmpty()) {
@@ -177,4 +185,17 @@ public class ServerGUI {
         }
     }
 
+    private static void updateCoursesTable(GlobalDataManager globalDataManager, DefaultTableModel tableModel) {
+        tableModel.setRowCount(0); // Wyczyść tabelę przed aktualizacją
+        if (globalDataManager.academyEntity != null && globalDataManager.academyEntity.getEntityCourses() != null && !globalDataManager.academyEntity.getEntityCourses().isEmpty()) {
+            for (CourseEntity course : globalDataManager.academyEntity.getEntityCourses()) {
+                Integer courseId = course.getId(); // Zakładam, że CourseEntity ma metodę getId()
+                String courseInfo = course.getName() + " (ID: " + courseId + ")";
+                tableModel.addRow(new Object[]{"Course", courseInfo});
+            }
+
+        } else {
+            tableModel.addRow(new Object[]{"No course data", null});
+        }
+    }
 }
