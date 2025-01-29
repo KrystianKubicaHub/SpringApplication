@@ -25,6 +25,7 @@ public class SQLService {
         loadStudentsFromDatabase();
         loadLecturersFromDatabase();
         loadCoursesFromDatabase();
+        loadFieldsOfStudyFromDatabase();
     }
     public void loadAcademyEntity() {
         final int ACADEMY_ID = 1;
@@ -237,7 +238,6 @@ public class SQLService {
     }
 
     private void loadCoursesFromDatabase() {
-        // Upewnij się, że lista kursów jest zainicjalizowana
         if (globalDataManager.academyEntity.getEntityCourses() == null) {
             return;
         }
@@ -281,7 +281,6 @@ public class SQLService {
                     }
                 }
 
-                // Utworzenie obiektu CourseEntity
                 CourseEntity courseEntity = new CourseEntity(
                         courseId,
                         (String) course.get("name"),
@@ -290,7 +289,6 @@ public class SQLService {
                         lecturer
                 );
 
-                // Dodanie kursu do entityCourses
                 globalDataManager.academyEntity.addCourse(courseEntity);
             }
         } catch (Exception e) {
@@ -298,6 +296,34 @@ public class SQLService {
             e.printStackTrace();
         }
     }
+    private void loadFieldsOfStudyFromDatabase() {
+        String query = "SELECT id_field, field_name, study_level, duration_in_semesters, description, academy_id FROM field_of_study_entities";
+
+        try {
+            List<FieldOfStudyEntity> fieldsOfStudy = jdbcTemplate.query(query, (rs, rowNum) -> {
+                int idField = rs.getInt("id_field");
+                String fieldName = rs.getString("field_name");
+                String studyLevelStr = rs.getString("study_level");
+                short durationInSemesters = rs.getShort("duration_in_semesters");
+                String description = rs.getString("description");
+                int academyId = rs.getInt("academy_id");
+
+                FieldOfStudyEntity.StudyLevel studyLevel = FieldOfStudyEntity.StudyLevel.valueOf(studyLevelStr);
+
+                FieldOfStudyEntity fieldOfStudyEntity = new FieldOfStudyEntity(idField, fieldName, studyLevel, durationInSemesters, description);
+
+
+                globalDataManager.academyEntity.addFieldOfStudy(fieldOfStudyEntity);
+
+                return fieldOfStudyEntity;
+            });
+
+        } catch (Exception e) {
+            System.err.println("Error numberr -1-1-1-: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
 
 
     public void updateAcademyInDatabase(AcademyEntity academyEntity) {

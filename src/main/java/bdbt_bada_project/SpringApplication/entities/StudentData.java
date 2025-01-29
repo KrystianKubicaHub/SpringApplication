@@ -1,7 +1,7 @@
 package bdbt_bada_project.SpringApplication.entities;
 
-import bdbt_bada_project.SpringApplication.Helpers.FAKE_DATA;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -48,8 +48,7 @@ public class StudentData extends PersonEntity {
 
     public StudentData() {
         super();
-        FAKE_DATA.setPersonsData(this);
-        this.enrollments = FAKE_DATA.generateEnrollments();
+        this.enrollments = new ArrayList<>();
     }
 
     public boolean removeEnrollmentByIndex(int i) {

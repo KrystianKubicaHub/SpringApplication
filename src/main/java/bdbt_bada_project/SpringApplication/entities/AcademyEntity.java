@@ -1,7 +1,5 @@
 package bdbt_bada_project.SpringApplication.entities;
 
-import bdbt_bada_project.SpringApplication.Helpers.FAKE_DATA;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +16,12 @@ public class AcademyEntity implements Serializable {
         return entityCourses;
     }
 
-    public List<FieldOfStudyEntity> getFieldOfStudies() {
-        return fieldOfStudies;
+    public List<FieldOfStudyEntity> getFieldsOfStudy() {
+        return fieldsOfStudy;
     }
 
     private final List<CourseEntity> entityCourses = new ArrayList<>();
-    private final List<FieldOfStudyEntity> fieldOfStudies = new ArrayList<>();
+    private final List<FieldOfStudyEntity> fieldsOfStudy = new ArrayList<>();
 
     public AcademyEntity() {
     }
@@ -104,4 +102,7 @@ public class AcademyEntity implements Serializable {
                 "}";
     }
 
+    public void addFieldOfStudy(FieldOfStudyEntity fieldOfStudyEntity) {
+        fieldsOfStudy.add(fieldOfStudyEntity);
+    }
 }

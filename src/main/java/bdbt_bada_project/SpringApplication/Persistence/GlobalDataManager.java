@@ -1,11 +1,8 @@
 package bdbt_bada_project.SpringApplication.Persistence;
 
 import bdbt_bada_project.SpringApplication.Controllers.UserSessionController;
-import bdbt_bada_project.SpringApplication.Helpers.FAKE_DATA;
 import bdbt_bada_project.SpringApplication.Helpers.ServerGUI;
-import bdbt_bada_project.SpringApplication.SQLCoincidence.SQLService;
 import bdbt_bada_project.SpringApplication.entities.AcademyEntity;
-import bdbt_bada_project.SpringApplication.entities.CourseEntity;
 import bdbt_bada_project.SpringApplication.entities.LecturerEntity;
 import bdbt_bada_project.SpringApplication.entities.StudentData;
 import org.springframework.stereotype.Component;
