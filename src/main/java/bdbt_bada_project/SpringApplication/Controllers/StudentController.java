@@ -1,6 +1,7 @@
 package bdbt_bada_project.SpringApplication.Controllers;
 
 import bdbt_bada_project.SpringApplication.Persistence.GlobalDataManager;
+import bdbt_bada_project.SpringApplication.SQLCoincidence.SQLService;
 import bdbt_bada_project.SpringApplication.entities.CourseEntity;
 import bdbt_bada_project.SpringApplication.entities.StudentData;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +14,12 @@ public class StudentController {
 
 
     private final GlobalDataManager globalDataManager;
+    private final SQLService sqlService;
 
 
-    public StudentController(GlobalDataManager globalDataManager) {
+    public StudentController(GlobalDataManager globalDataManager, SQLService sqlService) {
         this.globalDataManager = globalDataManager;
+        this.sqlService = sqlService;
     }
 
     @PostMapping("/student/update")
@@ -32,15 +35,19 @@ public class StudentController {
 
         if (studentData.getFirstName() != null) {
             currentData.setFirstName(studentData.getFirstName());
+            sqlService.updateFirstName(studentData.id, studentData.firstName);
         }
         if (studentData.getLastName() != null) {
             currentData.setLastName(studentData.getLastName());
+            sqlService.updateLastName(studentData.id, studentData.lastName);
         }
         if (studentData.getEmail() != null) {
             currentData.setEmail(studentData.getEmail());
+            sqlService.updateEmail(studentData.id, studentData.email);
         }
         if (studentData.getPhoneNumber() != null) {
             currentData.setPhoneNumber(studentData.getPhoneNumber());
+            sqlService.updateLastName(studentData.id, studentData.phoneNumber);
         }
 
         return "Student data updated successfully.";
@@ -56,6 +63,7 @@ public class StudentController {
         if (currentData == null) {
             return "No data found for the given user ID.";
         }
+        System.out.println(currentData.getEnrollments().get(3));
         return currentData;
     }
 
@@ -99,7 +107,7 @@ public class StudentController {
     public String registerForCourse(@RequestParam int userId, @RequestBody String courseId) {
         System.out.println("Próba zapisu na kurs: userId = " + userId + ", courseId = " + courseId);
 
-        // Konwersja courseId na liczbę całkowitą
+
         int courseIdInt;
         try {
             courseIdInt = Integer.parseInt(courseId);
@@ -120,7 +128,6 @@ public class StudentController {
             return "No data found for the given user ID.";
         }
 
-        // Sprawdzenie czy kurs istnieje
         CourseEntity selectedCourse = this.globalDataManager.academyEntity.getEntityCourses().stream()
                 .filter(course -> course.getId() == courseIdInt)
                 .findFirst()
@@ -131,8 +138,8 @@ public class StudentController {
             return "Course not found.";
         }
 
-        // Dodanie kursu do listy zapisów użytkownika
-        boolean added = currentData.addNewEnrollment(selectedCourse);
+        int enrollemnt_id = sqlService.addEnrollment(userId, courseId);
+        boolean added = currentData.addNewEnrollment(selectedCourse, enrollemnt_id);
         if (added) {
             System.out.println("User with ID " + userId + " successfully registered for course: " + selectedCourse.getName());
             return "Successfully registered for course: " + selectedCourse.getName();
@@ -141,9 +148,6 @@ public class StudentController {
             return "You are already enrolled in this course.";
         }
     }
-
-
-
 
 
     @GetMapping("/courses")

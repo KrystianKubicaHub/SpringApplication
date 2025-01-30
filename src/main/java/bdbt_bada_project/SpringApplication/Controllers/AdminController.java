@@ -39,29 +39,105 @@ public class AdminController {
         return ResponseEntity.ok(updatedCourses);
     }
 
-    @PostMapping("/courses/add")
-    public ResponseEntity<String> addCourse(@RequestBody CourseEntity newCourse) {
-        System.out.println("New course has arrived");
-        System.out.println(newCourse);
-        System.out.println(newCourse.getLecturer());
-        if (newCourse == null || newCourse.getName() == null || newCourse.getName().isEmpty()) {
-            return ResponseEntity.badRequest().body("Invalid course data. Name is required.");
-        }
-        globalDataManager.academyEntity.getEntityCourses().add(newCourse);
 
-        return ResponseEntity.ok("Course added successfully.");
+    @PostMapping("/courses/add")
+    public ResponseEntity<String> addCourse(@RequestBody Map<String, Object> newCourseData) {
+        System.out.println("New course has arrived: " + newCourseData);
+
+        if (!newCourseData.containsKey("name") || !newCourseData.containsKey("ectsCredits") || !newCourseData.containsKey("lecturerId")) {
+            return ResponseEntity.badRequest().body("Invalid course data. Name, ECTS credits, and Lecturer ID are required.");
+        }
+
+        try {
+            String name = (String) newCourseData.get("name");
+            String description = (String) newCourseData.getOrDefault("description", "");
+            int ectsCredits = (int) newCourseData.get("ectsCredits");
+
+            // 🔧 Poprawne parsowanie `lecturerId`
+            int lecturerId;
+            if (newCourseData.get("lecturerId") instanceof Integer) {
+                lecturerId = (int) newCourseData.get("lecturerId");
+            } else {
+                lecturerId = Integer.parseInt((String) newCourseData.get("lecturerId"));
+            }
+
+            // Wyszukiwanie wykładowcy po ID
+            LecturerEntity lecturer = globalDataManager.getAllLecturers().stream()
+                    .filter(l -> l.getId() == lecturerId)
+                    .findFirst()
+                    .orElse(null);
+
+            if (lecturer == null) {
+                return ResponseEntity.badRequest().body("Invalid Lecturer ID: " + lecturerId);
+            }
+
+            // Tworzenie nowego kursu
+            CourseEntity newCourse = new CourseEntity(null, name, description, ectsCredits, lecturer);
+
+            // Próba zapisania kursu w bazie danych
+            boolean isAddedToDB = sqlService.addCourse(newCourse);
+
+            if (!isAddedToDB) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to save course in the database.");
+            }
+
+            // Dodanie kursu do pamięci po udanym zapisie do bazy danych
+            globalDataManager.academyEntity.getEntityCourses().add(newCourse);
+
+            return ResponseEntity.ok("Course added successfully.");
+        } catch (Exception e) {
+            System.err.println("❌ ERROR in addCourse(): " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error: " + e.getMessage());
+        }
     }
+
+
+    @DeleteMapping("/courses/{courseId}")
+    public ResponseEntity<String> deleteCourse(@PathVariable int courseId) {
+        System.out.println("Received request to delete course ID: " + courseId);
+
+        boolean courseExists = globalDataManager.academyEntity.getEntityCourses().stream()
+                .anyMatch(course -> course.getId() == courseId);
+
+        if (!courseExists) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found.");
+        }
+
+        boolean deletedFromDB = sqlService.deleteCourseById(courseId);
+
+
+
+
+        if (!deletedFromDB) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete course from database.");
+        }
+        globalDataManager.academyEntity.getEntityCourses().removeIf(course -> course.getId() == courseId);
+
+        System.out.println("Course ID " + courseId + " deleted successfully.");
+        return ResponseEntity.ok("Course deleted successfully.");
+    }
+
+
+
+
+
 
     @PostMapping("/users/add")
     public ResponseEntity<String> addUser(@RequestBody NewUserRequest newUserData) {
+        int newId = getMaxUserId() + 1;
         if (newUserData == null || newUserData.getLogin() == null || newUserData.getPassword() == null || newUserData.getRole() == null) {
             return ResponseEntity.badRequest().body("Invalid user data. All fields are required.");
         }
 
+        UserSessionController.UserAccount newUserAccount = new UserSessionController.UserAccount(newId,
+                newUserData.getLogin(), newUserData.getPassword(), newUserData.getRole());
+        sqlService.addUserAccount(newUserAccount);
         if (newUserData.getRole() == UserSessionController.UserRole.STUDENT) {
             if (newUserData.getStudentData() == null) {
                 return ResponseEntity.badRequest().body("Student data is required for role STUDENT.");
             }
+            sqlService.addStudent(newUserData, newId);
             globalDataManager.studentsData.put(newUserData.getStudentData().getId(), newUserData.getStudentData());
         }
 
@@ -72,9 +148,19 @@ public class AdminController {
                 newUserData.getRole()
         );
 
+
+
+
         globalDataManager.userAccounts.add(newAccount);
 
         return ResponseEntity.ok("User added successfully.");
+    }
+
+    public int getMaxUserId() {
+        return globalDataManager.userAccounts.stream()
+                .mapToInt(UserSessionController.UserAccount::getId)
+                .max()
+                .orElse(0); // Jeśli lista jest pusta, zwróci 0
     }
 
 
@@ -115,6 +201,43 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+
+    @GetMapping("/fieldsOfStudy")
+    public ResponseEntity<List<FieldOfStudyEntity>> getAllFieldOfStudy() {
+        List<FieldOfStudyEntity> fieldOfStudyEntities = globalDataManager.academyEntity.getFieldsOfStudy();
+        return ResponseEntity.ok(fieldOfStudyEntities);
+    }
+
+    @DeleteMapping("/fieldsOfStudy/{id}")
+    public ResponseEntity<String> deleteFieldOfStudy(@PathVariable int id) {
+        boolean isDeleted = sqlService.deleteFieldOfStudyById(id);
+
+        System.out.println("Proścba o usunięcie " + id);
+        if (isDeleted) {
+            globalDataManager.academyEntity.getFieldsOfStudy()
+                    .removeIf(field -> field.getIdField() == id);
+            return ResponseEntity.ok("Field of study deleted successfully.");
+        } else {
+            return ResponseEntity.status(500).body("Failed to delete field of study.");
+        }
+    }
+    @PostMapping("/fieldsOfStudy/add")
+    public ResponseEntity<String> addFieldOfStudy(@RequestBody FieldOfStudyEntity newField) {
+        if (newField == null || newField.getFieldName() == null || newField.getFieldName().isEmpty()) {
+            return ResponseEntity.badRequest().body("Invalid field of study data. Name is required.");
+        }
+
+        boolean isAdded = sqlService.addFieldOfStudy(newField);
+
+        if (isAdded) {
+            globalDataManager.academyEntity.addFieldOfStudy(newField);
+            return ResponseEntity.ok("Field of study added successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add field of study.");
+        }
+    }
+
 
 
 
@@ -198,7 +321,6 @@ public class AdminController {
             currentAcademy.setEmail(updatedAcademy.getEmail());
         }
 
-        // Aktualizacja adresu
         AddressEntity currentAddress = currentAcademy.getAddress();
         AddressEntity updatedAddress = updatedAcademy.getAddress();
         if (currentAddress != null && updatedAddress != null) {
@@ -249,6 +371,7 @@ public class AdminController {
                     .body("Failed to send notification: " + e.getMessage());
         }
     }
+
     @PostMapping("dean/change")
     public ResponseEntity<String> changeDean(@RequestBody LecturerEntity newDean) {
         AcademyEntity academyEntity = globalDataManager.getAcademyEntity();
@@ -264,6 +387,7 @@ public class AdminController {
         try {
             System.out.println("New dean:\n");
             System.out.println(newDean);
+            sqlService.setDean(newDean.id);
             academyEntity.setDean(newDean);
 
 

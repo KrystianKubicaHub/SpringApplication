@@ -13,6 +13,8 @@
     <script src="/js/admin/addPerson.js"></script>
     <script src="/js/admin/showListOfPeople.js"></script>
     <script src="/js/admin/academyEntityDetails.js"></script>
+    <script src="/js/admin/showCourses.js"></script>
+    <script src="/js/admin/showFieldsOfStudy.js"></script>
 </head>
 <body>
 <div class="main-container">
@@ -37,12 +39,16 @@
         </button>
         <button class="large-btn" id="add-course-btn">
             <span class="icon">➕</span>
-            <span>Add Course</span>
+            <span>Show Fields Of Study</span>
         </button>
     </div>
 
-    <div class="display-panel" id="content-panel">
-        <h2>SELECT OPERATION</h2>
+    <div class="content-wrapper">
+        <div class="display-panel" id="content-panel">
+            <h2>SELECT OPERATION</h2>
+        </div>
+        <div class="select-lecturer-panel" id="select-lecturer-panel" style="display: none;">
+        </div>
     </div>
 </div>
 </body>

@@ -36,10 +36,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                     break;
                 case 'show-courses-btn':
-                    handleShowCourses();
+                    showCoursesClicked();
                     break;
                 case 'add-course-btn':
-                    handleAddCourse();
+                    showFieldsOfStudyClicked();
                     break;
                 default:
                     console.warn('Unknown button clicked:', buttonId);

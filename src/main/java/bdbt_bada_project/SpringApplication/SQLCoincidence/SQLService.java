@@ -1,5 +1,6 @@
 package bdbt_bada_project.SpringApplication.SQLCoincidence;
 
+import bdbt_bada_project.SpringApplication.Controllers.AdminController;
 import bdbt_bada_project.SpringApplication.Controllers.UserSessionController;
 import bdbt_bada_project.SpringApplication.Persistence.GlobalDataManager;
 import bdbt_bada_project.SpringApplication.entities.*;
@@ -26,14 +27,29 @@ public class SQLService {
         loadLecturersFromDatabase();
         loadCoursesFromDatabase();
         loadFieldsOfStudyFromDatabase();
+        loadEnrollmentsFromDatabase();
     }
+
+    public boolean setDean(int newDeanId) {
+        String sql = "UPDATE academy_entities SET dean_id = ? WHERE id_unit = 1";
+
+        try {
+            int rowsAffected = jdbcTemplate.update(sql, newDeanId);
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            System.err.println("Error" + e.getMessage());
+            return false;
+        }
+    }
+
+
     public void loadAcademyEntity() {
         final int ACADEMY_ID = 1;
         String queryAcademy = "SELECT ID_UNIT, NAME, PHONE, EMAIL, ADDRESS_ID FROM ACADEMY_ENTITIES WHERE ID_UNIT = ?";
         String queryAddress = "SELECT ID, STREET, HOUSE_NUMBER, APARTMENT_NUMBER, CITY, POSTAL_CODE, COUNTRY FROM ADDRESSES WHERE ID = ?";
 
         try {
-            // Pobierz dane Akademii
+
             AcademyEntity academyEntity = jdbcTemplate.queryForObject(queryAcademy, new Object[]{ACADEMY_ID}, (rs, rowNum) -> {
                 int idUnit = rs.getInt("ID_UNIT");
                 String name = rs.getString("NAME");
@@ -41,7 +57,6 @@ public class SQLService {
                 String email = rs.getString("EMAIL");
                 int addressId = rs.getInt("ADDRESS_ID");
 
-                // Pobierz dane adresu powiązanego z akademią
                 AddressEntity addressEntity = jdbcTemplate.queryForObject(queryAddress, new Object[]{addressId}, (addressRs, addressRowNum) -> {
                     Integer id = addressRs.getInt("ID");
                     String street = addressRs.getString("STREET");
@@ -53,7 +68,7 @@ public class SQLService {
                     return new AddressEntity(id, street, houseNumber, apartmentNumber, city, postalCode, country);
                 });
 
-                // Zwróć obiekt AcademyEntity z przypisanym adresem i dean ustawionym na null
+
                 return new AcademyEntity(idUnit, name, phone, email, addressEntity, null);
             });
 
@@ -73,6 +88,33 @@ public class SQLService {
             System.err.println("Error while loading AcademyEntity: " + e.getMessage());
         }
     }
+
+    public void loadDeanFromDatabase() {
+        String sql = "SELECT dean_id FROM academy_entities WHERE id_unit = 1";
+
+        try {
+            Integer deanId = jdbcTemplate.queryForObject(sql, Integer.class);
+
+            if (deanId != null) {
+                System.out.println("Dean ID: " + deanId);
+
+
+                LecturerEntity dean = globalDataManager.getAllLecturers().stream()
+                        .filter(lecturer -> lecturer.getId().equals(deanId))
+                        .findFirst()
+                        .orElse(null);
+
+                if (dean != null) {
+                    globalDataManager.academyEntity.setDean(dean);
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error" + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
 
 
     public void loadUserAccountsFromDatabase() {
@@ -178,7 +220,6 @@ public class SQLService {
         String lecturerQuery = "SELECT id, academic_title, specialization FROM lecturer_entities";
 
         try {
-            // Pobranie danych z person_entities
             Map<Integer, Map<String, Object>> personData = jdbcTemplate.query(personQuery, rs -> {
                 Map<Integer, Map<String, Object>> result = new HashMap<>();
                 while (rs.next()) {
@@ -235,6 +276,7 @@ public class SQLService {
         } catch (Exception e) {
             System.err.println("Błąd podczas ładowania wykładowców z bazy danych: " + e.getMessage());
         }
+        loadDeanFromDatabase();
     }
 
     private void loadCoursesFromDatabase() {
@@ -296,6 +338,7 @@ public class SQLService {
             e.printStackTrace();
         }
     }
+
     private void loadFieldsOfStudyFromDatabase() {
         String query = "SELECT id_field, field_name, study_level, duration_in_semesters, description, academy_id FROM field_of_study_entities";
 
@@ -353,13 +396,245 @@ public class SQLService {
 
 
     public void addUserAccount(UserSessionController.UserAccount userAccount) {
-        String query = "INSERT INTO USER_ACCOUNTS (ID, LOGIN, PASSWORD, ROLE) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO USER_ACCOUNTS (ID, LOGIN, PASSWORD, ROLE, ACADEMY_ID) VALUES (?, ?, ?, ?, ?)"; // 🟢 Poprawione: dodano brakujące `?`
 
         try {
-            jdbcTemplate.update(query, userAccount.getId(), userAccount.getLogin(), userAccount.getPassword(), userAccount.getRole().name());
-            System.out.println("User account added: " + userAccount.getLogin());
+            jdbcTemplate.update(query,
+                    userAccount.getId(),
+                    userAccount.getLogin(),
+                    userAccount.getPassword(),
+                    userAccount.getRole().name(),
+                    1 // 🟢 Domyślne ACADEMY_ID (jeśli zawsze 1, można zostawić tak)
+            );
+            System.out.println("user account added: " + userAccount.getLogin());
         } catch (Exception e) {
-            System.err.println("Error while adding user account: " + e.getMessage());
+            System.err.println("Error" + e.getMessage());
         }
     }
+
+
+    public void addStudent(AdminController.NewUserRequest newUserRequest, int studentId) {
+        if (newUserRequest == null || newUserRequest.getStudentData() == null) {
+            System.err.println("Error: Invalid student data!");
+            return;
+        }
+
+        StudentData studentData = newUserRequest.getStudentData();
+
+        String personSql = "INSERT INTO person_entities (id, first_name, last_name, pesel_number, phone_number, email) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try {
+            jdbcTemplate.update(personSql,
+                    studentId,
+                    studentData.getFirstName(),
+                    studentData.getLastName(),
+                    studentData.getPESELNumber(),
+                    studentData.getPhoneNumber(),
+                    studentData.getEmail()
+            );
+
+
+            String studentSql = "INSERT INTO student_entities (id, index_number, study_since, total_ects) VALUES (?, ?, ?, ?)";
+            jdbcTemplate.update(studentSql,
+                    studentId,
+                    studentData.indexNumber,
+                    studentData.studySince,
+                    studentData.totalECTS
+            );
+
+            System.out.println("Student added successfully: " + studentData.getFirstName() + " " + studentData.getLastName());
+        } catch (Exception e) {
+            System.err.println("Error inserting student into database: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
+    public boolean deleteFieldOfStudyById(int id) {
+        try {
+            String sql = "DELETE FROM field_of_study_entities WHERE id_field = ?";
+            int rowsAffected = jdbcTemplate.update(sql, id);
+
+            if (rowsAffected > 0) {
+                System.out.println("Field of study with ID " + id + " deleted successfully.");
+                return true;
+            } else {
+                System.err.println("No field of study found with ID " + id + ". Nothing was deleted.");
+                return false;
+            }
+        } catch (Exception e) {
+            System.err.println("Error while deleting field of study with ID " + id + ": " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean addFieldOfStudy(FieldOfStudyEntity newField) {
+        try {
+            String sql = "INSERT INTO field_of_study_entities (field_name, study_level, duration_in_semesters, description, academy_id) VALUES (?, ?, ?, ?, ?)";
+
+            int rowsAffected = jdbcTemplate.update(sql,
+                    newField.getFieldName(),
+                    newField.getStudyLevel().toString(),
+                    newField.getDurationInSemesters(),
+                    newField.getDescription(),
+                    1
+            );
+
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            System.err.println("Error adding field of study: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean deleteCourseById(int id) {
+        try {
+            String sql = "DELETE FROM courses WHERE id = ?";
+            int rowsAffected = jdbcTemplate.update(sql, id);
+
+            if (rowsAffected > 0) {
+                System.out.println("Course with ID " + id + " deleted successfully.");
+                return true;
+            } else {
+                System.err.println("No course found with ID " + id + ". Nothing was deleted.");
+                return false;
+            }
+        } catch (Exception e) {
+            System.err.println("Error while deleting course with ID " + id + ": " + e.getMessage());
+            return false;
+        }
+    }
+
+
+    public boolean addCourse(CourseEntity course) {
+        String getMaxIdQuery = "SELECT COALESCE(MAX(id), 0) + 1 FROM courses";
+        int nextId = jdbcTemplate.queryForObject(getMaxIdQuery, Integer.class);
+
+        String sql = "INSERT INTO courses (id, name, description, ects_credits, id_unit) VALUES (?, ?, ?, ?, ?)";
+
+        try {
+            int rowsAffected = jdbcTemplate.update(sql,
+                    nextId, // Nowe ID = max(ID) + 1
+                    course.getName(),
+                    course.getDescription(),
+                    course.getEctsCredits(),
+                    1
+            );
+
+            if (rowsAffected > 0) {
+                course.setId(nextId);
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            System.err.println("❌ Error inserting course into database: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public int addEnrollment(int userId, String courseId) {
+        String sql = "INSERT INTO enrollments (student_id, course_id, enrollment_date) VALUES (?, ?, SYSDATE)";
+        int enrollmentId = -1;
+
+        try {
+            String getMaxIdSql = "SELECT COALESCE(MAX(id), 0) + 1 FROM enrollments";
+            int newId = jdbcTemplate.queryForObject(getMaxIdSql, Integer.class);
+
+            int rowsAffected = jdbcTemplate.update(sql, userId, Integer.parseInt(courseId));
+
+            if (rowsAffected > 0) {
+                enrollmentId = newId;
+                System.out.println("Enrollment added successfully! ID: " + enrollmentId);
+            } else {
+                System.err.println("Failed to insert enrollment.");
+            }
+
+        } catch (Exception e) {
+            System.err.println("Error inserting enrollment: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return enrollmentId;
+    }
+
+
+    public void loadEnrollmentsFromDatabase() {
+        String sql = "SELECT id, student_id, course_id, enrollment_date FROM enrollments";
+
+        try {
+            List<Map<String, Object>> results = jdbcTemplate.queryForList(sql);
+
+            for (Map<String, Object> row : results) {
+                int enrollmentId = ((Number) row.get("id")).intValue(); // Konwersja BigDecimal -> int
+                int studentId = ((Number) row.get("student_id")).intValue(); // Pobranie ID studenta
+                int courseId = ((Number) row.get("course_id")).intValue(); // Pobranie ID kursu
+                Date enrollmentDate = (Date) row.get("enrollment_date");
+
+                // Pobranie CourseEntity na podstawie ID kursu
+                CourseEntity course = globalDataManager.academyEntity.getEntityCourses()
+                        .stream()
+                        .filter(c -> c.getId().equals(courseId))
+                        .findFirst()
+                        .orElse(null);
+
+                if (course == null) {
+                    System.err.println("Course with ID " + courseId + " not found in globalDataManager.");
+                    continue;
+                }
+                EnrollmentEntity enrollment = new EnrollmentEntity(course, enrollmentDate, enrollmentId);
+
+
+                StudentData student = globalDataManager.studentsData.get(studentId);
+                if (student == null) {
+                    System.err.println("Student with ID " + studentId + " not found in globalDataManager.");
+                    continue;
+                }
+
+                System.out.println("Enrollment: " + enrollment.getId() + " For student " + student.firstName);
+
+                student.getEnrollments().add(enrollment);
+                System.out.println(student.getEnrollments().size());
+            }
+
+            System.out.println("All enrollments have been successfully assigned to students!");
+
+        } catch (Exception e) {
+            System.err.println("Error loading enrollments from database: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public boolean updateFirstName(int studentId, String firstName) {
+        String sql = "UPDATE person_entities SET first_name = ? WHERE id = ?";
+        return executeUpdate(sql, firstName, studentId);
+    }
+
+    public boolean updateLastName(int studentId, String lastName) {
+        String sql = "UPDATE person_entities SET last_name = ? WHERE id = ?";
+        return executeUpdate(sql, lastName, studentId);
+    }
+
+    public boolean updateEmail(int studentId, String email) {
+        String sql = "UPDATE person_entities SET email = ? WHERE id = ?";
+        return executeUpdate(sql, email, studentId);
+    }
+
+    public boolean updatePhoneNumber(int studentId, String phoneNumber) {
+        String sql = "UPDATE person_entities SET phone_number = ? WHERE id = ?";
+        return executeUpdate(sql, phoneNumber, studentId);
+    }
+    private boolean executeUpdate(String sql, String newValue, int studentId) {
+        try {
+            int rowsAffected = jdbcTemplate.update(sql, newValue, studentId);
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            System.err.println("Error updating student data: " + e.getMessage());
+            return false;
+        }
+    }
+
+
+
+
 }

@@ -648,6 +648,402 @@ body {
     margin: 10px 0;
 }
 
+/* SHOW COURSES */
+.showCourse-add-btn {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.showCourse-add-btn:hover {
+    background-color: #218838;
+}
+
+.showCourse-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #1a1a1a; /* Ciemne tło tabeli */
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.showCourse-table th {
+    background-color: #007bff;
+    color: #ffffff;
+    font-size: 14px;
+    text-transform: uppercase;
+    padding: 12px;
+    text-align: left;
+}
+
+.showCourse-table td {
+    padding: 12px;
+    color: #ffffff; /* Tekst w komórkach - biały dla lepszej widoczności */
+    border-bottom: 1px solid #333;
+}
+
+.showCourse-table tr:nth-child(even) {
+    background-color: #222;
+}
+
+.showCourse-table tr:hover {
+    background-color: #444;
+}
+
+.showCourse-delete-btn {
+    padding: 5px 10px;
+    font-size: 14px;
+    color: white;
+    background-color: #dc3545;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.showCourse-delete-btn:hover {
+    background-color: #c82333;
+}
+
+.showCourse-loading-message,
+.showCourse-error-message,
+.showCourse-no-courses-message {
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.showCourse-loading-message {
+    color: #007bff;
+}
+
+.showCourse-error-message {
+    color: #dc3545;
+}
+
+.showCourse-no-courses-message {
+    color: #6c757d;
+}
+/* === Stylizacja przycisku "Add Field of Study" === */
+.showField-add-btn {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.showField-add-btn:hover {
+    background-color: #218838;
+}
+
+/* === Stylizacja tabeli kierunków studiów === */
+.showField-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #1a1a1a; /* Ciemne tło tabeli */
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* === Nagłówki tabeli === */
+.showField-table th {
+    background-color: #007bff;
+    color: #ffffff;
+    font-size: 14px;
+    text-transform: uppercase;
+    padding: 12px;
+    text-align: left;
+}
+
+/* === Stylizacja wierszy tabeli === */
+.showField-table td {
+    padding: 12px;
+    color: #ffffff; /* Tekst w komórkach - biały dla lepszej widoczności */
+    border-bottom: 1px solid #333;
+}
+
+/* Naprzemienne tło wierszy dla lepszej widoczności */
+.showField-table tr:nth-child(even) {
+    background-color: #222;
+}
+
+/* Podświetlenie wiersza przy najechaniu */
+.showField-table tr:hover {
+    background-color: #444;
+}
+
+/* === Stylizacja przycisków "Delete" === */
+.showField-delete-btn {
+    padding: 5px 10px;
+    font-size: 14px;
+    color: white;
+    background-color: #dc3545;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.showField-delete-btn:hover {
+    background-color: #c82333;
+}
+
+/* === Stylizacja komunikatów === */
+.showField-loading-message,
+.showField-error-message,
+.showField-no-fields-message {
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.showField-loading-message {
+    color: #007bff;
+}
+
+.showField-error-message {
+    color: #dc3545;
+}
+
+.showField-no-fields-message {
+    color: #6c757d;
+}
+/* Stylizacja formularza */
+.addField-form-title {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+#addField-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    background: #1a1a1a;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+#addField-form label {
+    color: white;
+    font-weight: bold;
+}
+
+#addField-form input,
+#addField-form select,
+#addField-form textarea {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.addField-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.addField-back-btn, .addField-add-btn {
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.addField-back-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.addField-back-btn:hover {
+    background-color: #c82333;
+}
+
+.addField-add-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.addField-add-btn:hover {
+    background-color: #218838;
+}
+/* === Stylizacja nagłówka formularza === */
+.addNewCourse-header {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: #ffffff;
+}
+
+/* === Stylizacja formularza === */
+.addNewCourse-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 450px;
+    margin: auto;
+    padding: 20px;
+    background: #1a1a1a;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+/* === Stylizacja pól formularza === */
+.addNewCourse-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.addNewCourse-form label {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.addNewCourse-input,
+.addNewCourse-select-btn,
+.addNewCourse-adjust-btn,
+.addNewCourse-submit-btn {
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* === Stylizacja przycisków + i - dla ECTS === */
+.addNewCourse-adjust-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    margin: 0 5px;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.addNewCourse-adjust-btn:hover {
+    background-color: #0056b3;
+}
+
+/* === Stylizacja przycisku "Select Lecturer" === */
+.addNewCourse-select-btn {
+    background-color: #17a2b8;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.addNewCourse-select-btn:hover {
+    background-color: #138496;
+}
+
+/* === Stylizacja listy wykładowców === */
+.addNewCourse-selected-lecturers {
+    list-style: none;
+    padding: 0;
+    margin: 5px 0;
+    color: #ffffff;
+}
+
+.addNewCourse-selected-lecturers li {
+    background-color: #343a40;
+    padding: 5px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+/* === Stylizacja przycisku "Add Course" === */
+.addNewCourse-submit-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px;
+    transition: background 0.3s ease;
+}
+
+.addNewCourse-submit-btn:hover {
+    background-color: #218838;
+}
+/* Nagłówek sekcji wyboru wykładowcy */
+.addNewCourse-lecturer-header {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: white;
+}
+
+/* Lista wykładowców */
+.addNewCourse-lecturers-list {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+    max-height: 200px;
+    overflow-y: auto;
+    background: #1a1a1a;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+}
+
+/* Pojedynczy wykładowca */
+.addNewCourse-lecturer-item {
+    padding: 10px;
+    border-bottom: 1px solid #333;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    color: white;
+}
+
+.addNewCourse-lecturer-item:hover {
+    background-color: #007bff;
+}
+
+/* Wybrany wykładowca */
+.addNewCourse-selected {
+    font-size: 18px;
+    font-weight: bold;
+    color: #28a745;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* Ukrywanie sekcji po wybraniu */
+.hidden {
+    display: none;
+}
+
+
+
 
 
 

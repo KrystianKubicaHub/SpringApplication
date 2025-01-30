@@ -25,7 +25,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll() // Zezwól na dostęp do wszystkich zasobów
+                        .anyRequest().permitAll()
                 );
         return http.build();
     }

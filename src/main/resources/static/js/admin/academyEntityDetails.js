@@ -214,6 +214,7 @@ function createSection(title, fields, editable = false, onSave = null) {
 
     return section;
 }
+
 async function updateAcademyData(updatedData) {
     if (updatedData.address) {
         console.log("Address data:", updatedData.address);
@@ -250,6 +251,7 @@ async function updateAcademyData(updatedData) {
         return false; // Zwracamy `false` w przypadku błędu
     }
 }
+
 async function selectDeanClicked() {
     return new Promise((resolve) => {
         const modal = document.createElement('div');

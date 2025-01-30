@@ -53,6 +53,7 @@ function updateEnrollments(student, userId) {
 
     enrollmentsContainer.innerHTML = '';
 
+    console.log(student.enrollments.length);
     if (student.enrollments.length !== 0) {
         student.enrollments.forEach((enrollment) => {
             const enrollmentId = enrollment.id; // Wyciągamy ID zapisu

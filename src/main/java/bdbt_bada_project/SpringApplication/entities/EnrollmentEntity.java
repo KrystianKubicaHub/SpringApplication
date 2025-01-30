@@ -14,6 +14,15 @@ public class EnrollmentEntity {
         this.enrollmentDate = enrollmentDate;
     }
 
+    @Override
+    public String toString() {
+        return "EnrollmentEntity{" +
+                "id=" + id +
+                ", course=" + course +
+                ", enrollmentDate=" + enrollmentDate +
+                '}';
+    }
+
     public CourseEntity getCourse() {
         return course;
     }

@@ -34,6 +34,10 @@ public class PersonEntity {
         return lastName;
     }
 
+    public String getPESELNumber() {
+        return PESELNumber;
+    }
+
     public PersonEntity(Integer id, String firstName, String lastName, String PESELNumber, String email, String phoneNumber) {
         this.id = id;
         this.firstName = firstName;
@@ -65,6 +69,7 @@ public class PersonEntity {
     public void setEmail(String email) {
         this.email = email;
     }
+
 
 
 }

@@ -60,7 +60,7 @@ public class StudentData extends PersonEntity {
         }
     }
 
-    public boolean addNewEnrollment(CourseEntity courseEntity) {
+    public boolean addNewEnrollment(CourseEntity courseEntity, int id) {
         if (courseEntity == null) {
             return false;
         }
@@ -69,10 +69,7 @@ public class StudentData extends PersonEntity {
         List<EnrollmentEntity> enrollments = this.getEnrollments();
 
         if (enrollments != null && !enrollments.isEmpty()) {
-            newId = enrollments.stream()
-                    .mapToInt(EnrollmentEntity::getId)
-                    .max()
-                    .orElse(0) + 1;
+            newId = id;
         }
 
         Date currentDate = new Date();

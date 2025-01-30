@@ -8,11 +8,24 @@ async function fetchStudentData(userId) {
         if (!response.ok) throw new Error(`Error fetching student data. Status: ${response.status}`);
 
         const studentData = await response.json();
+
+        // Sprawdzenie czy studentData nie jest null lub undefined
+        if (!studentData) {
+            throw new Error("Received null or undefined student data");
+        }
+
+        // Jeśli academicTitle jest null lub undefined, ustaw domyślną wartość
+        if (!studentData.academicTitle) {
+            console.warn("Warning: studentData.academicTitle is missing or null. Setting default value.");
+            studentData.academicTitle = "Prof."; // Ustawienie domyślnej wartości
+        }
+
         updateView(studentData, userId);
     } catch (error) {
         console.error('Error fetching student data:', error.message);
     }
 }
+
 
 async function updateStudentData(userId, student) {
     try {
